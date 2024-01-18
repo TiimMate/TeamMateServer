@@ -3,13 +3,15 @@ dotenv.config();
 
 import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
+import passport from "passport";
 
+import "./config/passport";
 import db from "./models/index";
 import { response } from "./config/response";
 import { BaseError } from "./config/error";
 import { status } from "./config/response.status";
 
-// import { authRouter } from "./routes/auth.route";
+import { authRouter } from "./routes/auth.route";
 
 const app = express();
 
@@ -26,8 +28,9 @@ app.use(cors());
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(passport.initialize());
 
-// app.use("/auth", authRouter);
+app.use("/auth", authRouter);
 
 app.use((req: Request, res: Response, next: NextFunction) => {
     const err = new BaseError(status.NOT_FOUND);
