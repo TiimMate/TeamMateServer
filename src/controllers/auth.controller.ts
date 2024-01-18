@@ -11,9 +11,9 @@ export const kakaoCallback = async (req, res, next) => {
     res.send(response(status.SUCCESS, await login(req.user)));
 };
 
-// export const naverCallback = async (req, res, next) => {
-//     res.send(response(status.SUCCESS, await login(req.user)));
-// };
+export const naverCallback = async (req, res, next) => {
+    res.send(response(status.SUCCESS, await login(req.user)));
+};
 
 export const refreshAccessToken = async (req: Request, res, next) => {
     res.send(response(status.SUCCESS, await generateNewAccessToken(req)));

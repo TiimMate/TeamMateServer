@@ -38,19 +38,19 @@ passport.use(
     ),
 );
 
-// passport.use(
-//     new NaverStrategy(
-//         {
-//             clientID: process.env.NAVER_CLIENT_ID!,
-//             clientSecret: process.env.NAVER_CLIENT_SECRET,
-//             callbackURL: process.env.NAVER_CALLBACK_URL!,
-//         },
-//         (accessToken, refreshToken, profile, done) => {
-//             createOrReadUser(profile.provider, profile.id, profile._json.email)
-//                 .then((user) => done(null, user))
-//                 .catch((err) => {
-//                     done(err);
-//                 });
-//         },
-//     ),
-// );
+passport.use(
+    new NaverStrategy(
+        {
+            clientID: process.env.NAVER_CLIENT_ID!,
+            clientSecret: process.env.NAVER_CLIENT_SECRET,
+            callbackURL: process.env.NAVER_CALLBACK_URL!,
+        },
+        (accessToken, refreshToken, profile, done) => {
+            createOrReadUser(profile.provider, profile.id, profile._json.email)
+                .then((user) => done(null, user))
+                .catch((err) => {
+                    done(err);
+                });
+        },
+    ),
+);
