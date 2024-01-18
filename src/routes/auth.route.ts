@@ -1,12 +1,12 @@
 import express from "express";
 import passport from "passport";
 import asyncHandler from "express-async-handler";
-import { kakaoCallback, refreshAccessToken } from "../controllers/auth.controller";
+import { googleCallback, kakaoCallback, refreshAccessToken } from "../controllers/auth.controller";
 
 export const authRouter = express.Router();
 
-// authRouter.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
-// authRouter.get("/google/callback", passport.authenticate("google", { session: false }), asyncHandler(googleCallback));
+authRouter.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
+authRouter.get("/google/callback", passport.authenticate("google", { session: false }), asyncHandler(googleCallback));
 
 authRouter.get("/kakao", passport.authenticate("kakao"));
 authRouter.get("/kakao/callback", passport.authenticate("kakao", { session: false }), asyncHandler(kakaoCallback));
