@@ -1,20 +1,31 @@
-import { Model, InferAttributes, InferCreationAttributes, CreationOptional, DataTypes, Sequelize } from "sequelize";
+import { Model, InferAttributes, InferCreationAttributes, DataTypes, Sequelize } from "sequelize";
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
-    declare id: CreationOptional<number>;
-    declare nickname: string;
-
     static initiate(sequelize: Sequelize) {
         User.init(
             {
-                id: {
-                    type: DataTypes.INTEGER,
-                    autoIncrement: true,
-                    primaryKey: true,
-                },
                 nickname: {
                     type: new DataTypes.STRING(10),
                     allowNull: false,
+                },
+                provider: {
+                    type: new DataTypes.STRING(10),
+                    allowNull: false,
+                },
+                providerId: {
+                    type: new DataTypes.STRING(50),
+                    allowNull: false,
+                },
+                email: {
+                    type: new DataTypes.STRING(50),
+                    allowNull: false,
+                    validate: {
+                        isEmail: true,
+                    },
+                },
+                refreshToken: {
+                    type: new DataTypes.STRING(150),
+                    allowNull: true,
                 },
             },
             {
