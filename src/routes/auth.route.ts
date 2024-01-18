@@ -1,7 +1,7 @@
 import express from "express";
 import passport from "passport";
 import asyncHandler from "express-async-handler";
-import { kakaoCallback } from "../controllers/auth.controller";
+import { kakaoCallback, refreshAccessToken } from "../controllers/auth.controller";
 
 export const authRouter = express.Router();
 
@@ -14,4 +14,4 @@ authRouter.get("/kakao/callback", passport.authenticate("kakao", { session: fals
 // authRouter.get("/naver", passport.authenticate("naver"));
 // authRouter.get("/naver/callback", passport.authenticate("naver", { session: false }), asyncHandler(naverCallback));
 
-// authRouter.post("/refresh", asyncHandler(refreshAccessToken));
+authRouter.post("/refresh", asyncHandler(refreshAccessToken));

@@ -31,13 +31,13 @@ export const setRefreshToken = async (refreshToken: string, userId: number) => {
     );
 };
 
-// export const getRefreshToken = async (userId: number) => {
-//     const user = await db.User.findOne({
-//         raw: true,
-//         where: {
-//             id: userId,
-//         },
-//         attributes: ["refreshToken"],
-//     });
-//     return user.refreshToken;
-// };
+export const getRefreshToken = async (userId: number) => {
+    const user = await db.User.findOne({
+        raw: true,
+        where: {
+            id: userId,
+        },
+        attributes: ["refreshToken"],
+    });
+    return user.refreshToken;
+};
