@@ -33,14 +33,17 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
                 timestamps: true,
                 underscored: true,
                 modelName: "User",
-                tableName: "users",
+                tableName: "user",
                 paranoid: true,
                 charset: "utf8",
                 collate: "utf8_general_ci",
             },
         );
     }
-    static associate(db) {}
+    static associate(db) {
+        db.User.hasMany(db.Team, { foreignKey: "leader_id" });
+        db.User.hasMany(db.Member, { foreignKey: "user_id" });
+    }
 }
 
 module.exports = User;
