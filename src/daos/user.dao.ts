@@ -41,3 +41,17 @@ export const getRefreshToken = async (userId: number) => {
     });
     return user.refreshToken;
 };
+
+export const getUserInfoById = async (id) => {
+    return await db.User.findOne({
+        raw: true,
+        where: {
+            id,
+        },
+        attributes: userInfoAttributes(),
+    });
+};
+
+export const userInfoAttributes = () => {
+    return ["nickname"]; //TODO: add height, weight, positon
+};

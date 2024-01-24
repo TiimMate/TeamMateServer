@@ -1,12 +1,15 @@
 import { BaseError } from "../config/error";
 import { status } from "../config/response.status";
-import { getTeamPreviewByCategory } from "../daos/team.dao";
+import { findMemberInfoByTeamId } from "../daos/member.dao";
+import { findTeamPreviewByCategory, getTeamDetail } from "../daos/team.dao";
+import { getUserInfoById, userInfoAttributes } from "../daos/user.dao";
+import { readTeamDetailResponseDTO } from "../dtos/team.dto";
 // import { insertTeam } from "../daos/team.dao";
 // import { CreateTeamInput } from "../schemas/team.schema";
 // import { insertTeam } from "../daos/team.dao";
 
-export const readTeamPreviewsByCategory = async (userId, params) => {
-    return await getTeamPreviewByCategory(userId, params.category);
+export const readTeamPreviewsByCategory = async (userId, query) => {
+    return await findTeamPreviewByCategory(userId, query.category);
 };
 
 // export const createTeam = async (body: CreateTeamInput) => {
@@ -18,3 +21,11 @@ export const readTeamPreviewsByCategory = async (userId, params) => {
 //     //return result;
 //     // return;
 // };
+
+export const readTeamDetail = async (userId, params) => {
+    const teamId = params.teamId;
+    const detail = await getTeamDetail(teamId);
+    const leaderInfo = await getUserInfoById(detail.leaderId);
+    const memberInfo = await findMemberInfoByTeamId(teamId, userInfoAttributes);
+    return readTeamDetailResponseDTO(detail, leaderInfo, memberInfo, userId == detail.leaderId);
+};
