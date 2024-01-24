@@ -15,3 +15,20 @@ export const findMemberInfoByTeamId = async (teamId, userInfoAttributes) => {
         attributes: [],
     });
 };
+
+export const insertMember = async (teamId, userId) => {
+    await db.Member.create({
+        teamId,
+        userId,
+    });
+};
+
+export const isMemberExist = async (teamId, userId) => {
+    const member = await db.Member.findOne({
+        where: {
+            teamId,
+            userId,
+        },
+    });
+    return member !== null;
+};

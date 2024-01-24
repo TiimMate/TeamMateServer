@@ -76,3 +76,14 @@ export const getTeamDetail = async (teamId) => {
         attributes: ["name", "logo", "skillLevel", "mannerLevel", "description", "leaderId"],
     });
 };
+
+export const getTeamIdByInviteCode = async (inviteCode): Promise<number> => {
+    const team = await db.Team.findOne({
+        raw: true,
+        where: {
+            inviteCode,
+        },
+        attributes: ["id"],
+    });
+    return team?.id;
+};
