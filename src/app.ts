@@ -13,6 +13,7 @@ import { status } from "./config/response.status";
 
 import { authRouter } from "./routes/auth.route";
 import { teamsRouter } from "./routes/teams.route";
+import { membersRouter } from "./routes/members.route";
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.use(passport.initialize());
 
 app.use("/auth", authRouter);
 app.use("/teams", teamsRouter);
+app.use("/members", membersRouter);
 
 app.use((req: Request, res: Response, next: NextFunction) => {
     const err = new BaseError(status.NOT_FOUND);
