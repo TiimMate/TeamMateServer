@@ -7,7 +7,7 @@ import db from "../models";
 
 // import { Team, User } from "../models";
 
-export const getTeamPreviewByCategory = async (userId, category) => {
+export const findTeamPreviewByCategory = async (userId, category) => {
     const teamsAsLeader = await db.Team.findAll({
         raw: true,
         where: {
@@ -66,3 +66,13 @@ export const getTeamPreviewByCategory = async (userId, category) => {
 //         mannerLevel: 1,
 //     });
 // };
+
+export const getTeamDetail = async (teamId) => {
+    return await db.Team.findOne({
+        raw: true,
+        where: {
+            id: teamId,
+        },
+        attributes: ["name", "logo", "skillLevel", "mannerLevel", "description", "leaderId"],
+    });
+};
