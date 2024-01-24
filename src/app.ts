@@ -12,6 +12,7 @@ import { BaseError } from "./config/error";
 import { status } from "./config/response.status";
 
 import { authRouter } from "./routes/auth.route";
+import { teamsRouter } from "./routes/teams.route";
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize());
 
 app.use("/auth", authRouter);
+app.use("/teams", teamsRouter);
 
 app.use((req: Request, res: Response, next: NextFunction) => {
     const err = new BaseError(status.NOT_FOUND);
@@ -40,6 +42,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.use((err, req: Request, res: Response, next: NextFunction) => {
     res.locals.message = err.message;
     res.locals.err = process.env.NODE_ENV !== "production" ? err : {};
+    console.log(err);
     const error = err instanceof BaseError ? err : new BaseError(status.INTERNAL_SERVER_ERROR);
     res.status(error.data.status).send(response(error.data));
 });

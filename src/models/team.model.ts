@@ -48,6 +48,10 @@ class Team extends Model<InferAttributes<Team>, InferCreationAttributes<Team>> {
                     type: new DataTypes.INTEGER(),
                     allowNull: false,
                 },
+                category: {
+                    type: new DataTypes.STRING(15),
+                    allowNull: false,
+                },
             },
             {
                 sequelize,
