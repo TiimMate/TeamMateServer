@@ -2,9 +2,9 @@ import express from "express";
 import asyncHandler from "express-async-handler";
 import {
     GuestingPreview,
-    GuestingPreviewByLevel,
-    GuestingPreviewByGender,
-    GuestingPreviewByRegion,
+    // GuestingPreviewByLevel,
+    // GuestingPreviewByGender,
+    // GuestingPreviewByRegion,
 } from "../controllers/guest.controller";
 
 export const guestsRouter = express.Router({ mergeParams: true });
@@ -15,8 +15,8 @@ guestsRouter.get("/", asyncHandler(GuestingPreview));
 
 // guestRouter.get("/:guestId", asyncHandler(DetailedGuestingPreview));
 
-guestsRouter.get("/level", asyncHandler(GuestingPreviewByLevel));
+// guestsRouter.get("/level", asyncHandler(GuestingPreviewByLevel));
 
-guestsRouter.get("/gender", asyncHandler(GuestingPreviewByGender));
+// guestsRouter.get("/gender", asyncHandler(GuestingPreviewByGender));
 
-guestsRouter.get("/region", asyncHandler(GuestingPreviewByRegion));
+// guestsRouter.get("/region", asyncHandler(GuestingPreviewByRegion));
