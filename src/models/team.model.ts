@@ -68,6 +68,7 @@ class Team extends Model<InferAttributes<Team>, InferCreationAttributes<Team>> {
     static associate(db) {
         db.Team.hasMany(db.Member, { foreignKey: "team_id" });
         db.Team.belongsTo(db.User, { foreignKey: "leader_id" });
+        db.Team.hasMany(db.Guest, { foreignKey: "team_id" });
     }
 }
 

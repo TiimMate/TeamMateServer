@@ -50,3 +50,12 @@ export const deleteMembersById = async (members, teamId) => {
         await member.destroy();
     }
 };
+
+export const getMemberCountByTeamId = async (teamId) => {
+    const count = await db.Member.count({
+        where: {
+            teamId,
+        },
+    });
+    return count;
+};

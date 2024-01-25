@@ -43,6 +43,7 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
     static associate(db) {
         db.User.hasMany(db.Team, { foreignKey: "leader_id" });
         db.User.hasMany(db.Member, { foreignKey: "user_id" });
+        db.User.hasMany(db.GuestUser, { foreignKey: "user_id" });
     }
 }
 
