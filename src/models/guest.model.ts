@@ -8,11 +8,7 @@ class Guest extends Model<InferAttributes<Guest>, InferCreationAttributes<Guest>
                     type: new DataTypes.INTEGER(),
                     allowNull: false,
                 },
-                category: {
-                    type: new DataTypes.STRING(15),
-                    allowNull: false,
-                },
-                game_time: {
+                gameTime: {
                     type: new DataTypes.DATE(6),
                     allowNull: false,
                 },
