@@ -32,3 +32,13 @@ export const isMemberExist = async (teamId, userId) => {
     });
     return member !== null;
 };
+
+export const getMemberCountByTeamId = async (teamId) => {
+    const count = await db.Member.count({
+        where: {
+            teamId,
+        },
+    });
+    console.log(count);
+    return count;
+};
