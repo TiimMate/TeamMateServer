@@ -1,26 +1,20 @@
-import { BaseError } from "../config/error";
-import { status } from "../config/response.status";
 import { findMemberInfoByTeamId } from "../daos/member.dao";
-import { findTeamPreviewByCategory, getTeamDetail } from "../daos/team.dao";
+import { findTeamPreviewByCategory, getTeamDetail, insertTeam } from "../daos/team.dao";
 import { getUserInfoById, userInfoAttributes } from "../daos/user.dao";
 import { readTeamDetailResponseDTO } from "../dtos/team.dto";
-// import { insertTeam } from "../daos/team.dao";
-// import { CreateTeamInput } from "../schemas/team.schema";
-// import { insertTeam } from "../daos/team.dao";
+import { v4 as uuidv4 } from "uuid";
+import { CreateTeamSchema } from "../schemas/team.schema";
 
 export const readTeamPreviewsByCategory = async (userId, query) => {
     return await findTeamPreviewByCategory(userId, query.category);
 };
 
-// export const createTeam = async (body: CreateTeamInput) => {
-//     // //사진 gcs에 업로드 => 파일 경로 가져오기
-//     console.log(body.logo);
-//     throw new Error();
-//     const result = await insertTeam(body);
-//     //console.log(result);
-//     //return result;
-//     // return;
-// };
+export const createTeam = async (userId, body: CreateTeamSchema) => {
+    await insertTeam(body, userId, uuidv4());
+    return;
+};
+
+// export const updateTeam = async (body) => {};
 
 export const readTeamDetail = async (userId, params) => {
     const teamId = params.teamId;
