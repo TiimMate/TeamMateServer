@@ -1,26 +1,22 @@
 import db from "../models";
 
 export const findGuesting = async (selectedDate, category) => {
-    const Guesting = await db.Guest.findAll({
+    return await db.Guest.findAll({
         raw: true,
         where: {
-            category,
             gameTime: selectedDate,
         },
         include: [
             {
                 model: db.Team,
-                as: "TeamInfo",
-                attributes: ["name", "region", "gender", "age_group", "skill_level"],
+                attributes: ["name", "region", "gender", "ageGroup", "skillLevel"],
                 where: {
-                    id: db.Sequelize.col("Guesting.TeamId"),
+                    category,
                 },
             },
         ],
         attributes: ["game_time"],
     });
-
-    return Guesting.map((guest) => guest["TeamInfo"]);
 };
 
 export const findGuestingByGender = async (selectedDate, category, gender) => {

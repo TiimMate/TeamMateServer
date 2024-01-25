@@ -5,7 +5,7 @@ import {
     GuestingPreviewByLevel,
     GuestingPreviewByGender,
     GuestingPreviewByRegion,
-} from "../controllers/guest.controller.js";
+} from "../controllers/guest.controller";
 
 export const guestsRouter = express.Router({ mergeParams: true });
 

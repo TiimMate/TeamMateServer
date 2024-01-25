@@ -2,8 +2,8 @@ import { BaseError } from "../config/error";
 import { status } from "../config/response.status";
 import { findGuesting, findGuestingByGender, findGuestingByLevel, findGuestingByRegion } from "../daos/guest.dao";
 
-export const readGuesting = async (selectedDate, query) => {
-    return await findGuesting(selectedDate, query.category);
+export const readGuesting = async (query) => {
+    return await findGuesting(query.date, query.category);
 };
 
 export const readGuestingByGender = async (selectedDate, query) => {

@@ -13,7 +13,7 @@ import {
 // };
 
 export const GuestingPreview = async (req, res, next) => {
-    return res.send(response(status.SUCCESS, await readGuesting(req.team.id, req.query)));
+    return res.send(response(status.SUCCESS, await readGuesting(req.query)));
 };
 
 export const GuestingPreviewByLevel = async (req, res, next) => {
