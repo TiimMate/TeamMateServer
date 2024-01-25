@@ -1,9 +1,15 @@
 import { BaseError } from "../config/error";
 import { status } from "../config/response.status";
 import { findGuesting, findGuestingByGender, findGuestingByLevel, findGuestingByRegion } from "../daos/guest.dao";
+import { getMemberCountByTeamId } from "../daos/member.dao";
+import { readGuestingResponseDTO } from "../dtos/guest.dto";
 
 export const readGuesting = async (query) => {
-    return await findGuesting(query.date, query.category);
+    const guestings = await findGuesting(query.date, query.category);
+    for (const guesting of guestings) {
+        guesting.memberCount = (await getMemberCountByTeamId(guesting["Team.id"])) + 1;
+    }
+    return readGuestingResponseDTO(guestings);
 };
 
 export const readGuestingByGender = async (selectedDate, query) => {
