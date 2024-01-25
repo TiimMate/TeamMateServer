@@ -5,6 +5,7 @@ export interface Status {
     isSuccess: boolean;
     code: number | string;
     message: string;
+    detail?: any;
 }
 
 export const status: { [key: string]: Status } = {
@@ -30,6 +31,12 @@ export const status: { [key: string]: Status } = {
         isSuccess: false,
         code: "COMMON002",
         message: "요청에 필요한 정보가 누락되었습니다.",
+    },
+    REQUEST_VALIDATION_ERROR: {
+        status: StatusCodes.BAD_REQUEST,
+        isSuccess: false,
+        code: "COMMON003",
+        message: "요청이 유효하지 않습니다.",
     },
 
     //auth err
