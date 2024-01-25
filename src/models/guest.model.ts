@@ -14,6 +14,10 @@ class Guest extends Model<InferAttributes<Guest>, InferCreationAttributes<Guest>
                 },
                 description: {
                     type: new DataTypes.STRING(400),
+                    allowNull: true,
+                },
+                recruitCount: {
+                    type: new DataTypes.INTEGER(),
                     allowNull: false,
                 },
             },
