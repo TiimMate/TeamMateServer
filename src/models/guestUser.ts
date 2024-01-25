@@ -26,8 +26,8 @@ class GuestUser extends Model<InferAttributes<GuestUser>, InferCreationAttribute
         );
     }
     static associate(db) {
-        db.Member.belongsTo(db.Guest, { foreignKey: "guest_id" });
-        db.Member.belongsTo(db.User, { foreignKey: "user_id" });
+        db.GuestUser.belongsTo(db.Guest, { foreignKey: "guest_id" });
+        db.GuestUser.belongsTo(db.User, { foreignKey: "user_id" });
     }
 }
 
