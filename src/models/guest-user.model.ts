@@ -18,7 +18,7 @@ class GuestUser extends Model<InferAttributes<GuestUser>, InferCreationAttribute
                 timestamps: true,
                 underscored: true,
                 modelName: "GuestUser",
-                tableName: "guestUser",
+                tableName: "guest_User",
                 paranoid: false,
                 charset: "utf8",
                 collate: "utf8_general_ci",
