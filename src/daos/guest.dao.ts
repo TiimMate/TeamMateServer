@@ -1,21 +1,20 @@
+import { Sequelize } from "sequelize";
 import db from "../models";
 
-export const findGuesting = async (selectedDate, category) => {
+export const findGuesting = async (date, category) => {
     return await db.Guest.findAll({
         raw: true,
-        where: {
-            gameTime: selectedDate,
-        },
+        where: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${date}', '%Y-%m-%d')`),
         include: [
             {
                 model: db.Team,
-                attributes: ["name", "region", "gender", "ageGroup", "skillLevel"],
                 where: {
                     category,
                 },
+                attributes: ["id", "name", "region", "gender", "ageGroup", "skillLevel"],
             },
         ],
-        attributes: ["game_time"],
+        attributes: ["gameTime", "recruitCount"],
     });
 };
 
