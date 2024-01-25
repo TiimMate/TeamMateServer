@@ -68,3 +68,19 @@ export const getTeamIdByInviteCode = async (inviteCode): Promise<number> => {
     });
     return team?.id;
 };
+
+export const getTeamById = async (teamId, userId) => {
+    return await db.Team.findOne({
+        where: {
+            id: teamId,
+            leaderId: userId,
+        },
+    });
+};
+
+export const setTeam = async (team, body) => {
+    Object.keys(body).forEach((field) => {
+        team[field] = body[field];
+    });
+    await team.save();
+};

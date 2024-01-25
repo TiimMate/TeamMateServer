@@ -84,6 +84,12 @@ export const status: { [key: string]: Status } = {
         code: "TEAM001",
         message: "해당 초대 코드로 가입할 수 있는 팀이 없습니다.",
     },
+    TEAM_NOT_FOUND: {
+        status: StatusCodes.NOT_FOUND,
+        isSuccess: false,
+        code: "TEAM002",
+        message: "요청한 팀을 찾을 수 없습니다.",
+    },
 
     //member err
     ALREADY_JOINED: {
@@ -91,5 +97,11 @@ export const status: { [key: string]: Status } = {
         isSuccess: false,
         code: "MEMBER001",
         message: "해당 팀에 이미 가입되어 있습니다.",
+    },
+    MEMBER_NOT_FOUND: {
+        status: StatusCodes.NOT_FOUND,
+        isSuccess: false,
+        code: "MEMBER002",
+        message: "멤버를 찾을 수 없습니다.",
     },
 };

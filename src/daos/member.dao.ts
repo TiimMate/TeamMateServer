@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import db from "../models";
 
 export const findMemberInfoByTeamId = async (teamId, userInfoAttributes) => {
@@ -33,12 +34,28 @@ export const isMemberExist = async (teamId, userId) => {
     return member !== null;
 };
 
+export const findMemberToDelete = async (memberIdsToDelete, teamId) => {
+    return await db.Member.findAll({
+        where: {
+            teamId,
+            userId: {
+                [Op.in]: memberIdsToDelete,
+            },
+        },
+    });
+};
+
+export const deleteMembersById = async (members, teamId) => {
+    for (const member of members) {
+        await member.destroy();
+    }
+};
+
 export const getMemberCountByTeamId = async (teamId) => {
     const count = await db.Member.count({
         where: {
             teamId,
         },
     });
-    console.log(count);
     return count;
 };
