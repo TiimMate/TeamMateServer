@@ -35,6 +35,6 @@ export const getCommunityPost = async (userId: number | undefined, postId: numbe
         where: {
             id: postId,
         },
-        attributes: ["id", "title", "content", "link"],
+        attributes: ["title", "content", "link"],
     });
 };

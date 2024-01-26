@@ -1,7 +1,7 @@
 import db from "../models";
 import { calculateHasNext, generateCursorCondition } from "../utils/paging.util";
 
-const defaultLimit = 2;
+const defaultLimit = 20;
 
 export const findCommunityComment = async (postId: number, cursorId: number | undefined) => {
     const commentsBeforeCursorForPost = { postId, ...generateCursorCondition(cursorId) };
@@ -22,4 +22,12 @@ export const findCommunityComment = async (postId: number, cursorId: number | un
 
     const ascendingComments = comments.sort((a, b) => a.id - b.id);
     return { ascendingComments, hasNext: calculateHasNext(ascendingComments, defaultLimit) };
+};
+
+export const getCommentCount = async (postId: number) => {
+    return await db.CommunityComment.count({
+        where: {
+            postId,
+        },
+    });
 };
