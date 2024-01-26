@@ -1,10 +1,10 @@
-import { Op } from "sequelize";
 import db from "../models";
+import { calculateHasNext, generateCursorCondition } from "../utils/paging.util";
 
 const defaultLimit = 20;
 
 export const findCommunityPost = async (userId?: number, cursorId?: number) => {
-    const postsBeforeCursor = cursorId ? { id: { [Op.lt]: cursorId } } : {};
+    const postsBeforeCursor = generateCursorCondition(cursorId);
 
     const bookmarkInclude: any[] = [];
     if (userId) {
@@ -26,6 +26,15 @@ export const findCommunityPost = async (userId?: number, cursorId?: number) => {
         attributes: ["id", "title", "createdAt"],
         include: bookmarkInclude,
     });
-    const hasNext = posts.length === defaultLimit;
-    return { posts, hasNext };
+    return { posts, hasNext: calculateHasNext(posts, defaultLimit) };
+};
+
+export const getCommunityPost = async (userId: number | undefined, postId: number) => {
+    return await db.CommunityPost.findOne({
+        raw: true,
+        where: {
+            id: postId,
+        },
+        attributes: ["id", "title", "content", "link"],
+    });
 };
