@@ -22,6 +22,7 @@ export const readCommunityPostResponseDTO = (post, imageUrls, comments, isBookma
         isBookmarked,
         commentCount: comments.ascendingComments.length,
         comments: comments.ascendingComments.map((comment) => ({
+            id: comment.id,
             nickname: comment["User.nickname"],
             content: comment.content,
             createdAt: comment.createdAt,
