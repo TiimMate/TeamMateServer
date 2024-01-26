@@ -1,7 +1,7 @@
 import { BaseError } from "../config/error";
 import { status } from "../config/response.status";
 import { getCommunityBookmark, insertOrDeleteBookmark } from "../daos/community-bookmark.dao";
-import { findCommunityComment, getCommentCount } from "../daos/community-comment.dao";
+import { findCommunityComment, getCommentCount, insertCommunityComment } from "../daos/community-comment.dao";
 import { findCommunityImage } from "../daos/community-image.dao";
 import { findCommunityPost, getCommunityPost, insertCommunityPost } from "../daos/community-post.dao";
 import {
@@ -9,6 +9,7 @@ import {
     readCommunityPostResponseDTO,
     readCommunityPostsResponseDTO,
 } from "../dtos/community-posts.dto";
+import { CreateCommunityCommentSchema } from "../schemas/community-comment.schema";
 import { CreateCommunityPostSchema } from "../schemas/community-post.schema";
 
 export const readCommunityPosts = async (userId: number | undefined, query) => {
@@ -23,10 +24,7 @@ export const createOrDeleteBookmark = async (userId, params) => {
 
 export const readCommunityPost = async (userId, params) => {
     const postId = params.postId;
-    const post = await getCommunityPost(userId, postId);
-    if (!post) {
-        throw new BaseError(status.POST_NOT_FOUND);
-    }
+    const post = handlePostNotFound(await getCommunityPost(postId));
     const imageUrls = await findCommunityImage(postId);
     const commentCount = await getCommentCount(postId);
     const comments = await findCommunityComment(postId, undefined);
@@ -53,4 +51,18 @@ export const readCommunityComments = async (params, query) => {
 export const createCommunityPost = async (userId: number, body: CreateCommunityPostSchema) => {
     await insertCommunityPost(userId, body);
     return;
+};
+
+export const createCommunityComment = async (userId: number, params, body: CreateCommunityCommentSchema) => {
+    const postId = params.postId;
+    handlePostNotFound(await getCommunityPost(postId));
+    await insertCommunityComment(userId, postId, body);
+    return;
+};
+
+const handlePostNotFound = (post) => {
+    if (!post) {
+        throw new BaseError(status.POST_NOT_FOUND);
+    }
+    return post;
 };
