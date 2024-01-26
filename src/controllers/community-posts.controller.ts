@@ -1,7 +1,8 @@
-import { Response } from "express";
+import { Request, Response } from "express";
 import { response } from "../config/response";
 import { status } from "../config/response.status";
 import {
+    createCommunityPost,
     createOrDeleteBookmark,
     readCommunityComments,
     readCommunityPost,
@@ -20,6 +21,10 @@ export const fetchCommunityPost = async (req, res: Response, next) => {
     res.send(response(status.SUCCESS, await readCommunityPost(req.user.id, req.params)));
 };
 
-export const fetchCommunityComments = async (req, res: Response, next) => {
+export const fetchCommunityComments = async (req: Request, res: Response, next) => {
     res.send(response(status.SUCCESS, await readCommunityComments(req.params, req.query)));
+};
+
+export const addCommunityPost = async (req, res: Response, next) => {
+    res.send(response(status.SUCCESS, await createCommunityPost(req.user.id, req.body)));
 };
