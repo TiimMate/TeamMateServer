@@ -1,7 +1,7 @@
 import { deleteMembersById, findMemberInfoByTeamId, findMemberToDelete } from "../daos/member.dao";
 import { findTeamPreviewByCategory, getTeamById, getTeamDetail, insertTeam, setTeam } from "../daos/team.dao";
 import { getUserInfoById, userInfoAttributes } from "../daos/user.dao";
-import { readTeamDetailResponseDTO } from "../dtos/team.dto";
+import { readTeamDetailResponseDTO } from "../dtos/teams.dto";
 import { v4 as uuidv4 } from "uuid";
 import { CreateTeamSchema, UpdateTeamSchema } from "../schemas/team.schema";
 import { BaseError } from "../config/error";

@@ -2,7 +2,7 @@
 // import { status } from "../config/response.status";
 import { findGuesting } from "../daos/guest.dao";
 import { getMemberCountByTeamId } from "../daos/member.dao";
-import { readGuestingResponseDTO } from "../dtos/guest.dto";
+import { readGuestingResponseDTO } from "../dtos/guests.dto";
 
 export const readGuesting = async (query) => {
     const guestings = await findGuesting(query.date, query.category);
