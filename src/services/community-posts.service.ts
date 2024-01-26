@@ -3,12 +3,13 @@ import { status } from "../config/response.status";
 import { getCommunityBookmark, insertOrDeleteBookmark } from "../daos/community-bookmark.dao";
 import { findCommunityComment, getCommentCount } from "../daos/community-comment.dao";
 import { findCommunityImage } from "../daos/community-image.dao";
-import { findCommunityPost, getCommunityPost } from "../daos/community-post.dao";
+import { findCommunityPost, getCommunityPost, insertCommunityPost } from "../daos/community-post.dao";
 import {
     readCommunityCommentsResonseDTO,
     readCommunityPostResponseDTO,
     readCommunityPostsResponseDTO,
 } from "../dtos/community-posts.dto";
+import { CreateCommunityPostSchema } from "../schemas/community-post.schema";
 
 export const readCommunityPosts = async (userId: number | undefined, query) => {
     const response = await findCommunityPost(userId, query.cursorId);
@@ -47,4 +48,9 @@ export const readCommunityComments = async (params, query) => {
     }
     const comments = await findCommunityComment(params.postId, cursorId);
     return readCommunityCommentsResonseDTO(comments);
+};
+
+export const createCommunityPost = async (userId: number, body: CreateCommunityPostSchema) => {
+    await insertCommunityPost(userId, body);
+    return;
 };

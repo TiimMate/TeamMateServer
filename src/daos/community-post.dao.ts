@@ -1,4 +1,5 @@
 import db from "../models";
+import { CreateCommunityPostSchema } from "../schemas/community-post.schema";
 import { calculateHasNext, generateCursorCondition } from "../utils/paging.util";
 
 const defaultLimit = 20;
@@ -36,5 +37,14 @@ export const getCommunityPost = async (userId: number | undefined, postId: numbe
             id: postId,
         },
         attributes: ["title", "content", "link"],
+    });
+};
+
+export const insertCommunityPost = async (userId: number, data: CreateCommunityPostSchema) => {
+    await db.CommunityPost.create({
+        title: data.title,
+        content: data.content,
+        link: data.link,
+        authorId: userId,
     });
 };
