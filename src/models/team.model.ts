@@ -5,7 +5,7 @@ class Team extends Model<InferAttributes<Team>, InferCreationAttributes<Team>> {
         Team.init(
             {
                 logo: {
-                    type: new DataTypes.STRING(100),
+                    type: new DataTypes.STRING(200),
                     allowNull: true,
                 },
                 name: {
