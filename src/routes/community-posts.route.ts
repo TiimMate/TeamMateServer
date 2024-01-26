@@ -2,6 +2,7 @@ import express from "express";
 import asyncHandler from "express-async-handler";
 import { verifyUser, verifyUserIfExists } from "../middlewares/auth.middleware";
 import {
+    addCommunityComment,
     addCommunityPost,
     addOrRemoveBookmark,
     fetchCommunityComments,
@@ -10,15 +11,23 @@ import {
 } from "../controllers/community-posts.controller";
 import { createCommunityPost } from "../schemas/community-post.schema";
 import { validateBody } from "../middlewares/validate.middleware";
+import { createCommunityComment } from "../schemas/community-comment.schema";
 
 export const communityPostsRouter = express.Router();
+
+communityPostsRouter.post("/", verifyUser, validateBody(createCommunityPost), asyncHandler(addCommunityPost));
 
 communityPostsRouter.get("/", verifyUserIfExists, asyncHandler(fetchCommunityPosts));
 
 communityPostsRouter.post("/:postId/bookmark", verifyUser, asyncHandler(addOrRemoveBookmark));
 
-communityPostsRouter.get("/:postId", verifyUser, asyncHandler(fetchCommunityPost));
+communityPostsRouter.post(
+    "/:postId/comments",
+    verifyUser,
+    validateBody(createCommunityComment),
+    asyncHandler(addCommunityComment),
+);
 
 communityPostsRouter.get("/:postId/comments", verifyUser, asyncHandler(fetchCommunityComments));
 
-communityPostsRouter.post("/", verifyUser, validateBody(createCommunityPost), asyncHandler(addCommunityPost));
+communityPostsRouter.get("/:postId", verifyUser, asyncHandler(fetchCommunityPost));

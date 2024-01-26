@@ -30,7 +30,7 @@ export const findCommunityPost = async (userId?: number, cursorId?: number) => {
     return { posts, hasNext: calculateHasNext(posts, defaultLimit) };
 };
 
-export const getCommunityPost = async (userId: number | undefined, postId: number) => {
+export const getCommunityPost = async (postId: number) => {
     return await db.CommunityPost.findOne({
         raw: true,
         where: {
