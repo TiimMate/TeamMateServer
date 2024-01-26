@@ -104,4 +104,12 @@ export const status: { [key: string]: Status } = {
         code: "MEMBER002",
         message: "멤버를 찾을 수 없습니다.",
     },
+
+    //post err
+    POST_NOT_FOUND: {
+        status: StatusCodes.NOT_FOUND,
+        isSuccess: false,
+        code: "POST001",
+        message: "요청한 글을 찾을 수 없습니다.",
+    },
 };
