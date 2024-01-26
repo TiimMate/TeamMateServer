@@ -15,6 +15,7 @@ import { authRouter } from "./routes/auth.route";
 import { teamsRouter } from "./routes/teams.route";
 import { membersRouter } from "./routes/members.route";
 import { guestsRouter } from "./routes/guests.route";
+import { communityPostsRouter } from "./routes/community-posts.route";
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.use("/auth", authRouter);
 app.use("/teams", teamsRouter);
 app.use("/members", membersRouter);
 app.use("/guests", guestsRouter);
+app.use("/community-posts", communityPostsRouter);
 
 app.use((req: Request, res: Response, next: NextFunction) => {
     const err = new BaseError(status.NOT_FOUND);
