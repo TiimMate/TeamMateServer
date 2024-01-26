@@ -10,8 +10,7 @@ export const readCommunityPostsResponseDTO = (response) => {
     };
 };
 
-export const readCommunityPostResponseDTO = (post, imageUrls, comments, isBookmarked) => {
-    console.log(post);
+export const readCommunityPostResponseDTO = (post, imageUrls, commentCount, comments, isBookmarked) => {
     return {
         post: {
             title: post.title,
@@ -20,7 +19,13 @@ export const readCommunityPostResponseDTO = (post, imageUrls, comments, isBookma
             imageUrls: imageUrls,
         },
         isBookmarked,
-        commentCount: comments.ascendingComments.length,
+        commentCount,
+        ...readCommunityCommentsResonseDTO(comments),
+    };
+};
+
+export const readCommunityCommentsResonseDTO = (comments) => {
+    return {
         comments: comments.ascendingComments.map((comment) => ({
             id: comment.id,
             nickname: comment["User.nickname"],

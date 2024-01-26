@@ -3,6 +3,7 @@ import asyncHandler from "express-async-handler";
 import { verifyUser, verifyUserIfExists } from "../middlewares/auth.middleware";
 import {
     addOrRemoveBookmark,
+    fetchCommunityComments,
     fetchCommunityPost,
     fetchCommunityPosts,
 } from "../controllers/community-posts.controller";
@@ -14,3 +15,5 @@ communityPostsRouter.get("/", verifyUserIfExists, asyncHandler(fetchCommunityPos
 communityPostsRouter.post("/:postId/bookmark", verifyUser, asyncHandler(addOrRemoveBookmark));
 
 communityPostsRouter.get("/:postId", verifyUser, asyncHandler(fetchCommunityPost));
+
+communityPostsRouter.get("/:postId/comments", asyncHandler(fetchCommunityComments));
