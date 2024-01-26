@@ -1,96 +1,73 @@
 import db from "../models";
+import { Sequelize } from "sequelize";
 
-export const findGamesByDate = async (selectedDate, category) => {
-    const hostingGames = await db.Game.findAll({
+export const findGamesByDate = async (date, category) => {
+    return await db.Game.findAll({
         raw: true,
-        where: {
-            category,
-            gameTime: selectedDate,
-        },
+        where: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${date}', '%Y-%m-%d')`),
         include: [
             {
                 model: db.Team,
-                as: "hostTeamInfo",
-                attributes: ["name", "region", "gender", "age_group", "skill_level"],
+                attributes: ["name", "region", "gender", "ageGroup", "skillLevel"],
                 where: {
-                    id: db.Sequelize.col("Game.hostTeamId"),
+                    category,
                 },
             },
         ],
-        attributes: [],
+        attributes: ["game_time"],
     });
-
-    return hostingGames.map((game) => game["hostTeamInfo"]);
 };
 
-export const findGamesByGender = async (selectedDate, category, gender) => {
-    const hostingGames = await db.Game.findAll({
+export const findGamesByGender = async (date, category, gender) => {
+    return await db.Game.findAll({
         raw: true,
-        where: {
-            gameTime: selectedDate,
-            category,
-            gender,
-        },
+        where: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${date}', '%Y-%m-%d')`),
         include: [
             {
                 model: db.Team,
-                as: "hostTeamInfo",
-                attributes: ["name", "region", "gender", "age_group", "skill_level"],
+                attributes: ["name", "region", "gender", "ageGroup", "skillLevel"],
                 where: {
-                    id: db.Sequelize.col("Game.hostTeamId"),
+                    category,
+                    gender,
                 },
             },
         ],
-        attributes: [],
+        attributes: ["game_time"],
     });
-
-    return hostingGames.map((game) => game["hostTeamInfo"]);
 };
 
-export const findGamesByLevel = async (selectedDate, category, level) => {
-    const hostingGames = await db.Game.findAll({
+export const findGamesByLevel = async (date, category, level) => {
+    return await db.Game.findAll({
         raw: true,
-        where: {
-            gameTime: selectedDate,
-            category,
-            level,
-        },
+        where: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${date}', '%Y-%m-%d')`),
         include: [
             {
                 model: db.Team,
-                as: "hostTeamInfo",
-                attributes: ["name", "region", "gender", "age_group", "skill_level"],
+                attributes: ["name", "region", "gender", "ageGroup", "skillLevel"],
                 where: {
-                    id: db.Sequelize.col("Game.hostTeamId"),
+                    category,
+                    level,
                 },
             },
         ],
-        attributes: [],
+        attributes: ["game_time"],
     });
-
-    return hostingGames.map((game) => game["hostTeamInfo"]);
 };
 
-export const findGamesByRegion = async (selectedDate, category, region) => {
-    const hostingGames = await db.Game.findAll({
+export const findGamesByRegion = async (date, category, region) => {
+    return await db.Game.findAll({
         raw: true,
-        where: {
-            gameTime: selectedDate,
-            category,
-            region,
-        },
+        where: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${date}', '%Y-%m-%d')`),
         include: [
             {
                 model: db.Team,
-                as: "hostTeamInfo",
-                attributes: ["name", "region", "gender", "age_group", "skill_level"],
+                attributes: ["name", "region", "gender", "ageGroup", "skillLevel"],
                 where: {
-                    id: db.Sequelize.col("Game.hostTeamId"),
+                    category,
+                    region,
                 },
             },
         ],
-        attributes: [],
+        attributes: ["game_time"],
     });
-
-    return hostingGames.map((game) => game["hostTeamInfo"]);
 };

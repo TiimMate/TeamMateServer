@@ -42,8 +42,8 @@ class Game extends Model<InferAttributes<Game>, InferCreationAttributes<Game>> {
         );
     }
     static associate(db) {
-        // db.Game.hasMany(db.Team, { foreignKey: "host_team_id" });
-        // db.Game.hasMany(db.Team, { foreignKey: "battle_team_id" });
+        db.Game.belongsTo(db.Team, { foreignKey: "host_team_id" });
+        db.Game.belongsTo(db.Team, { foreignKey: "battle_team_id" });
         // db.Game.belongsTo(db.Team, {
         //     foreignKey: "category",
         //     targetKey: "category",
