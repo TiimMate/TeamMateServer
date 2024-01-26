@@ -24,11 +24,15 @@ export const generateRefreshToken = (): string => {
 };
 
 export const extractAccessToken = (req: Request): string => {
-    const accessToken = req.headers.authorization?.split(tokenType)[1];
+    const accessToken = extractAccessTokenFromHeader(req);
     if (!accessToken) {
         throw new BaseError(status.MISSING_ACCESS_TOKEN);
     }
     return accessToken;
+};
+
+export const extractAccessTokenFromHeader = (req: Request): string | undefined => {
+    return req.headers.authorization?.split(tokenType)[1];
 };
 
 export const extractRefreshToken = (req: Request) => {
