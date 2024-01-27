@@ -4,7 +4,7 @@ import { verifyUser, verifyUserIfExists } from "../middlewares/auth.middleware";
 import {
     addCommunityComment,
     addCommunityPost,
-    addOrRemoveBookmark,
+    // addOrRemoveBookmark,
     fetchCommunityComments,
     fetchCommunityPost,
     // fetchCommunityPosts,
@@ -19,7 +19,7 @@ communityPostsRouter.post("/", verifyUser, validateBody(createCommunityPost), as
 
 // communityPostsRouter.get("/", verifyUserIfExists, asyncHandler(fetchCommunityPosts));
 
-communityPostsRouter.post("/:postId/bookmark", verifyUser, asyncHandler(addOrRemoveBookmark));
+// communityPostsRouter.post("/:postId/bookmark", verifyUser, asyncHandler(addOrRemoveBookmark));
 
 communityPostsRouter.post(
     "/:postId/comments",

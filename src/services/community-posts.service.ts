@@ -1,6 +1,9 @@
 import { BaseError } from "../config/error";
 import { status } from "../config/response.status";
-import { getCommunityBookmark, insertOrDeleteBookmark } from "../daos/community-bookmark.dao";
+import {
+    getBookmark,
+    // insertOrDeleteBookmark
+} from "../daos/bookmark.dao";
 import { findCommunityComment, getCommentCount, insertCommunityComment } from "../daos/community-comment.dao";
 import { findCommunityImage } from "../daos/community-image.dao";
 import {
@@ -21,10 +24,10 @@ import { CreateCommunityPostSchema } from "../schemas/community-post.schema";
 //     return readCommunityPostsResponseDTO(response);
 // };
 
-export const createOrDeleteBookmark = async (userId, params) => {
-    await insertOrDeleteBookmark(userId, params.postId);
-    return;
-};
+// export const createOrDeleteBookmark = async (userId, params) => {
+//     await insertOrDeleteBookmark(userId, params.postId);
+//     return;
+// };
 
 export const readCommunityPost = async (userId, params) => {
     const postId = params.postId;
@@ -40,7 +43,7 @@ const checkIsBookmarked = async (userId: number | undefined, postId: number) => 
     if (!userId) {
         return null;
     }
-    return Boolean(await getCommunityBookmark(userId, postId));
+    return Boolean(await getBookmark(userId, postId));
 };
 
 export const readCommunityComments = async (params, query) => {

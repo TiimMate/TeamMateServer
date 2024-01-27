@@ -4,7 +4,7 @@ import { status } from "../config/response.status";
 import {
     createCommunityComment,
     createCommunityPost,
-    createOrDeleteBookmark,
+    // createOrDeleteBookmark,
     readCommunityComments,
     readCommunityPost,
     // readCommunityPosts,
@@ -14,9 +14,9 @@ import {
 //     res.send(response(status.SUCCESS, await readCommunityPosts(req.user?.id, req.query)));
 // };
 
-export const addOrRemoveBookmark = async (req, res: Response, next) => {
-    res.send(response(status.SUCCESS, await createOrDeleteBookmark(req.user.id, req.params)));
-};
+// export const addOrRemoveBookmark = async (req, res: Response, next) => {
+//     res.send(response(status.SUCCESS, await createOrDeleteBookmark(req.user.id, req.params)));
+// };
 
 export const fetchCommunityPost = async (req, res: Response, next) => {
     res.send(response(status.SUCCESS, await readCommunityPost(req.user.id, req.params)));

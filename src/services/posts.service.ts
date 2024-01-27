@@ -1,4 +1,5 @@
 import { PostType } from "../constants/post-type.constant";
+import { insertOrDeleteBookmark } from "../daos/bookmark.dao";
 import { findPostByType, findPostByAuthorId, findBookmarkedPost } from "../daos/post.dao";
 import { readPostsResponseDTO } from "../dtos/posts.dto";
 
@@ -15,4 +16,9 @@ export const readPostsByAuthor = async (userId: number, query) => {
 export const readBookmarkedPosts = async (userId: number, query) => {
     const result = await findBookmarkedPost(userId, query.cursorId);
     return readPostsResponseDTO(result);
+};
+
+export const createOrDeleteBookmark = async (userId, params) => {
+    await insertOrDeleteBookmark(userId, params.postId);
+    return;
 };
