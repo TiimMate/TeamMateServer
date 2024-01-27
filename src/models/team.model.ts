@@ -5,7 +5,7 @@ class Team extends Model<InferAttributes<Team>, InferCreationAttributes<Team>> {
         Team.init(
             {
                 logo: {
-                    type: new DataTypes.STRING(100),
+                    type: new DataTypes.STRING(200),
                     allowNull: true,
                 },
                 name: {
@@ -68,9 +68,9 @@ class Team extends Model<InferAttributes<Team>, InferCreationAttributes<Team>> {
     static associate(db) {
         db.Team.hasMany(db.Member, { foreignKey: "team_id" });
         db.Team.belongsTo(db.User, { foreignKey: "leader_id" });
-
         db.Team.hasMany(db.Game, { foreignKey: "host_team_id" });
         db.Team.hasMany(db.Game, { foreignKey: "guest_team_id" });
+        db.Team.hasMany(db.Guest, { foreignKey: "team_id" });
     }
 }
 

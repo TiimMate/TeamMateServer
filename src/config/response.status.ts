@@ -5,6 +5,7 @@ export interface Status {
     isSuccess: boolean;
     code: number | string;
     message: string;
+    detail?: any;
 }
 
 export const status: { [key: string]: Status } = {
@@ -30,6 +31,12 @@ export const status: { [key: string]: Status } = {
         isSuccess: false,
         code: "COMMON002",
         message: "요청에 필요한 정보가 누락되었습니다.",
+    },
+    REQUEST_VALIDATION_ERROR: {
+        status: StatusCodes.BAD_REQUEST,
+        isSuccess: false,
+        code: "COMMON003",
+        message: "요청이 유효하지 않습니다.",
     },
 
     //auth err
@@ -77,6 +84,12 @@ export const status: { [key: string]: Status } = {
         code: "TEAM001",
         message: "해당 초대 코드로 가입할 수 있는 팀이 없습니다.",
     },
+    TEAM_NOT_FOUND: {
+        status: StatusCodes.NOT_FOUND,
+        isSuccess: false,
+        code: "TEAM002",
+        message: "요청한 팀을 찾을 수 없습니다.",
+    },
 
     //member err
     ALREADY_JOINED: {
@@ -84,5 +97,19 @@ export const status: { [key: string]: Status } = {
         isSuccess: false,
         code: "MEMBER001",
         message: "해당 팀에 이미 가입되어 있습니다.",
+    },
+    MEMBER_NOT_FOUND: {
+        status: StatusCodes.NOT_FOUND,
+        isSuccess: false,
+        code: "MEMBER002",
+        message: "멤버를 찾을 수 없습니다.",
+    },
+
+    //post err
+    POST_NOT_FOUND: {
+        status: StatusCodes.NOT_FOUND,
+        isSuccess: false,
+        code: "POST001",
+        message: "요청한 글을 찾을 수 없습니다.",
     },
 };
