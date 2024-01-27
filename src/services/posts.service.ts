@@ -1,5 +1,5 @@
 import { PostType } from "../constants/post-type.constant";
-import { findPostByType, findPostByAuthorId } from "../daos/post.dao";
+import { findPostByType, findPostByAuthorId, findBookmarkedPost } from "../daos/post.dao";
 import { readPostsResponseDTO } from "../dtos/posts.dto";
 
 export const readCommunityPosts = async (userId: number | undefined, query) => {
@@ -7,7 +7,12 @@ export const readCommunityPosts = async (userId: number | undefined, query) => {
     return readPostsResponseDTO(result);
 };
 
-export const readPostsByAuthor = async (userId, query) => {
+export const readPostsByAuthor = async (userId: number, query) => {
     const result = await findPostByAuthorId(userId, query.cursorId);
+    return readPostsResponseDTO(result);
+};
+
+export const readBookmarkedPosts = async (userId: number, query) => {
+    const result = await findBookmarkedPost(userId, query.cursorId);
     return readPostsResponseDTO(result);
 };
