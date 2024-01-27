@@ -1,6 +1,11 @@
 // import { BaseError } from "../config/error";
 // import { status } from "../config/response.status";
-import { findGuesting } from "../daos/guest.dao";
+import {
+    findGuesting,
+    // findGuestingByGender,
+    // findGuestingByLevel,
+    findGuestingByRegion,
+} from "../daos/guest.dao";
 import { getMemberCountByTeamId } from "../daos/member.dao";
 import { readGuestingResponseDTO } from "../dtos/guests.dto";
 
@@ -12,14 +17,26 @@ export const readGuesting = async (query) => {
     return readGuestingResponseDTO(guestings);
 };
 
-// export const readGuestingByGender = async (selectedDate, query) => {
-//     return await findGuestingByGender(selectedDate, query.category, query.gender);
+// export const readGuestingByGender = async (query) => {
+//     const guestings = await findGuestingByGender(query.date, query.category, query.gender);
+//     for (const guesting of guestings) {
+//         guesting.memberCount = (await getMemberCountByTeamId(guesting["Team.id"])) + 1;
+//     }
+//     return readGuestingResponseDTO(guestings);
 // };
 
-// export const readGuestingByLevel = async (selectedDate, query) => {
-//     return await findGuestingByLevel(selectedDate, query.category, query.level);
+// export const readGuestingByLevel = async (query) => {
+//     const guestings = await findGuestingByLevel(query.date, query.category, query.skillLevel);
+//     for (const guesting of guestings) {
+//         guesting.memberCount = (await getMemberCountByTeamId(guesting["Team.id"])) + 1;
+//     }
+//     return readGuestingResponseDTO(guestings);
 // };
 
-// export const readGuestingByRegion = async (selectedDate, query) => {
-//     return await findGuestingByRegion(selectedDate, query.category, query.region);
-// };
+export const readGuestingByRegion = async (query) => {
+    const guestings = await findGuestingByRegion(query.date, query.category, query.region);
+    for (const guesting of guestings) {
+        guesting.memberCount = (await getMemberCountByTeamId(guesting["Team.id"])) + 1;
+    }
+    return readGuestingResponseDTO(guestings);
+};
