@@ -6,18 +6,18 @@ const defaultLimit = 20;
 
 export const findPostByType = async (userId: number | undefined, cursorId: number | undefined, type: PostType) => {
     const communityPostsBeforeCursor = { type, ...generateCursorCondition(cursorId) };
-    return findPost(userId, communityPostsBeforeCursor);
+    return findPostByFilter(userId, communityPostsBeforeCursor);
 };
 
 export const findPostByAuthorId = async (userId: number, cursorId?: number) => {
     const postsBeforeCursorForAuthor = { authorId: userId, ...generateCursorCondition(cursorId) };
-    return findPost(userId, postsBeforeCursorForAuthor);
+    return findPostByFilter(userId, postsBeforeCursorForAuthor);
 };
 
-const findPost = async (userId: number | undefined, postFilter: object) => {
-    const bookmarkInclude: any[] = [];
+const findPostByFilter = async (userId: number | undefined, postFilter: object) => {
+    const includeAllPosts: any[] = [];
     if (userId) {
-        bookmarkInclude.push({
+        includeAllPosts.push({
             model: db.Bookmark,
             where: {
                 userId,
@@ -26,7 +26,24 @@ const findPost = async (userId: number | undefined, postFilter: object) => {
             attributes: ["id"],
         });
     }
+    return findPost(postFilter, includeAllPosts);
+};
 
+export const findBookmarkedPost = async (userId: number, cursorId?: number) => {
+    const postsBeforeCursor = generateCursorCondition(cursorId);
+    const includeBookmarkedPosts = [
+        {
+            model: db.Bookmark,
+            where: {
+                userId,
+            },
+            attributes: ["id"],
+        },
+    ];
+    return findPost(postsBeforeCursor, includeBookmarkedPosts);
+};
+
+const findPost = async (postFilter: object, bookmarkInclude: Array<any>) => {
     const posts = await db.Post.findAll({
         raw: true,
         where: postFilter,
