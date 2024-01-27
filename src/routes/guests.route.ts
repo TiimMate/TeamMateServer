@@ -7,10 +7,12 @@ import {
     GuestingPreviewByRegion,
     DetailedGuestingPreview,
 } from "../controllers/guest.controller";
+import { createGuesting } from "../schemas/guest.schema";
+import { validateBody } from "../middlewares/validate.middleware";
 
 export const guestsRouter = express.Router({ mergeParams: true });
 
-// guestRouter.post("/", asyncHandler(createGuesting));
+// guestsRouter.post("/", validateBody(createGuesting), asyncHandler(addGuesting));
 
 guestsRouter.get("/", asyncHandler(GuestingPreview));
 

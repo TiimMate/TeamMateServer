@@ -6,11 +6,19 @@ import {
     findGuestingByLevel,
     findGuestingByRegion,
     getDetailedGuesting,
+    insertGuesting,
 } from "../daos/guest.dao";
 import { findMemberInfoByTeamId, getMemberCountByTeamId } from "../daos/member.dao";
-import { getTeamDetailforGuesting } from "../daos/team.dao";
+import { getTeamDetailforGuesting, getTeamIdByUserId } from "../daos/team.dao";
 import { getUserInfoById, userInfoAttributes } from "../daos/user.dao";
 import { readGuestingDetailResponseDTO, readGuestingResponseDTO } from "../dtos/guests.dto";
+import { CreateGuestingSchema } from "../schemas/guest.schema";
+
+export const createGuesting = async (userId, body: CreateGuestingSchema) => {
+    const teamId = getTeamIdByUserId(userId);
+    await insertGuesting(teamId, body);
+    return;
+};
 
 export const readGuesting = async (query) => {
     const guestings = await findGuesting(query.date, query.category);

@@ -88,6 +88,15 @@ export const getTeamById = async (teamId, userId) => {
     });
 };
 
+export const getTeamIdByUserId = async (userId) => {
+    return await db.Team.findOne({
+        where: {
+            leaderId: userId,
+        },
+        attributes: ["id"],
+    });
+};
+
 export const setTeam = async (team, body) => {
     Object.keys(body).forEach((field) => {
         team[field] = body[field];

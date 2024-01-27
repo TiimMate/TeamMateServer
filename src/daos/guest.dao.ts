@@ -1,5 +1,15 @@
 import { Sequelize } from "sequelize";
 import db from "../models";
+import { CreateGuestingSchema } from "../schemas/guest.schema";
+
+export const insertGuesting = async (teamId, data: CreateGuestingSchema) => {
+    await db.Guest.create({
+        teamId: teamId,
+        gameTime: data.gameTime,
+        description: data.description,
+        recruitCount: data.recruitCount,
+    });
+};
 
 export const findGuesting = async (date, category) => {
     return await db.Guest.findAll({

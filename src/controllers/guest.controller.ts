@@ -7,11 +7,11 @@ import {
     readGuestingByRegion,
     readDetailedGuesting,
 } from "../services/guest.service";
-// import { postGuesting } from "../services/guest.service";
+import { createGuesting } from "../services/guest.service";
 
-// export const createGuesting = async (req, res, next) => {
-//     return res.send(response(status.SUCCESS, await postGuesting(req.params.category, req.query)));
-// };
+export const addGuesting = async (req, res, next) => {
+    return res.send(response(status.SUCCESS, await createGuesting(req.user.id, req.body)));
+};
 
 export const GuestingPreview = async (req, res, next) => {
     return res.send(response(status.SUCCESS, await readGuesting(req.query)));
