@@ -5,6 +5,7 @@ import {
     GuestingPreviewByLevel,
     GuestingPreviewByGender,
     GuestingPreviewByRegion,
+    DetailedGuestingPreview,
 } from "../controllers/guest.controller";
 
 export const guestsRouter = express.Router({ mergeParams: true });
@@ -19,4 +20,4 @@ guestsRouter.get("/gender", asyncHandler(GuestingPreviewByGender));
 
 guestsRouter.get("/region", asyncHandler(GuestingPreviewByRegion));
 
-// guestRouter.get("/:guestId", asyncHandler(DetailedGuestingPreview));
+guestsRouter.get("/:guestingId", asyncHandler(DetailedGuestingPreview));

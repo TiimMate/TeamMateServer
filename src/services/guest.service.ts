@@ -1,8 +1,16 @@
 // import { BaseError } from "../config/error";
 // import { status } from "../config/response.status";
-import { findGuesting, findGuestingByGender, findGuestingByLevel, findGuestingByRegion } from "../daos/guest.dao";
-import { getMemberCountByTeamId } from "../daos/member.dao";
-import { readGuestingResponseDTO } from "../dtos/guests.dto";
+import {
+    findGuesting,
+    findGuestingByGender,
+    findGuestingByLevel,
+    findGuestingByRegion,
+    getDetailedGuesting,
+} from "../daos/guest.dao";
+import { findMemberInfoByTeamId, getMemberCountByTeamId } from "../daos/member.dao";
+import { getTeamDetailforGuesting } from "../daos/team.dao";
+import { getUserInfoById, userInfoAttributes } from "../daos/user.dao";
+import { readGuestingDetailResponseDTO, readGuestingResponseDTO } from "../dtos/guests.dto";
 
 export const readGuesting = async (query) => {
     const guestings = await findGuesting(query.date, query.category);
@@ -34,4 +42,13 @@ export const readGuestingByRegion = async (query) => {
         guesting.memberCount = (await getMemberCountByTeamId(guesting["Team.id"])) + 1;
     }
     return readGuestingResponseDTO(guestings);
+};
+
+export const readDetailedGuesting = async (params) => {
+    const guestingId = params.guestingId;
+    const guestingDetail = await getDetailedGuesting(guestingId);
+    const TeamDetail = await getTeamDetailforGuesting(guestingDetail.teamId);
+    const leaderInfo = await getUserInfoById(TeamDetail.leaderId);
+    const memberInfo = await findMemberInfoByTeamId(guestingDetail.teamId, userInfoAttributes);
+    return readGuestingDetailResponseDTO(guestingDetail, TeamDetail, leaderInfo, memberInfo);
 };

@@ -72,30 +72,12 @@ export const findGuestingByRegion = async (date, category, region) => {
     });
 };
 
-// export const findGuestDetail = async (guestId) => {
-//     return await db.Guest.findOne({
-//         raw: true,
-//         where: {
-//             id: guestId,
-//         },
-//         include: [
-//             {
-//                 model: db.Team,
-//                 as: "TeamInfo",
-//                 attributes: ["name", "skill_level", "manner_level", "region", "description", "gender", "age_group"],
-//                 where: {
-//                     id: db.Sequelize.col("Guest.TeamId"),
-//                 },
-//             },
-//             {
-//                 model: db.User,
-//                 as: "TeamMemberInfo",
-//                 attributes: ["nickname"],
-//                 where: {
-//                     id: db.Sequelize.col("User.TeamId"),
-//                 },
-//             },
-//         ],
-//         attributes: ["game_time", "dscription"],
-//     });
-// };
+export const getDetailedGuesting = async (guestingId) => {
+    return await db.Guest.findAll({
+        raw: true,
+        where: {
+            id: guestingId,
+        },
+        attributes: ["teamId", "gameTime", "description", "recruitCount"],
+    });
+};

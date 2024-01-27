@@ -58,6 +58,16 @@ export const getTeamDetail = async (teamId) => {
     });
 };
 
+export const getTeamDetailforGuesting = async (teamId) => {
+    return await db.Team.findOne({
+        raw: true,
+        where: {
+            id: teamId,
+        },
+        attributes: ["name", "description", "gender", "ageGroup", "gymName", "skillLevel", "mannerLevel"],
+    });
+};
+
 export const getTeamIdByInviteCode = async (inviteCode): Promise<number> => {
     const team = await db.Team.findOne({
         raw: true,

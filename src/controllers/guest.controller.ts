@@ -5,6 +5,7 @@ import {
     readGuestingByLevel,
     readGuestingByGender,
     readGuestingByRegion,
+    readDetailedGuesting,
 } from "../services/guest.service";
 // import { postGuesting } from "../services/guest.service";
 
@@ -28,6 +29,6 @@ export const GuestingPreviewByRegion = async (req, res, next) => {
     return res.send(response(status.SUCCESS, await readGuestingByRegion(req.query)));
 };
 
-// export const DetailedGuestingPreview = async (req, res, next) => {
-//     return res.send(response(status.SUCCESS, await getDetailedGuesting(req.team.id, req.params)));
-// };
+export const DetailedGuestingPreview = async (req, res, next) => {
+    return res.send(response(status.SUCCESS, await readDetailedGuesting(req.params)));
+};
