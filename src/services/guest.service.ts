@@ -2,7 +2,7 @@
 // import { status } from "../config/response.status";
 import {
     findGuesting,
-    // findGuestingByGender,
+    findGuestingByGender,
     // findGuestingByLevel,
     findGuestingByRegion,
 } from "../daos/guest.dao";
@@ -17,13 +17,13 @@ export const readGuesting = async (query) => {
     return readGuestingResponseDTO(guestings);
 };
 
-// export const readGuestingByGender = async (query) => {
-//     const guestings = await findGuestingByGender(query.date, query.category, query.gender);
-//     for (const guesting of guestings) {
-//         guesting.memberCount = (await getMemberCountByTeamId(guesting["Team.id"])) + 1;
-//     }
-//     return readGuestingResponseDTO(guestings);
-// };
+export const readGuestingByGender = async (query) => {
+    const guestings = await findGuestingByGender(query.date, query.category, query.gender);
+    for (const guesting of guestings) {
+        guesting.memberCount = (await getMemberCountByTeamId(guesting["Team.id"])) + 1;
+    }
+    return readGuestingResponseDTO(guestings);
+};
 
 // export const readGuestingByLevel = async (query) => {
 //     const guestings = await findGuestingByLevel(query.date, query.category, query.skillLevel);

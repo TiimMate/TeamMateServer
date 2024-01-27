@@ -3,7 +3,7 @@ import asyncHandler from "express-async-handler";
 import {
     GuestingPreview,
     // GuestingPreviewByLevel,
-    // GuestingPreviewByGender,
+    GuestingPreviewByGender,
     GuestingPreviewByRegion,
 } from "../controllers/guest.controller";
 
@@ -15,7 +15,7 @@ guestsRouter.get("/", asyncHandler(GuestingPreview));
 
 // guestsRouter.get("/level", asyncHandler(GuestingPreviewByLevel));
 
-// guestsRouter.get("/gender", asyncHandler(GuestingPreviewByGender));
+guestsRouter.get("/gender", asyncHandler(GuestingPreviewByGender));
 
 guestsRouter.get("/region", asyncHandler(GuestingPreviewByRegion));
 

@@ -3,7 +3,7 @@ import { status } from "../config/response.status";
 import {
     readGuesting,
     // readGuestingByLevel,
-    // readGuestingByGender,
+    readGuestingByGender,
     readGuestingByRegion,
 } from "../services/guest.service";
 // import { postGuesting } from "../services/guest.service";
@@ -20,9 +20,9 @@ export const GuestingPreview = async (req, res, next) => {
 //     return res.send(response(status.SUCCESS, await readGuestingByLevel(req.query)));
 // };
 
-// export const GuestingPreviewByGender = async (req, res, next) => {
-//     return res.send(response(status.SUCCESS, await readGuestingByGender(req.query)));
-// };
+export const GuestingPreviewByGender = async (req, res, next) => {
+    return res.send(response(status.SUCCESS, await readGuestingByGender(req.query)));
+};
 
 export const GuestingPreviewByRegion = async (req, res, next) => {
     return res.send(response(status.SUCCESS, await readGuestingByRegion(req.query)));
