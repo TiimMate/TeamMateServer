@@ -3,19 +3,23 @@ import { status } from "../config/response.status";
 import { getCommunityBookmark, insertOrDeleteBookmark } from "../daos/community-bookmark.dao";
 import { findCommunityComment, getCommentCount, insertCommunityComment } from "../daos/community-comment.dao";
 import { findCommunityImage } from "../daos/community-image.dao";
-import { findCommunityPost, getCommunityPost, insertCommunityPost } from "../daos/community-post.dao";
+import {
+    // findCommunityPost,
+    getCommunityPost,
+    insertCommunityPost,
+} from "../daos/community-post.dao";
 import {
     readCommunityCommentsResonseDTO,
     readCommunityPostResponseDTO,
-    readCommunityPostsResponseDTO,
+    // readCommunityPostsResponseDTO,
 } from "../dtos/community-posts.dto";
 import { CreateCommunityCommentSchema } from "../schemas/community-comment.schema";
 import { CreateCommunityPostSchema } from "../schemas/community-post.schema";
 
-export const readCommunityPosts = async (userId: number | undefined, query) => {
-    const response = await findCommunityPost(userId, query.cursorId);
-    return readCommunityPostsResponseDTO(response);
-};
+// export const readCommunityPosts = async (userId: number | undefined, query) => {
+//     const response = await findCommunityPost(userId, query.cursorId);
+//     return readCommunityPostsResponseDTO(response);
+// };
 
 export const createOrDeleteBookmark = async (userId, params) => {
     await insertOrDeleteBookmark(userId, params.postId);

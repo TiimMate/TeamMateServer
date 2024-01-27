@@ -1,7 +1,13 @@
+import { PostType } from "../constants/post-type.constant";
 import db from "../models";
 import { calculateHasNext, generateCursorCondition } from "../utils/paging.util";
 
 const defaultLimit = 20;
+
+export const findPostByType = async (userId: number | undefined, cursorId: number | undefined, type: PostType) => {
+    const communityPostsBeforeCursor = { type, ...generateCursorCondition(cursorId) };
+    return findPost(userId, communityPostsBeforeCursor);
+};
 
 export const findPostByAuthorId = async (userId: number, cursorId?: number) => {
     const postsBeforeCursorForAuthor = { authorId: userId, ...generateCursorCondition(cursorId) };

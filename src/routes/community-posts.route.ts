@@ -7,7 +7,7 @@ import {
     addOrRemoveBookmark,
     fetchCommunityComments,
     fetchCommunityPost,
-    fetchCommunityPosts,
+    // fetchCommunityPosts,
 } from "../controllers/community-posts.controller";
 import { createCommunityPost } from "../schemas/community-post.schema";
 import { validateBody } from "../middlewares/validate.middleware";
@@ -17,7 +17,7 @@ export const communityPostsRouter = express.Router();
 
 communityPostsRouter.post("/", verifyUser, validateBody(createCommunityPost), asyncHandler(addCommunityPost));
 
-communityPostsRouter.get("/", verifyUserIfExists, asyncHandler(fetchCommunityPosts));
+// communityPostsRouter.get("/", verifyUserIfExists, asyncHandler(fetchCommunityPosts));
 
 communityPostsRouter.post("/:postId/bookmark", verifyUser, asyncHandler(addOrRemoveBookmark));
 
