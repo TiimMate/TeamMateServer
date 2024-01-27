@@ -1,8 +1,8 @@
 import { Model, InferAttributes, InferCreationAttributes, DataTypes, Sequelize } from "sequelize";
 
-class CommunityBookmark extends Model<InferAttributes<CommunityBookmark>, InferCreationAttributes<CommunityBookmark>> {
+class Bookmark extends Model<InferAttributes<Bookmark>, InferCreationAttributes<Bookmark>> {
     static initiate(sequelize: Sequelize) {
-        CommunityBookmark.init(
+        Bookmark.init(
             {
                 postId: {
                     type: new DataTypes.INTEGER(),
@@ -17,8 +17,8 @@ class CommunityBookmark extends Model<InferAttributes<CommunityBookmark>, InferC
                 sequelize,
                 timestamps: true,
                 underscored: true,
-                modelName: "CommunityBookmark",
-                tableName: "community_bookmark",
+                modelName: "Bookmark",
+                tableName: "bookmark",
                 paranoid: true,
                 charset: "utf8",
                 collate: "utf8_general_ci",
@@ -26,9 +26,9 @@ class CommunityBookmark extends Model<InferAttributes<CommunityBookmark>, InferC
         );
     }
     static associate(db) {
-        db.CommunityBookmark.belongsTo(db.CommunityPost, { foreignKey: "post_id" });
-        db.CommunityBookmark.belongsTo(db.User, { foreignKey: "user_id" });
+        db.Bookmark.belongsTo(db.Post, { foreignKey: "post_id" });
+        db.Bookmark.belongsTo(db.User, { foreignKey: "user_id" });
     }
 }
 
-module.exports = CommunityBookmark;
+module.exports = Bookmark;

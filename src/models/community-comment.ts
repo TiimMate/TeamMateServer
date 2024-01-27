@@ -30,7 +30,7 @@ class CommunityComment extends Model<InferAttributes<CommunityComment>, InferCre
         );
     }
     static associate(db) {
-        db.CommunityComment.belongsTo(db.CommunityPost, { foreignKey: "post_id" });
+        db.CommunityComment.belongsTo(db.Post, { foreignKey: "post_id" });
         db.CommunityComment.belongsTo(db.User, { foreignKey: "author_id" });
     }
 }

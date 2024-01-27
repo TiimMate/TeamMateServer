@@ -1,8 +1,8 @@
 import { Model, InferAttributes, InferCreationAttributes, DataTypes, Sequelize } from "sequelize";
 
-class CommunityImage extends Model<InferAttributes<CommunityImage>, InferCreationAttributes<CommunityImage>> {
+class Image extends Model<InferAttributes<Image>, InferCreationAttributes<Image>> {
     static initiate(sequelize: Sequelize) {
-        CommunityImage.init(
+        Image.init(
             {
                 postId: {
                     type: new DataTypes.INTEGER(),
@@ -17,8 +17,8 @@ class CommunityImage extends Model<InferAttributes<CommunityImage>, InferCreatio
                 sequelize,
                 timestamps: false,
                 underscored: true,
-                modelName: "CommunityImage",
-                tableName: "community_image",
+                modelName: "Image",
+                tableName: "image",
                 paranoid: false,
                 charset: "utf8",
                 collate: "utf8_general_ci",
@@ -26,8 +26,8 @@ class CommunityImage extends Model<InferAttributes<CommunityImage>, InferCreatio
         );
     }
     static associate(db) {
-        db.CommunityImage.belongsTo(db.CommunityPost, { foreignKey: "post_id" });
+        db.Image.belongsTo(db.Post, { foreignKey: "post_id" });
     }
 }
 
-module.exports = CommunityImage;
+module.exports = Image;
