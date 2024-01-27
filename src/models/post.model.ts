@@ -1,8 +1,8 @@
 import { Model, InferAttributes, InferCreationAttributes, DataTypes, Sequelize } from "sequelize";
 
-class CommunityPost extends Model<InferAttributes<CommunityPost>, InferCreationAttributes<CommunityPost>> {
+class Post extends Model<InferAttributes<Post>, InferCreationAttributes<Post>> {
     static initiate(sequelize: Sequelize) {
-        CommunityPost.init(
+        Post.init(
             {
                 title: {
                     type: new DataTypes.STRING(30),
@@ -20,13 +20,17 @@ class CommunityPost extends Model<InferAttributes<CommunityPost>, InferCreationA
                     type: new DataTypes.INTEGER(),
                     allowNull: false,
                 },
+                type: {
+                    type: new DataTypes.INTEGER(),
+                    allowNull: false,
+                },
             },
             {
                 sequelize,
                 timestamps: true,
                 underscored: true,
-                modelName: "CommunityPost",
-                tableName: "community_post",
+                modelName: "Post",
+                tableName: "post",
                 paranoid: false,
                 charset: "utf8",
                 collate: "utf8_general_ci",
@@ -34,11 +38,12 @@ class CommunityPost extends Model<InferAttributes<CommunityPost>, InferCreationA
         );
     }
     static associate(db) {
-        db.CommunityPost.hasMany(db.CommunityImage, { foreignKey: "post_id" });
-        db.CommunityPost.hasMany(db.CommunityComment, { foreignKey: "post_id" });
-        db.CommunityPost.hasMany(db.CommunityBookmark, { foreignKey: "post_id" });
-        db.CommunityPost.belongsTo(db.User, { foreignKey: "author_id" });
+        db.Post.belongsTo(db.User, { foreignKey: "author_id" });
+        db.Post.hasMany(db.Image, { foreignKey: "post_id" });
+        db.Post.hasMany(db.Bookmark, { foreignKey: "post_id" });
+        db.Post.hasMany(db.CommunityComment, { foreignKey: "post_id" });
+        //db.Post.hasMany(db.RentalInformationComment, { foreignKey: "post_id" });
     }
 }
 
-module.exports = CommunityPost;
+module.exports = Post;
