@@ -17,3 +17,18 @@ export const validateBody = (schema: AnyZodObject) => (req, res, next: NextFunct
         }
     }
 };
+
+export const validateParams = (schema: AnyZodObject) => (req, res, next: NextFunction) => {
+    try {
+        schema.parse(req.params);
+        next();
+    } catch (err: any) {
+        if (err instanceof ZodError) {
+            const detail = err.errors.map((err) => ({
+                field: err.path[0],
+                description: err.message,
+            }));
+            throw new BaseError(status.REQUEST_VALIDATION_ERROR, detail);
+        }
+    }
+};

@@ -14,6 +14,10 @@ const fieldsWithoutCategory = {
 
 const categories = z.enum(["농구", "야구", "테니스", "축구", "풋살", "배구", "볼링", "배드민턴", "탁구"]);
 
+export const category = object({
+    category: categories,
+});
+
 export const createTeam = object({
     ...fieldsWithoutCategory,
     category: categories,
