@@ -4,7 +4,7 @@ import { getBookmark, insertOrDeleteBookmark } from "../daos/bookmark.dao";
 import { findComment, getCommentCount, insertComment } from "../daos/comment.dao";
 import { findImage } from "../daos/image.dao";
 import { findPostByType, findPostByAuthorId, findBookmarkedPost, getPost, insertPost } from "../daos/post.dao";
-import { readPostResponseDTO, readPostsResponseDTO } from "../dtos/posts.dto";
+import { readCommentsResonseDTO, readPostResponseDTO, readPostsResponseDTO } from "../dtos/posts.dto";
 import { CreateCommentSchema } from "../schemas/comment.schema";
 import { CreatePostSchema } from "../schemas/post.schema";
 import { PostType } from "../types/post-type.enum";
@@ -63,4 +63,13 @@ const handlePostNotFound = (post) => {
         throw new BaseError(status.POST_NOT_FOUND);
     }
     return post;
+};
+
+export const readComments = async (params, query) => {
+    const cursorId = query.cursorId;
+    if (isNaN(Number(cursorId))) {
+        throw new BaseError(status.REQUEST_VALIDATION_ERROR);
+    }
+    const comments = await findComment(params.postId, cursorId);
+    return readCommentsResonseDTO(comments);
 };

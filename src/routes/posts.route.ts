@@ -9,6 +9,7 @@ import {
     fetchMyPosts,
     addCommunityPost,
     addComment,
+    fetchComments,
 } from "../controllers/posts.controller";
 import { validateBody } from "../middlewares/validate.middleware";
 import { createPost } from "../schemas/post.schema";
@@ -27,5 +28,7 @@ postsRouter.get("/bookmarks", verifyUser, asyncHandler(fetchBookmarkedPosts));
 postsRouter.post("/:postId/bookmark", verifyUser, asyncHandler(addOrRemoveBookmark));
 
 postsRouter.post("/:postId/comments", verifyUser, validateBody(createComment), asyncHandler(addComment));
+
+postsRouter.get("/:postId/comments", verifyUser, asyncHandler(fetchComments));
 
 postsRouter.get("/:postId", verifyUser, asyncHandler(fetchPost));

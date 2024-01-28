@@ -6,8 +6,8 @@ import { calculateHasNext, generateCursorCondition } from "../utils/paging.util"
 const defaultLimit = 20;
 
 export const findPostByType = async (userId: number | undefined, cursorId: number | undefined, type: PostType) => {
-    const communityPostsBeforeCursor = { type, ...generateCursorCondition(cursorId) };
-    return findPostByFilter(userId, communityPostsBeforeCursor);
+    const postsBeforeCursorByType = { type, ...generateCursorCondition(cursorId) };
+    return findPostByFilter(userId, postsBeforeCursorByType);
 };
 
 export const findPostByAuthorId = async (userId: number, cursorId?: number) => {
