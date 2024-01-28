@@ -7,20 +7,20 @@ import {
 import { findComment, insertComment } from "../daos/comment.dao";
 // import { findCommunityComment, getCommentCount, insertCommunityComment } from "../daos/comment.dao";
 // import { findCommunityImage } from "../daos/image.dao";
-import {
-    // findCommunityPost,
-    // getCommunityPost,
-    insertCommunityPost,
-} from "../daos/community-post.dao";
+// import {
+//     // findCommunityPost,
+//     // getCommunityPost,
+//     insertCommunityPost,
+// } from "../daos/community-post.dao";
 import { getPost } from "../daos/post.dao";
 // import { getPostByType } from "../daos/post.dao";
-import {} from // readCommunityCommentsResonseDTO,
+// import {} from // readCommunityCommentsResonseDTO,
 // readCommunityPostResponseDTO,
 // readCommunityPostsResponseDTO,
-"../dtos/community-posts.dto";
+// "../dtos/community-posts.dto";
 import { readCommentsResonseDTO } from "../dtos/posts.dto";
 import { CreateCommunityCommentSchema } from "../schemas/community-comment.schema";
-import { CreateCommunityPostSchema } from "../schemas/community-post.schema";
+// import { CreateCommunityPostSchema } from "../schemas/community-post.schema";
 import { PostType } from "../types/post-type.enum";
 
 // export const readCommunityPosts = async (userId: number | undefined, query) => {
@@ -59,10 +59,10 @@ export const readCommunityComments = async (params, query) => {
     return readCommentsResonseDTO(comments);
 };
 
-export const createCommunityPost = async (userId: number, body: CreateCommunityPostSchema) => {
-    await insertCommunityPost(userId, body);
-    return;
-};
+// export const createCommunityPost = async (userId: number, body: CreateCommunityPostSchema) => {
+//     await insertCommunityPost(userId, body);
+//     return;
+// };
 
 export const createCommunityComment = async (userId: number, params, body: CreateCommunityCommentSchema) => {
     const postId = params.postId;

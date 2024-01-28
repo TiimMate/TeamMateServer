@@ -7,11 +7,16 @@ import {
     fetchPost,
     fetchCommunityPosts,
     fetchMyPosts,
+    addCommunityPost,
 } from "../controllers/posts.controller";
+import { validateBody } from "../middlewares/validate.middleware";
+import { createPost } from "../schemas/community-post.schema";
 
 export const postsRouter = express.Router();
 
-postsRouter.get("/", verifyUserIfExists, asyncHandler(fetchCommunityPosts));
+postsRouter.post("/community", verifyUser, validateBody(createPost), asyncHandler(addCommunityPost));
+
+postsRouter.get("/community", verifyUserIfExists, asyncHandler(fetchCommunityPosts));
 
 postsRouter.get("/authors/me", verifyUser, asyncHandler(fetchMyPosts));
 

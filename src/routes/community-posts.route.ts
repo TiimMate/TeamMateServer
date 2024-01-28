@@ -3,19 +3,19 @@ import asyncHandler from "express-async-handler";
 import { verifyUser, verifyUserIfExists } from "../middlewares/auth.middleware";
 import {
     addCommunityComment,
-    addCommunityPost,
+    // addCommunityPost,
     // addOrRemoveBookmark,
     fetchCommunityComments,
     // fetchCommunityPost,
     // fetchCommunityPosts,
 } from "../controllers/community-posts.controller";
-import { createCommunityPost } from "../schemas/community-post.schema";
+// import { createCommunityPost } from "../schemas/community-post.schema";
 import { validateBody } from "../middlewares/validate.middleware";
 import { createCommunityComment } from "../schemas/community-comment.schema";
 
 export const communityPostsRouter = express.Router();
 
-communityPostsRouter.post("/", verifyUser, validateBody(createCommunityPost), asyncHandler(addCommunityPost));
+// communityPostsRouter.post("/", verifyUser, validateBody(createCommunityPost), asyncHandler(addCommunityPost));
 
 // communityPostsRouter.get("/", verifyUserIfExists, asyncHandler(fetchCommunityPosts));
 

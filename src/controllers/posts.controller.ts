@@ -7,6 +7,7 @@ import {
     readPost,
     readCommunityPosts,
     readPostsByAuthor,
+    createCommunityPost,
 } from "../services/posts.service";
 
 export const fetchCommunityPosts = async (req, res: Response, next) => {
@@ -27,4 +28,8 @@ export const addOrRemoveBookmark = async (req, res: Response, next) => {
 
 export const fetchPost = async (req, res: Response, next) => {
     res.send(response(status.SUCCESS, await readPost(req.user.id, req.params)));
+};
+
+export const addCommunityPost = async (req, res: Response, next) => {
+    res.send(response(status.SUCCESS, await createCommunityPost(req.user.id, req.body)));
 };
