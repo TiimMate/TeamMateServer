@@ -7,8 +7,8 @@ import {
     readGuestingByRegion,
     readDetailedGuesting,
     createGuesting,
-    updateGuesting,
     addGuestUser,
+    updateGuesting,
 } from "../services/guest.service";
 
 export const addGuesting = async (req, res, next) => {

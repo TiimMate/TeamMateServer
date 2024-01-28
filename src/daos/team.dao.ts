@@ -92,17 +92,14 @@ export const getTeamById = async (teamId, userId) => {
 
 export const getTeamIdByLeaderId = async (userId) => {
     const team = await db.Team.findOne({
+        raw: true,
         where: {
             leaderId: userId,
         },
         attributes: ["id"],
     });
 
-    if (team) {
-        return team.id;
-    } else {
-        throw new BaseError(status.TEAM_NOT_FOUND);
-    }
+    return team?.id;
 };
 
 export const setTeam = async (team, body) => {

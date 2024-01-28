@@ -108,10 +108,11 @@ export const InsertGuestUser = async (guestingId, userId) => {
 };
 
 export const getGuestingById = async (guestingId, userId) => {
+    const teamId = await getTeamIdByLeaderId(userId);
     return await db.Guest.findOne({
         where: {
             id: guestingId,
-            teamId: getTeamIdByLeaderId(userId),
+            teamId: teamId,
         },
     });
 };

@@ -12,7 +12,7 @@ export const createGuesting = object({
 });
 
 export const updateGuesting = object({
-    memberIdsToDelete: z.optional(z.array(z.number().int())),
+    ...fields,
 });
 
 export type CreateGuestingSchema = TypeOf<typeof createGuesting>;
