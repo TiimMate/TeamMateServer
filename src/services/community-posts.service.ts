@@ -19,7 +19,7 @@ import { getPost } from "../daos/post.dao";
 // readCommunityPostsResponseDTO,
 // "../dtos/community-posts.dto";
 import { readCommentsResonseDTO } from "../dtos/posts.dto";
-import { CreateCommunityCommentSchema } from "../schemas/community-comment.schema";
+// import { CreateCommunityCommentSchema } from "../schemas/comment.schema";
 // import { CreateCommunityPostSchema } from "../schemas/community-post.schema";
 import { PostType } from "../types/post-type.enum";
 
@@ -64,12 +64,12 @@ export const readCommunityComments = async (params, query) => {
 //     return;
 // };
 
-export const createCommunityComment = async (userId: number, params, body: CreateCommunityCommentSchema) => {
-    const postId = params.postId;
-    handlePostNotFound(await getPost(postId));
-    await insertComment(userId, postId, body);
-    return;
-};
+// export const createCommunityComment = async (userId: number, params, body: CreateCommunityCommentSchema) => {
+//     const postId = params.postId;
+//     handlePostNotFound(await getPost(postId));
+//     await insertComment(userId, postId, body);
+//     return;
+// };
 
 const handlePostNotFound = (post) => {
     if (!post) {

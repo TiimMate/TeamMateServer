@@ -8,9 +8,11 @@ import {
     fetchCommunityPosts,
     fetchMyPosts,
     addCommunityPost,
+    addComment,
 } from "../controllers/posts.controller";
 import { validateBody } from "../middlewares/validate.middleware";
-import { createPost } from "../schemas/community-post.schema";
+import { createPost } from "../schemas/post.schema";
+import { createComment } from "../schemas/comment.schema";
 
 export const postsRouter = express.Router();
 
@@ -23,5 +25,7 @@ postsRouter.get("/authors/me", verifyUser, asyncHandler(fetchMyPosts));
 postsRouter.get("/bookmarks", verifyUser, asyncHandler(fetchBookmarkedPosts));
 
 postsRouter.post("/:postId/bookmark", verifyUser, asyncHandler(addOrRemoveBookmark));
+
+postsRouter.post("/:postId/comments", verifyUser, validateBody(createComment), asyncHandler(addComment));
 
 postsRouter.get("/:postId", verifyUser, asyncHandler(fetchPost));

@@ -1,5 +1,5 @@
 import db from "../models";
-// import { CreateCommentSchema } from "../schemas/community-comment.schema";
+import { CreateCommentSchema } from "../schemas/comment.schema";
 import { calculateHasNext, generateCursorCondition } from "../utils/paging.util";
 
 const defaultLimit = 20;
@@ -33,7 +33,7 @@ export const getCommentCount = async (postId: number) => {
     });
 };
 
-export const insertComment = async (userId: number, postId: number, body /*: CreateCommentSchema*/) => {
+export const insertComment = async (userId: number, postId: number, body: CreateCommentSchema) => {
     await db.Comment.create({
         postId,
         authorId: userId,

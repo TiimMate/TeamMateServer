@@ -2,7 +2,7 @@ import express from "express";
 import asyncHandler from "express-async-handler";
 import { verifyUser, verifyUserIfExists } from "../middlewares/auth.middleware";
 import {
-    addCommunityComment,
+    // addCommunityComment,
     // addCommunityPost,
     // addOrRemoveBookmark,
     fetchCommunityComments,
@@ -11,7 +11,7 @@ import {
 } from "../controllers/community-posts.controller";
 // import { createCommunityPost } from "../schemas/community-post.schema";
 import { validateBody } from "../middlewares/validate.middleware";
-import { createCommunityComment } from "../schemas/community-comment.schema";
+// import { createCommunityComment } from "../schemas/comment.schema";
 
 export const communityPostsRouter = express.Router();
 
@@ -21,12 +21,12 @@ export const communityPostsRouter = express.Router();
 
 // communityPostsRouter.post("/:postId/bookmark", verifyUser, asyncHandler(addOrRemoveBookmark));
 
-communityPostsRouter.post(
-    "/:postId/comments",
-    verifyUser,
-    validateBody(createCommunityComment),
-    asyncHandler(addCommunityComment),
-);
+// communityPostsRouter.post(
+//     "/:postId/comments",
+//     verifyUser,
+//     validateBody(createCommunityComment),
+//     asyncHandler(addCommunityComment),
+// );
 
 communityPostsRouter.get("/:postId/comments", verifyUser, asyncHandler(fetchCommunityComments));
 

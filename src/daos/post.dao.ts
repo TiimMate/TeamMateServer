@@ -1,5 +1,5 @@
 import db from "../models";
-import { CreatePostSchema } from "../schemas/community-post.schema";
+import { CreatePostSchema } from "../schemas/post.schema";
 import { PostType } from "../types/post-type.enum";
 import { calculateHasNext, generateCursorCondition } from "../utils/paging.util";
 
