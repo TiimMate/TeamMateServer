@@ -16,6 +16,7 @@ export const findGamesByDate = async (date, category) => {
             },
         ],
         attributes: ["gameTime"],
+        order: [["created_at", "DESC"]],
     });
 };
 
@@ -35,6 +36,7 @@ export const findGamesByGender = async (date, category, gender) => {
             },
         ],
         attributes: ["gameTime"],
+        order: [["created_at", "DESC"]],
     });
 };
 
@@ -54,6 +56,7 @@ export const findGamesByLevel = async (date, category, skillLevel) => {
             },
         ],
         attributes: ["gameTime"],
+        order: [["created_at", "DESC"]],
     });
 };
 
@@ -73,5 +76,6 @@ export const findGamesByRegion = async (date, category, region) => {
             },
         ],
         attributes: ["gameTime"],
+        order: [["created_at", "DESC"]],
     });
 };
