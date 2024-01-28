@@ -41,8 +41,7 @@ class Post extends Model<InferAttributes<Post>, InferCreationAttributes<Post>> {
         db.Post.belongsTo(db.User, { foreignKey: "author_id" });
         db.Post.hasMany(db.Image, { foreignKey: "post_id" });
         db.Post.hasMany(db.Bookmark, { foreignKey: "post_id" });
-        db.Post.hasMany(db.CommunityComment, { foreignKey: "post_id" });
-        //db.Post.hasMany(db.RentalInformationComment, { foreignKey: "post_id" });
+        db.Post.hasMany(db.Comment, { foreignKey: "post_id" });
     }
 }
 

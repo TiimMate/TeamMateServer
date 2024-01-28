@@ -30,15 +30,15 @@ import { CreateCommunityPostSchema } from "../schemas/community-post.schema";
 //     return { posts, hasNext: calculateHasNext(posts, defaultLimit) };
 // };
 
-export const getCommunityPost = async (postId: number) => {
-    return await db.CommunityPost.findOne({
-        raw: true,
-        where: {
-            id: postId,
-        },
-        attributes: ["title", "content", "link"],
-    });
-};
+// export const getCommunityPost = async (postId: number) => {
+//     return await db.CommunityPost.findOne({
+//         raw: true,
+//         where: {
+//             id: postId,
+//         },
+//         attributes: ["title", "content", "link"],
+//     });
+// };
 
 export const insertCommunityPost = async (userId: number, data: CreateCommunityPostSchema) => {
     await db.CommunityPost.create({

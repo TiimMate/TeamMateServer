@@ -4,6 +4,7 @@ import { status } from "../config/response.status";
 import {
     createOrDeleteBookmark,
     readBookmarkedPosts,
+    readPost,
     readCommunityPosts,
     readPostsByAuthor,
 } from "../services/posts.service";
@@ -22,4 +23,8 @@ export const fetchBookmarkedPosts = async (req, res: Response, next) => {
 
 export const addOrRemoveBookmark = async (req, res: Response, next) => {
     res.send(response(status.SUCCESS, await createOrDeleteBookmark(req.user.id, req.params)));
+};
+
+export const fetchPost = async (req, res: Response, next) => {
+    res.send(response(status.SUCCESS, await readPost(req.user.id, req.params)));
 };

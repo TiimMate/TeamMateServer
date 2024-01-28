@@ -6,7 +6,7 @@ import {
     createCommunityPost,
     // createOrDeleteBookmark,
     readCommunityComments,
-    readCommunityPost,
+    // readCommunityPost,
     // readCommunityPosts,
 } from "../services/community-posts.service";
 
@@ -18,9 +18,9 @@ import {
 //     res.send(response(status.SUCCESS, await createOrDeleteBookmark(req.user.id, req.params)));
 // };
 
-export const fetchCommunityPost = async (req, res: Response, next) => {
-    res.send(response(status.SUCCESS, await readCommunityPost(req.user.id, req.params)));
-};
+// export const fetchCommunityPost = async (req, res: Response, next) => {
+//     res.send(response(status.SUCCESS, await readCommunityPost(req.user.id, req.params)));
+// };
 
 export const fetchCommunityComments = async (req: Request, res: Response, next) => {
     res.send(response(status.SUCCESS, await readCommunityComments(req.params, req.query)));

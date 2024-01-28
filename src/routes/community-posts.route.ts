@@ -6,7 +6,7 @@ import {
     addCommunityPost,
     // addOrRemoveBookmark,
     fetchCommunityComments,
-    fetchCommunityPost,
+    // fetchCommunityPost,
     // fetchCommunityPosts,
 } from "../controllers/community-posts.controller";
 import { createCommunityPost } from "../schemas/community-post.schema";
@@ -30,4 +30,4 @@ communityPostsRouter.post(
 
 communityPostsRouter.get("/:postId/comments", verifyUser, asyncHandler(fetchCommunityComments));
 
-communityPostsRouter.get("/:postId", verifyUser, asyncHandler(fetchCommunityPost));
+// communityPostsRouter.get("/:postId", verifyUser, asyncHandler(fetchCommunityPost));

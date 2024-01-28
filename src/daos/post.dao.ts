@@ -1,5 +1,5 @@
-import { PostType } from "../constants/post-type.constant";
 import db from "../models";
+import { PostType } from "../types/post-type.enum";
 import { calculateHasNext, generateCursorCondition } from "../utils/paging.util";
 
 const defaultLimit = 20;
@@ -12,6 +12,30 @@ export const findPostByType = async (userId: number | undefined, cursorId: numbe
 export const findPostByAuthorId = async (userId: number, cursorId?: number) => {
     const postsBeforeCursorForAuthor = { authorId: userId, ...generateCursorCondition(cursorId) };
     return findPostByFilter(userId, postsBeforeCursorForAuthor);
+};
+
+export const findBookmarkedPost = async (userId: number, cursorId?: number) => {
+    const postsBeforeCursor = generateCursorCondition(cursorId);
+    const includeBookmarkedPosts = [
+        {
+            model: db.Bookmark,
+            where: {
+                userId,
+            },
+            attributes: ["id"],
+        },
+    ];
+    return findPost(postsBeforeCursor, includeBookmarkedPosts);
+};
+
+export const getPost = async (postId: number) => {
+    return await db.Post.findOne({
+        raw: true,
+        where: {
+            id: postId,
+        },
+        attributes: ["title", "content", "link"],
+    });
 };
 
 const findPostByFilter = async (userId: number | undefined, postFilter: object) => {
@@ -27,20 +51,6 @@ const findPostByFilter = async (userId: number | undefined, postFilter: object) 
         });
     }
     return findPost(postFilter, includeAllPosts);
-};
-
-export const findBookmarkedPost = async (userId: number, cursorId?: number) => {
-    const postsBeforeCursor = generateCursorCondition(cursorId);
-    const includeBookmarkedPosts = [
-        {
-            model: db.Bookmark,
-            where: {
-                userId,
-            },
-            attributes: ["id"],
-        },
-    ];
-    return findPost(postsBeforeCursor, includeBookmarkedPosts);
 };
 
 const findPost = async (postFilter: object, bookmarkInclude: Array<any>) => {
