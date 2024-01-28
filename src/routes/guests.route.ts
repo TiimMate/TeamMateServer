@@ -8,6 +8,7 @@ import {
     DetailedGuestingPreview,
     addGuesting,
     modifyGuesting,
+    applicationGuesting,
 } from "../controllers/guest.controller";
 import { createGuesting, updateGuesting } from "../schemas/guest.schema";
 import { validateBody } from "../middlewares/validate.middleware";
@@ -27,3 +28,5 @@ guestsRouter.get("/gender", asyncHandler(GuestingPreviewByGender));
 guestsRouter.get("/region", asyncHandler(GuestingPreviewByRegion));
 
 guestsRouter.get("/:guestingId", asyncHandler(DetailedGuestingPreview));
+
+guestsRouter.get("/:guestingId/application", asyncHandler(applicationGuesting));

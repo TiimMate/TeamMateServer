@@ -1,3 +1,4 @@
+import { application } from "express";
 import { response } from "../config/response";
 import { status } from "../config/response.status";
 import {
@@ -8,6 +9,7 @@ import {
     readDetailedGuesting,
     createGuesting,
     updateGuesting,
+    addGuestUser,
 } from "../services/guest.service";
 
 export const addGuesting = async (req, res, next) => {
@@ -36,4 +38,8 @@ export const GuestingPreviewByRegion = async (req, res, next) => {
 
 export const DetailedGuestingPreview = async (req, res, next) => {
     return res.send(response(status.SUCCESS, await readDetailedGuesting(req.params)));
+};
+
+export const applicationGuesting = async (req, res, next) => {
+    return res.send(response(status.SUCCESS, await addGuestUser(req.user.id, req.params)));
 };

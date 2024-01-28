@@ -12,6 +12,13 @@ export const insertGuesting = async (teamId, data: CreateGuestingSchema) => {
     });
 };
 
+export const setGuesting = async (guesting, body) => {
+    Object.keys(body).forEach((field) => {
+        guesting[field] = body[field];
+    });
+    await guesting.save();
+};
+
 export const findGuesting = async (date, category) => {
     return await db.Guest.findAll({
         raw: true,
@@ -93,11 +100,11 @@ export const getDetailedGuesting = async (guestingId) => {
     });
 };
 
-export const setGuesting = async (guesting, body) => {
-    Object.keys(body).forEach((field) => {
-        guesting[field] = body[field];
+export const InsertGuestUser = async (guestingId, userId) => {
+    await db.GuestUser.create({
+        guestId: guestingId,
+        userId: userId,
     });
-    await guesting.save();
 };
 
 export const getGuestingById = async (guestingId, userId) => {

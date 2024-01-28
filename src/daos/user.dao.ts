@@ -42,6 +42,15 @@ export const getRefreshToken = async (userId: number) => {
     return user.refreshToken;
 };
 
+export const getUserById = async (id) => {
+    return await db.User.findOne({
+        raw: true,
+        where: {
+            id,
+        },
+    });
+};
+
 export const getUserInfoById = async (id) => {
     return await db.User.findOne({
         raw: true,

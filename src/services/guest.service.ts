@@ -1,6 +1,7 @@
 import { BaseError } from "../config/error";
 import { status } from "../config/response.status";
 import {
+    InsertGuestUser,
     findGuesting,
     findGuestingByGender,
     findGuestingByLevel,
@@ -12,7 +13,7 @@ import {
 } from "../daos/guest.dao";
 import { findMemberInfoByTeamId, getMemberCountByTeamId } from "../daos/member.dao";
 import { getTeamDetailforGuesting, getTeamIdByLeaderId } from "../daos/team.dao";
-import { getUserInfoById, userInfoAttributes } from "../daos/user.dao";
+import { getUserById, getUserInfoById, userInfoAttributes } from "../daos/user.dao";
 import { readGuestingDetailResponseDTO, readGuestingResponseDTO } from "../dtos/guests.dto";
 import { CreateGuestingSchema, UpdateGuestingSchema } from "../schemas/guest.schema";
 
@@ -71,4 +72,14 @@ export const readDetailedGuesting = async (params) => {
     const leaderInfo = await getUserInfoById(TeamDetail.leaderId);
     const memberInfo = await findMemberInfoByTeamId(guestingDetail.teamId, userInfoAttributes);
     return readGuestingDetailResponseDTO(guestingDetail, TeamDetail, leaderInfo, memberInfo);
+};
+
+export const addGuestUser = async (userId, params) => {
+    const guestingId = params.guestingId;
+    const user = await getUserById(userId);
+    if (!user) {
+        // user 정보 수정 API 연결
+    }
+    await InsertGuestUser(guestingId, userId);
+    return;
 };
