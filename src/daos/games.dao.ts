@@ -15,7 +15,7 @@ export const findGamesByDate = async (date, category) => {
                 },
             },
         ],
-        attributes: ["gameTime"],
+        attributes: ["gameTime", "status"],
         order: [["created_at", "DESC"]],
     });
 };
