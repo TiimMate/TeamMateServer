@@ -18,7 +18,7 @@ import { readGuestingDetailResponseDTO, readGuestingResponseDTO } from "../dtos/
 import { CreateGuestingSchema, UpdateGuestingSchema } from "../schemas/guest.schema";
 
 export const createGuesting = async (userId, body: CreateGuestingSchema) => {
-    const teamId = getTeamIdByLeaderId(userId);
+    const teamId = await getTeamIdByLeaderId(userId);
     await insertGuesting(teamId, body);
     return;
 };

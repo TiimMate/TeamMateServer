@@ -15,9 +15,11 @@ import { validateBody } from "../middlewares/validate.middleware";
 
 export const guestsRouter = express.Router({ mergeParams: true });
 
-guestsRouter.post("/", validateBody(createGuesting), asyncHandler(addGuesting));
+// guestsRouter.post("/", validateBody(createGuesting), asyncHandler(addGuesting));
+guestsRouter.post("/", asyncHandler(addGuesting));
 
-guestsRouter.put("/:guestingId", validateBody(updateGuesting), asyncHandler(modifyGuesting));
+// guestsRouter.put("/:guestingId", validateBody(updateGuesting), asyncHandler(modifyGuesting));
+guestsRouter.put("/:guestingId", asyncHandler(modifyGuesting));
 
 guestsRouter.get("/", asyncHandler(GuestingPreview));
 
@@ -29,4 +31,4 @@ guestsRouter.get("/region", asyncHandler(GuestingPreviewByRegion));
 
 guestsRouter.get("/:guestingId", asyncHandler(DetailedGuestingPreview));
 
-guestsRouter.get("/:guestingId/application", asyncHandler(applicationGuesting));
+guestsRouter.post("/:guestingId/application", asyncHandler(applicationGuesting));

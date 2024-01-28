@@ -1,3 +1,5 @@
+import { BaseError } from "../config/error";
+import { status } from "../config/response.status";
 import { defaultLevel } from "../constants/level.constant";
 import db from "../models";
 import { CreateTeamSchema } from "../schemas/team.schema";
@@ -89,12 +91,18 @@ export const getTeamById = async (teamId, userId) => {
 };
 
 export const getTeamIdByLeaderId = async (userId) => {
-    return await db.Team.findOne({
+    const team = await db.Team.findOne({
         where: {
             leaderId: userId,
         },
         attributes: ["id"],
     });
+
+    if (team) {
+        return team.id;
+    } else {
+        throw new BaseError(status.TEAM_NOT_FOUND);
+    }
 };
 
 export const setTeam = async (team, body) => {

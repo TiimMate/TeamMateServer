@@ -1,7 +1,7 @@
 import { TypeOf, object, z } from "zod";
 
 const fields = {
-    teamId: z.number().int().min(1),
+    teamId: z.number().int(),
     gameTime: z.date(),
     description: z.optional(z.string()),
     recruitCount: z.number().int().min(1),
