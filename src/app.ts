@@ -3,9 +3,7 @@ dotenv.config();
 
 import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
-import passport from "passport";
 
-import "./config/passport";
 import db from "./models/index";
 import { response } from "./config/response";
 import { BaseError } from "./config/error";
@@ -33,7 +31,6 @@ app.use(cors());
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(passport.initialize());
 
 app.use("/auth", authRouter);
 app.use("/teams", teamsRouter);

@@ -16,13 +16,6 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
                     type: new DataTypes.STRING(50),
                     allowNull: false,
                 },
-                email: {
-                    type: new DataTypes.STRING(50),
-                    allowNull: false,
-                    validate: {
-                        isEmail: true,
-                    },
-                },
                 refreshToken: {
                     type: new DataTypes.STRING(150),
                     allowNull: true,
