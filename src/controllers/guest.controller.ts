@@ -6,11 +6,16 @@ import {
     readGuestingByGender,
     readGuestingByRegion,
     readDetailedGuesting,
+    createGuesting,
+    updateGuesting,
 } from "../services/guest.service";
-import { createGuesting } from "../services/guest.service";
 
 export const addGuesting = async (req, res, next) => {
     return res.send(response(status.SUCCESS, await createGuesting(req.user.id, req.body)));
+};
+
+export const modifyGuesting = async (req, res, next) => {
+    return res.send(response(status.SUCCESS, await updateGuesting(req.user.id, req.params, req.body)));
 };
 
 export const GuestingPreview = async (req, res, next) => {

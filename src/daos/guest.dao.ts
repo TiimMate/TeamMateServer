@@ -1,6 +1,7 @@
 import { Sequelize } from "sequelize";
 import db from "../models";
 import { CreateGuestingSchema } from "../schemas/guest.schema";
+import { getTeamIdByLeaderId } from "./team.dao";
 
 export const insertGuesting = async (teamId, data: CreateGuestingSchema) => {
     await db.Guest.create({
@@ -89,5 +90,21 @@ export const getDetailedGuesting = async (guestingId) => {
             id: guestingId,
         },
         attributes: ["teamId", "gameTime", "description", "recruitCount"],
+    });
+};
+
+export const setGuesting = async (guesting, body) => {
+    Object.keys(body).forEach((field) => {
+        guesting[field] = body[field];
+    });
+    await guesting.save();
+};
+
+export const getGuestingById = async (guestingId, userId) => {
+    return await db.Guest.findOne({
+        where: {
+            id: guestingId,
+            teamId: getTeamIdByLeaderId(userId),
+        },
     });
 };

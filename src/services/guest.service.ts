@@ -1,22 +1,34 @@
-// import { BaseError } from "../config/error";
-// import { status } from "../config/response.status";
+import { BaseError } from "../config/error";
+import { status } from "../config/response.status";
 import {
     findGuesting,
     findGuestingByGender,
     findGuestingByLevel,
     findGuestingByRegion,
     getDetailedGuesting,
+    getGuestingById,
     insertGuesting,
+    setGuesting,
 } from "../daos/guest.dao";
 import { findMemberInfoByTeamId, getMemberCountByTeamId } from "../daos/member.dao";
-import { getTeamDetailforGuesting, getTeamIdByUserId } from "../daos/team.dao";
+import { getTeamDetailforGuesting, getTeamIdByLeaderId } from "../daos/team.dao";
 import { getUserInfoById, userInfoAttributes } from "../daos/user.dao";
 import { readGuestingDetailResponseDTO, readGuestingResponseDTO } from "../dtos/guests.dto";
-import { CreateGuestingSchema } from "../schemas/guest.schema";
+import { CreateGuestingSchema, UpdateGuestingSchema } from "../schemas/guest.schema";
 
 export const createGuesting = async (userId, body: CreateGuestingSchema) => {
-    const teamId = getTeamIdByUserId(userId);
+    const teamId = getTeamIdByLeaderId(userId);
     await insertGuesting(teamId, body);
+    return;
+};
+
+export const updateGuesting = async (userId, params, body: UpdateGuestingSchema) => {
+    const guestingId = params.guestingId;
+    const guesting = await getGuestingById(guestingId, userId);
+    if (!guesting) {
+        throw new BaseError(status.GUEST_NOT_FOUND);
+    }
+    await setGuesting(guesting, body);
     return;
 };
 

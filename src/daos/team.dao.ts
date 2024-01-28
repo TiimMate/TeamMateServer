@@ -88,7 +88,7 @@ export const getTeamById = async (teamId, userId) => {
     });
 };
 
-export const getTeamIdByUserId = async (userId) => {
+export const getTeamIdByLeaderId = async (userId) => {
     return await db.Team.findOne({
         where: {
             leaderId: userId,
