@@ -1,6 +1,7 @@
 import { BaseError } from "../config/error";
 import { status } from "../config/response.status";
-import { getUserByProviderId, insertUser, setRefreshToken } from "../daos/user.dao";
+import { getUserByProviderId, getUserProfileByCategory, insertUser, setRefreshToken } from "../daos/user.dao";
+import { readUserProfileByCategoryResponseDTO } from "../dtos/users.dto";
 
 export type Payload = {
     id: number;
@@ -20,4 +21,9 @@ export const createOrReadUser = async (provider, providerId, email): Promise<Pay
 
 export const updateRefreshToken = async (refreshToken: string, userId: number) => {
     await setRefreshToken(refreshToken, userId);
+};
+
+export const readUserProfileByCategory = async (userId, params) => {
+    const profile = await getUserProfileByCategory(userId, params.category);
+    return readUserProfileByCategoryResponseDTO(profile);
 };
