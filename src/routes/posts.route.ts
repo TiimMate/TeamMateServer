@@ -12,7 +12,7 @@ export const postsRouter = express.Router();
 
 postsRouter.get("/", verifyUserIfExists, asyncHandler(fetchCommunityPosts));
 
-postsRouter.get("/my", verifyUser, asyncHandler(fetchMyPosts));
+postsRouter.get("/authors/me", verifyUser, asyncHandler(fetchMyPosts));
 
 postsRouter.get("/bookmarks", verifyUser, asyncHandler(fetchBookmarkedPosts));
 
