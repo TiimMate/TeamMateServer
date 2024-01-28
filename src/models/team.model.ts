@@ -69,7 +69,15 @@ class Team extends Model<InferAttributes<Team>, InferCreationAttributes<Team>> {
         db.Team.hasMany(db.Member, { foreignKey: "team_id" });
         db.Team.belongsTo(db.User, { foreignKey: "leader_id" });
         db.Team.hasMany(db.Game, { foreignKey: "host_team_id" });
-        db.Team.hasMany(db.Game, { foreignKey: "guest_team_id" });
+        db.Team.hasMany(db.Game, { foreignKey: "opposing_team_id" });
+        // db.Team.belongsToMany(db.Game, {
+        //     through: db.GameApply,
+        //     foreignKey: "apply_team_id",
+        //     constraints: false,
+        // });
+        db.Team.belongsToMany(db.Game, {
+            through: "game_apply",
+        });
         db.Team.hasMany(db.Guest, { foreignKey: "team_id" });
     }
 }
