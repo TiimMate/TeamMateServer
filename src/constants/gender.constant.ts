@@ -13,5 +13,5 @@ export const getGendersLength = (): number => {
 };
 
 export const getGenderById = (id: number): string | undefined => {
-    return Genders[id].name;
+    return Genders[id]?.name;
 };

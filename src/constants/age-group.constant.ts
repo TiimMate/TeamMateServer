@@ -15,5 +15,5 @@ export const getAgeGroupsLength = (): number => {
 };
 
 export const getAgeGroupById = (id: number): string | undefined => {
-    return AgeGroups[id].name;
+    return AgeGroups[id]?.name;
 };
