@@ -8,13 +8,14 @@ export const findGamesByDate = async (date, category) => {
         include: [
             {
                 model: db.Team,
+                as: "HostTeam",
                 attributes: ["name", "region", "gender", "ageGroup", "skillLevel"],
                 where: {
                     category,
                 },
             },
         ],
-        attributes: ["game_time"],
+        attributes: ["gameTime"],
     });
 };
 
@@ -25,6 +26,7 @@ export const findGamesByGender = async (date, category, gender) => {
         include: [
             {
                 model: db.Team,
+                as: "HostTeam",
                 attributes: ["name", "region", "gender", "ageGroup", "skillLevel"],
                 where: {
                     category,
@@ -32,25 +34,26 @@ export const findGamesByGender = async (date, category, gender) => {
                 },
             },
         ],
-        attributes: ["game_time"],
+        attributes: ["gameTime"],
     });
 };
 
-export const findGamesByLevel = async (date, category, level) => {
+export const findGamesByLevel = async (date, category, skillLevel) => {
     return await db.Game.findAll({
         raw: true,
         where: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${date}', '%Y-%m-%d')`),
         include: [
             {
                 model: db.Team,
+                as: "HostTeam",
                 attributes: ["name", "region", "gender", "ageGroup", "skillLevel"],
                 where: {
                     category,
-                    level,
+                    skillLevel,
                 },
             },
         ],
-        attributes: ["game_time"],
+        attributes: ["gameTime"],
     });
 };
 
@@ -61,6 +64,7 @@ export const findGamesByRegion = async (date, category, region) => {
         include: [
             {
                 model: db.Team,
+                as: "HostTeam",
                 attributes: ["name", "region", "gender", "ageGroup", "skillLevel"],
                 where: {
                     category,
@@ -68,6 +72,6 @@ export const findGamesByRegion = async (date, category, region) => {
                 },
             },
         ],
-        attributes: ["game_time"],
+        attributes: ["gameTime"],
     });
 };

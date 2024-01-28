@@ -11,7 +11,7 @@ export const readGamesByGender = async (query) => {
 };
 
 export const readGamesByLevel = async (query) => {
-    return await findGamesByLevel(query.date, query.category, query.level);
+    return await findGamesByLevel(query.date, query.category, query.skillLevel);
 };
 
 export const readGamesByRegion = async (query) => {

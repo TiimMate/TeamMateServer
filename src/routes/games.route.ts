@@ -13,6 +13,6 @@ export const gamesRouter = express.Router();
 gamesRouter.get("/", asyncHandler(fetchGamesByDate));
 
 // 연습경기 모집글 필터링 - 성별/레벨/지역
-gamesRouter.get("/byGender", asyncHandler(fetchGamesByGender));
-gamesRouter.get("/byLevel", asyncHandler(fetchGamesByLevel));
-gamesRouter.get("/byRegion", asyncHandler(fetchGamesByRegion));
+gamesRouter.get("/by-gender", asyncHandler(fetchGamesByGender));
+gamesRouter.get("/by-level", asyncHandler(fetchGamesByLevel));
+gamesRouter.get("/by-region", asyncHandler(fetchGamesByRegion));
