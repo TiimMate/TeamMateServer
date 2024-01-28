@@ -16,6 +16,7 @@ import { teamsRouter } from "./routes/teams.route";
 import { membersRouter } from "./routes/members.route";
 import { guestsRouter } from "./routes/guests.route";
 import { postsRouter } from "./routes/posts.route";
+import { usersRouter } from "./routes/users.route";
 import { communityPostsRouter } from "./routes/community-posts.route";
 
 const app = express();
@@ -40,6 +41,7 @@ app.use("/teams", teamsRouter);
 app.use("/members", membersRouter);
 app.use("/guests", guestsRouter);
 app.use("/posts", postsRouter);
+app.use("/users", usersRouter);
 app.use("/community-posts", communityPostsRouter);
 
 app.use((req: Request, res: Response, next: NextFunction) => {
