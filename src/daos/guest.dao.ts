@@ -91,7 +91,7 @@ export const findGuestingByRegion = async (date, category, region) => {
 };
 
 export const getDetailedGuesting = async (guestingId) => {
-    return await db.Guest.findAll({
+    return await db.Guest.findOne({
         raw: true,
         where: {
             id: guestingId,
