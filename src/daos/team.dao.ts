@@ -108,3 +108,14 @@ export const setTeam = async (team, body) => {
     });
     await team.save();
 };
+
+export const findTeamAvailPreviewById = async (userId, category) => {
+    return await db.Team.findAll({
+        raw: true,
+        where: {
+            category,
+            leaderId: userId,
+        },
+        attributes: ["name"],
+    });
+};
