@@ -1,13 +1,20 @@
 // import { BaseError } from "../config/error";
 // import { status } from "../config/response.status";
+import db from "../models";
 import {
     findGamesByDate,
     findGamesByGender,
     findGamesByLevel,
     findGamesByRegion,
     getGameDetail,
+    insertGame,
 } from "../daos/games.dao";
-import { getTeamDetailforGuesting } from "../daos/team.dao";
+import {
+    getTeamDetailforGuesting,
+    getTeamIdByLeaderId,
+    getTeamCategoryByLeaderId,
+    getTeamById,
+} from "../daos/team.dao";
 import {
     findMemberInfoByTeamId,
     findMemberInfoWithoutLeaderByTeamId,
@@ -15,6 +22,7 @@ import {
 } from "../daos/member.dao";
 import { getUserInfoById, userInfoAttributes } from "../daos/user.dao";
 import { readGameResponseDTO, readGameDetailResponseDTO } from "../dtos/games.dto";
+import { CreateGameSchema } from "../schemas/game.schema";
 
 export const readGamesByDate = async (query) => {
     const games = await findGamesByDate(query.date, query.category);
@@ -55,4 +63,17 @@ export const readGameDetail = async (params) => {
     const leaderInfo = await getUserInfoById(teamDetail.leaderId);
     const memberInfo = await findMemberInfoWithoutLeaderByTeamId(gameDetail.hostTeamId, userInfoAttributes);
     return readGameDetailResponseDTO(gameDetail, teamDetail, leaderInfo, memberInfo);
+};
+
+export const createGame = async (userId, body: CreateGameSchema) => {
+    const hostTeamId = await getTeamIdByLeaderId(userId);
+    const category = await getTeamCategoryByLeaderId(userId);
+
+    const team = await getTeamById(hostTeamId, userId);
+    if (!team) {
+        // team 메뉴로 이동
+    }
+
+    await insertGame(hostTeamId, body, category);
+    return;
 };
