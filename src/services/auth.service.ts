@@ -20,7 +20,7 @@ export const tokenType = "Bearer ";
 
 export const kakaoLogin = async (body) => {
     const accessToken = await getKakaoAccessToken(body.code);
-    const userInfo = await retrieveKakaoUserInfo(accessToken);
+    const userInfo = await getKakaoUserInfo(accessToken);
     const payload = await createOrReadUser(userInfo);
     return login(payload);
 };
@@ -39,7 +39,7 @@ const getKakaoAccessToken = async (code: string) => {
     return response.data.access_token;
 };
 
-const retrieveKakaoUserInfo = async (accessToken: string): Promise<UserInfo> => {
+const getKakaoUserInfo = async (accessToken: string): Promise<UserInfo> => {
     const url = "https://kapi.kakao.com/v2/user/me";
     const response = await redaxios.get(url, {
         headers: {
@@ -51,6 +51,41 @@ const retrieveKakaoUserInfo = async (accessToken: string): Promise<UserInfo> => 
         provider: Provider.KAKAO,
         providerId: response.data.id,
         nickname: response.data.kakao_account.profile.nickname,
+    };
+};
+
+export const naverLogin = async (body) => {
+    const accessToken = await getNaverAccessToken(body.code, body.state);
+    const userInfo = await getNaverUserInfo(accessToken);
+    const payload = await createOrReadUser(userInfo);
+    return login(payload);
+};
+
+const getNaverAccessToken = async (code: string, state: string) => {
+    const url = "https://nid.naver.com/oauth2.0/token";
+    const response = await redaxios.get(url, {
+        params: {
+            grant_type: "authorization_code",
+            client_id: process.env.NAVER_CLIENT_ID,
+            client_secret: process.env.NAVER_CLIENT_SECRET,
+            code: code,
+            state: state,
+        },
+    });
+    return response.data.access_token;
+};
+
+const getNaverUserInfo = async (accessToken: string): Promise<UserInfo> => {
+    const url = "https://openapi.naver.com/v1/nid/me";
+    const response = await redaxios.get(url, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+    return {
+        provider: Provider.NAVER,
+        providerId: response.data.response.id,
+        nickname: response.data.response.name,
     };
 };
 
