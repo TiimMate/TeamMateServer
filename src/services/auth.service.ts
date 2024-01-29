@@ -1,5 +1,5 @@
 import { Request } from "express";
-import { createOrReadUser, updateRefreshToken } from "./users.service";
+import { createOrReadUser, updateRefreshToken, deleteRefreshToken } from "./users.service";
 import { BaseError } from "../config/error";
 import { status } from "../config/response.status";
 import { getRefreshToken } from "../daos/user.dao";
@@ -29,7 +29,14 @@ const getKakaoAccessToken = async (code: string) => {
     const url = "https://kauth.kakao.com/oauth/token";
     const response = await redaxios.post(
         url,
-        `grant_type=authorization_code&client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.KAKAO_REDIRECT_URI}&code=${code}`,
+        {
+            params: {
+                grant_type: "authorization_code",
+                client_id: process.env.KAKAO_CLIENT_ID,
+                redirect_uri: process.env.KAKAO_REDIRECT_URI,
+                code: code,
+            },
+        },
         {
             headers: {
                 "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
@@ -111,4 +118,9 @@ export const generateNewAccessToken = async (req: Request) => {
 
 const isRefreshTokenMatching = async (refreshToken, userId: number) => {
     return refreshToken === (await getRefreshToken(userId));
+};
+
+export const logoutUser = async (userId: number) => {
+    await deleteRefreshToken(userId);
+    return;
 };

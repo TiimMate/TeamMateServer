@@ -13,3 +13,7 @@ export const createOrReadUser = async (userInfo: UserInfo): Promise<Payload> => 
 export const updateRefreshToken = async (refreshToken: string, userId: number) => {
     await setRefreshToken(refreshToken, userId);
 };
+
+export const deleteRefreshToken = async (userId: number) => {
+    await setRefreshToken(null, userId);
+};
