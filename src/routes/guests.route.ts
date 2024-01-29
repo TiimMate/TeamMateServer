@@ -5,11 +5,21 @@ import {
     GuestingPreviewByLevel,
     GuestingPreviewByGender,
     GuestingPreviewByRegion,
+    DetailedGuestingPreview,
+    addGuesting,
+    modifyGuesting,
+    applicationGuesting,
 } from "../controllers/guest.controller";
+import { createGuesting, updateGuesting } from "../schemas/guest.schema";
+import { validateBody } from "../middlewares/validate.middleware";
 
 export const guestsRouter = express.Router({ mergeParams: true });
 
-// guestRouter.post("/", asyncHandler(createGuesting));
+// guestsRouter.post("/", validateBody(createGuesting), asyncHandler(addGuesting));
+guestsRouter.post("/", asyncHandler(addGuesting));
+
+// guestsRouter.put("/:guestingId", validateBody(updateGuesting), asyncHandler(modifyGuesting));
+guestsRouter.put("/:guestingId", asyncHandler(modifyGuesting));
 
 guestsRouter.get("/", asyncHandler(GuestingPreview));
 
@@ -19,4 +29,6 @@ guestsRouter.get("/gender", asyncHandler(GuestingPreviewByGender));
 
 guestsRouter.get("/region", asyncHandler(GuestingPreviewByRegion));
 
-// guestRouter.get("/:guestId", asyncHandler(DetailedGuestingPreview));
+guestsRouter.get("/:guestingId", asyncHandler(DetailedGuestingPreview));
+
+guestsRouter.post("/:guestingId/application", asyncHandler(applicationGuesting));

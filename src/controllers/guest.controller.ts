@@ -5,12 +5,19 @@ import {
     readGuestingByLevel,
     readGuestingByGender,
     readGuestingByRegion,
+    readDetailedGuesting,
+    createGuesting,
+    addGuestUser,
+    updateGuesting,
 } from "../services/guest.service";
-// import { postGuesting } from "../services/guest.service";
 
-// export const createGuesting = async (req, res, next) => {
-//     return res.send(response(status.SUCCESS, await postGuesting(req.params.category, req.query)));
-// };
+export const addGuesting = async (req, res, next) => {
+    return res.send(response(status.SUCCESS, await createGuesting(1, req.body)));
+};
+
+export const modifyGuesting = async (req, res, next) => {
+    return res.send(response(status.SUCCESS, await updateGuesting(1, req.params, req.body)));
+};
 
 export const GuestingPreview = async (req, res, next) => {
     return res.send(response(status.SUCCESS, await readGuesting(req.query)));
@@ -28,6 +35,10 @@ export const GuestingPreviewByRegion = async (req, res, next) => {
     return res.send(response(status.SUCCESS, await readGuestingByRegion(req.query)));
 };
 
-// export const DetailedGuestingPreview = async (req, res, next) => {
-//     return res.send(response(status.SUCCESS, await getDetailedGuesting(req.team.id, req.params)));
-// };
+export const DetailedGuestingPreview = async (req, res, next) => {
+    return res.send(response(status.SUCCESS, await readDetailedGuesting(req.params)));
+};
+
+export const applicationGuesting = async (req, res, next) => {
+    return res.send(response(status.SUCCESS, await addGuestUser(1, req.params)));
+};

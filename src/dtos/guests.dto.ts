@@ -14,3 +14,29 @@ export const readGuestingResponseDTO = (guestings) => {
         recruitCount: guesting.recruitCount,
     }));
 };
+
+export const readGuestingDetailResponseDTO = (guestingDetail, TeamDetail, leaderInfo, memberInfo) => {
+    const member = memberInfo.map((info) => ({
+        nickname: info["User.nickname"],
+        height: null,
+        weight: null,
+        position: null,
+    }));
+    return {
+        name: TeamDetail.name,
+        skillLevel: TeamDetail.skillLevel,
+        mannerLevel: TeamDetail.mannerLevel,
+        description: TeamDetail.description,
+        gusting_info: {
+            gameTime: guestingDetail.gameTime,
+            gender: TeamDetail.gender,
+            ageGroup: TeamDetail.ageGroup,
+            gymName: TeamDetail.gymName,
+            skillLevel: TeamDetail.skillLevel,
+        },
+        member_info: {
+            leader: leaderInfo,
+            member,
+        },
+    };
+};
