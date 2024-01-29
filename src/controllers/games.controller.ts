@@ -7,6 +7,7 @@ import {
     readGamesByLevel,
     readGamesByRegion,
     readGameDetail,
+    createGame,
 } from "../services/games.service";
 import { readTeamAvailPreviewById } from "../services/teams.service";
 
@@ -27,10 +28,15 @@ export const fetchGamesByRegion = async (req, res, next) => {
 };
 
 export const fetchTeamsAvailById = async (req, res, next) => {
-    // res.send(response(status.SUCCESS, await readTeamAvailPreviewById(req.user.id, req.query)));
-    res.send(response(status.SUCCESS, await readTeamAvailPreviewById(1, req.query))); // test
+    res.send(response(status.SUCCESS, await readTeamAvailPreviewById(req.user.id, req.query)));
+    // res.send(response(status.SUCCESS, await readTeamAvailPreviewById(1, req.query))); // for testing
 };
 
 export const fetchGameDetail = async (req, res, next) => {
     res.send(response(status.SUCCESS, await readGameDetail(req.params)));
+};
+
+export const addGame = async (req, res, next) => {
+    return res.send(response(status.SUCCESS, await createGame(req.user.id, req.body)));
+    // return res.send(response(status.SUCCESS, await createGame(2, req.body))); //for testing
 };

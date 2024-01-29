@@ -1,6 +1,7 @@
 import db from "../models";
 import { Sequelize } from "sequelize";
 import { getStatusById } from "../constants/status.constant";
+import { CreateGameSchema } from "../schemas/game.schema";
 
 export const findGamesByDate = async (date, category) => {
     const games = await db.Game.findAll({
@@ -108,5 +109,14 @@ export const getGameDetail = async (gameId) => {
             id: gameId,
         },
         attributes: ["hostTeamId", "gameTime", "description"],
+    });
+};
+
+export const insertGame = async (hostTeamId, data: CreateGameSchema, category) => {
+    await db.Game.create({
+        hostTeamId: hostTeamId,
+        gameTime: data.gameTime,
+        category: category,
+        description: data.description,
     });
 };
