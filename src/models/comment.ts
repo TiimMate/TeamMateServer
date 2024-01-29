@@ -1,8 +1,8 @@
 import { Model, InferAttributes, InferCreationAttributes, DataTypes, Sequelize } from "sequelize";
 
-class CommunityComment extends Model<InferAttributes<CommunityComment>, InferCreationAttributes<CommunityComment>> {
+class Comment extends Model<InferAttributes<Comment>, InferCreationAttributes<Comment>> {
     static initiate(sequelize: Sequelize) {
-        CommunityComment.init(
+        Comment.init(
             {
                 postId: {
                     type: new DataTypes.INTEGER(),
@@ -21,8 +21,8 @@ class CommunityComment extends Model<InferAttributes<CommunityComment>, InferCre
                 sequelize,
                 timestamps: true,
                 underscored: true,
-                modelName: "CommunityComment",
-                tableName: "community_comment",
+                modelName: "Comment",
+                tableName: "comment",
                 paranoid: false,
                 charset: "utf8",
                 collate: "utf8_general_ci",
@@ -30,9 +30,9 @@ class CommunityComment extends Model<InferAttributes<CommunityComment>, InferCre
         );
     }
     static associate(db) {
-        db.CommunityComment.belongsTo(db.Post, { foreignKey: "post_id" });
-        db.CommunityComment.belongsTo(db.User, { foreignKey: "author_id" });
+        db.Comment.belongsTo(db.Post, { foreignKey: "post_id" });
+        db.Comment.belongsTo(db.User, { foreignKey: "author_id" });
     }
 }
 
-module.exports = CommunityComment;
+module.exports = Comment;

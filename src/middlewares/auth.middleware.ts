@@ -1,9 +1,9 @@
 import { BaseError } from "../config/error";
 import { status } from "../config/response.status";
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import { extractAccessToken, extractAccessTokenFromHeader, verifyAccessToken } from "../utils/jwt.util";
 
-export const verifyUser = (req: Request, res: Response, next: NextFunction) => {
+export const verifyUser = (req, res: Response, next: NextFunction) => {
     const accessToken = extractAccessToken(req);
     const verified = verifyAccessToken(accessToken);
     if (verified.isExpired) {
@@ -17,7 +17,7 @@ export const verifyUser = (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
-export const verifyUserIfExists = (req: Request, res: Response, next: NextFunction) => {
+export const verifyUserIfExists = (req, res: Response, next: NextFunction) => {
     const accessToken = extractAccessTokenFromHeader(req);
     if (accessToken) {
         const verified = verifyAccessToken(accessToken);

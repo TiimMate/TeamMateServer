@@ -10,13 +10,11 @@ export const getUserByProviderId = async (provider, providerId) => {
     });
 };
 
-export const insertUser = async (provider, providerId, email) => {
-    const nickname = email.split("@")[0];
+export const insertUser = async (provider, providerId, nickname) => {
     return await db.User.create({
         nickname,
         provider,
         providerId,
-        email,
     });
 };
 

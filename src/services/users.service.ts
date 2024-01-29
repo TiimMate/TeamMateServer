@@ -1,20 +1,12 @@
-import { BaseError } from "../config/error";
-import { status } from "../config/response.status";
 import { getUserByProviderId, getUserProfileByCategory, insertUser, setRefreshToken } from "../daos/user.dao";
 import { readUserProfileByCategoryResponseDTO } from "../dtos/users.dto";
+import { Payload } from "../types/payload.interface";
+import { UserInfo } from "../types/user-info.interface";
 
-export type Payload = {
-    id: number;
-    nickname: string;
-};
-
-export const createOrReadUser = async (provider, providerId, email): Promise<Payload> => {
-    if (!provider || !providerId || !email) {
-        throw new BaseError(status.MISSING_REQUIRED_FIELDS);
-    }
-    let user = await getUserByProviderId(provider, providerId);
+export const createOrReadUser = async (userInfo: UserInfo): Promise<Payload> => {
+    let user = await getUserByProviderId(userInfo.provider, userInfo.providerId);
     if (!user) {
-        user = await insertUser(provider, providerId, email);
+        user = await insertUser(userInfo.provider, userInfo.providerId, userInfo.nickname);
     }
     return { id: user.id, nickname: user.nickname };
 };
