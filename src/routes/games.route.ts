@@ -6,6 +6,7 @@ import {
     fetchGamesByLevel,
     fetchGamesByRegion,
     fetchTeamsAvailById,
+    fetchGameDetail,
 } from "../controllers/games.controller";
 
 export const gamesRouter = express.Router();
@@ -20,3 +21,6 @@ gamesRouter.get("/by-region", asyncHandler(fetchGamesByRegion));
 
 // 연습경기 신청 가능 팀 목록 조회
 gamesRouter.get("/apply-avail", asyncHandler(fetchTeamsAvailById));
+
+// 연습경기 모집글 상세 조회
+gamesRouter.get("/:gameId", asyncHandler(fetchGameDetail));
