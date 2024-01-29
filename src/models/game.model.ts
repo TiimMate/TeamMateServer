@@ -31,6 +31,7 @@ class Game extends Model<InferAttributes<Game>, InferCreationAttributes<Game>> {
                 status: {
                     type: new DataTypes.INTEGER(),
                     allowNull: false,
+                    defaultValue: 0,
                 },
             },
             {
