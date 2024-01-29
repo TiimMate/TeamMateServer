@@ -17,6 +17,32 @@ export const findMemberInfoByTeamId = async (teamId, userInfoAttributes) => {
     });
 };
 
+export const findMemberInfoWithoutLeaderByTeamId = async (teamId, userInfoAttributes) => {
+    const team = await db.Team.findByPk(teamId);
+    if (!team) {
+        throw new Error("Team not found");
+    }
+    const leaderId = team.leaderId;
+
+    // 리더 제외한 멤버들 조회
+    return await db.Member.findAll({
+        raw: true,
+        where: {
+            teamId: teamId,
+            userId: {
+                [Op.ne]: leaderId,
+            },
+        },
+        include: [
+            {
+                model: db.User,
+                attributes: userInfoAttributes(),
+            },
+        ],
+        attributes: [],
+    });
+};
+
 export const insertMember = async (teamId, userId) => {
     await db.Member.create({
         teamId,

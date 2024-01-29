@@ -8,7 +8,11 @@ import {
     getGameDetail,
 } from "../daos/games.dao";
 import { getTeamDetailforGuesting } from "../daos/team.dao";
-import { findMemberInfoByTeamId, getMemberCountByTeamId } from "../daos/member.dao";
+import {
+    findMemberInfoByTeamId,
+    findMemberInfoWithoutLeaderByTeamId,
+    getMemberCountByTeamId,
+} from "../daos/member.dao";
 import { getUserInfoById, userInfoAttributes } from "../daos/user.dao";
 import { readGameResponseDTO, readGameDetailResponseDTO } from "../dtos/games.dto";
 
@@ -49,6 +53,6 @@ export const readGameDetail = async (params) => {
     const gameDetail = await getGameDetail(gameId);
     const teamDetail = await getTeamDetailforGuesting(gameDetail.hostTeamId);
     const leaderInfo = await getUserInfoById(teamDetail.leaderId);
-    const memberInfo = await findMemberInfoByTeamId(gameDetail.hostTeamId, userInfoAttributes);
+    const memberInfo = await findMemberInfoWithoutLeaderByTeamId(gameDetail.hostTeamId, userInfoAttributes);
     return readGameDetailResponseDTO(gameDetail, teamDetail, leaderInfo, memberInfo);
 };
