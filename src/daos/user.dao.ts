@@ -18,7 +18,7 @@ export const insertUser = async (provider, providerId, nickname) => {
     });
 };
 
-export const setRefreshToken = async (refreshToken: string, userId: number) => {
+export const setRefreshToken = async (refreshToken: string | null, userId: number) => {
     await db.User.update(
         { refreshToken },
         {
