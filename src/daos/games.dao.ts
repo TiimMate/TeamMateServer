@@ -100,3 +100,13 @@ export const findGamesByRegion = async (date, category, region) => {
         status: getStatusById(game.status),
     }));
 };
+
+export const getGameDetail = async (gameId) => {
+    return await db.Game.findOne({
+        raw: true,
+        where: {
+            id: gameId,
+        },
+        attributes: ["hostTeamId", "gameTime", "description"],
+    });
+};
