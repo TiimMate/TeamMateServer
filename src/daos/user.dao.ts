@@ -1,7 +1,9 @@
 import db from "../models";
 import { CommonProfile } from "../schemas/user-profile.schema";
+import { Category } from "../types/category.enum";
+import { Provider } from "../types/provider.enum";
 
-export const getUserByProviderId = async (provider, providerId) => {
+export const getUserByProviderId = async (provider: Provider, providerId: string) => {
     return await db.User.findOne({
         raw: true,
         where: {
@@ -11,7 +13,7 @@ export const getUserByProviderId = async (provider, providerId) => {
     });
 };
 
-export const insertUser = async (provider, providerId, nickname) => {
+export const insertUser = async (provider: Provider, providerId: string, nickname: string) => {
     return await db.User.create({
         nickname,
         provider,
@@ -41,30 +43,51 @@ export const getRefreshToken = async (userId: number) => {
     return user.refreshToken;
 };
 
-export const getUserById = async (id) => {
+export const getUser = async (userId: number) => {
     return await db.User.findOne({
         raw: true,
         where: {
-            id,
+            id: userId,
         },
     });
 };
 
-export const getUserInfoById = async (id) => {
+export const getUserInfoByCategory = async (userId: number, category: Category) => {
     return await db.User.findOne({
         raw: true,
         where: {
-            id,
+            id: userId,
+        },
+        attributes: ["nickname", "height"],
+        include: [
+            {
+                model: db.Profile,
+                where: {
+                    category,
+                },
+                required: false,
+                attributes: ["position"],
+            },
+        ],
+    });
+};
+
+export const getUserInfoById = async (userId: number) => {
+    throw new Error("더 이상 사용되지 않는 함수");
+    return await db.User.findOne({
+        raw: true,
+        where: {
+            id: userId,
         },
         attributes: userInfoAttributes(),
     });
 };
 
 export const userInfoAttributes = () => {
-    return ["nickname"]; //TODO: add height, weight, positon
+    return ["nickname", "height"];
 };
 
-export const getUserProfileByCategory = async (userId: number, category) => {
+export const getUserProfileByCategory = async (userId: number, category: Category) => {
     return await db.User.findOne({
         raw: true,
         where: {

@@ -5,7 +5,7 @@ import { Payload } from "../types/payload.interface";
 import { UserInfo } from "../types/user-info.interface";
 import { UpdateUserProfileBody, CategoryProfile } from "../schemas/user-profile.schema";
 import {
-    getUserById,
+    getUser,
     getUserByProviderId,
     getUserProfileByCategory,
     insertUser,
@@ -13,7 +13,7 @@ import {
     setRefreshToken,
 } from "../daos/user.dao";
 import { getUserProfile, insertCategoryProfile, setCategoryProfile } from "../daos/profile.dao";
-import { readUserProfileByCategoryResponseDTO } from "../dtos/users.dto";
+import { readUserProfileResponseDTO } from "../dtos/users.dto";
 
 export const createOrReadUser = async (userInfo: UserInfo): Promise<Payload> => {
     let user = await getUserByProviderId(userInfo.provider, userInfo.providerId);
@@ -27,9 +27,12 @@ export const updateRefreshToken = async (refreshToken: string, userId: number) =
     await setRefreshToken(refreshToken, userId);
 };
 
-export const readUserProfileByCategory = async (userId, params) => {
+export const readUserProfile = async (userId: number, params) => {
     const profile = await getUserProfileByCategory(userId, params.category);
-    return readUserProfileByCategoryResponseDTO(profile);
+    if (!profile) {
+        throw new BaseError(status.USER_NOT_FOUND);
+    }
+    return readUserProfileResponseDTO(profile);
 };
 
 export const deleteRefreshToken = async (userId: number) => {
@@ -37,7 +40,7 @@ export const deleteRefreshToken = async (userId: number) => {
 };
 
 export const updateUserProfile = async (userId, params, body: UpdateUserProfileBody) => {
-    const user = await getUserById(userId);
+    const user = await getUser(userId);
     if (!user) {
         throw new BaseError(status.USER_NOT_FOUND);
     }
