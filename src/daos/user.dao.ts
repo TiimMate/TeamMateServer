@@ -1,4 +1,5 @@
 import db from "../models";
+import { CommonProfile } from "../schemas/user-profile.schema";
 
 export const getUserByProviderId = async (provider, providerId) => {
     return await db.User.findOne({
@@ -61,4 +62,15 @@ export const getUserInfoById = async (id) => {
 
 export const userInfoAttributes = () => {
     return ["nickname"]; //TODO: add height, weight, positon
+};
+
+export const setCommonProfile = async (userId: number, commonProfile: CommonProfile) => {
+    await db.User.update(
+        { ...commonProfile },
+        {
+            where: {
+                id: userId,
+            },
+        },
+    );
 };
