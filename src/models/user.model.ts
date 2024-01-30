@@ -20,6 +20,18 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
                     type: new DataTypes.STRING(150),
                     allowNull: true,
                 },
+                gender: {
+                    type: new DataTypes.STRING(1),
+                    allowNull: true,
+                },
+                ageGroup: {
+                    type: new DataTypes.STRING(10),
+                    allowNull: true,
+                },
+                height: {
+                    type: new DataTypes.INTEGER(),
+                    allowNull: true,
+                },
             },
             {
                 sequelize,
@@ -34,6 +46,7 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
         );
     }
     static associate(db) {
+        db.User.hasMany(db.Profile, { foreignKey: "user_id" });
         db.User.hasMany(db.Team, { foreignKey: "leader_id" });
         db.User.hasMany(db.Member, { foreignKey: "user_id" });
         db.User.hasMany(db.GuestUser, { foreignKey: "user_id" });

@@ -55,7 +55,7 @@ const getKakaoUserInfo = async (accessToken: string): Promise<UserInfo> => {
         },
     });
     return {
-        provider: Provider.KAKAO,
+        provider: Provider.Kakao,
         providerId: response.data.id,
         nickname: response.data.kakao_account.profile.nickname,
     };
@@ -90,7 +90,7 @@ const getNaverUserInfo = async (accessToken: string): Promise<UserInfo> => {
         },
     });
     return {
-        provider: Provider.NAVER,
+        provider: Provider.Naver,
         providerId: response.data.response.id,
         nickname: response.data.response.name,
     };
