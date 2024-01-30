@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { object, z } from "zod";
 import { Gender } from "../types/gender.enum";
 import { Category } from "../types/category.enum";
 import { AgeGroup } from "../types/age-group.enum";
@@ -44,3 +44,17 @@ export const categoryField = {
         Category.TableTennis,
     ]),
 };
+
+export const logoField = { logo: z.optional(z.string().max(200)) };
+
+export const nameField = { name: z.string().max(20) };
+
+export const gymNameField = { gymName: z.string().max(100) };
+
+export const memberIdsToDeleteField = { memberIdsToDelete: z.optional(z.array(z.number().int())) };
+
+export const categoryParam = object({
+    params: object({
+        ...categoryField,
+    }),
+});

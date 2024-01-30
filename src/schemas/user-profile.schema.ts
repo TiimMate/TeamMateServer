@@ -39,12 +39,6 @@ export const updateUserProfileSchema = object({
     body: body,
 });
 
-export const readUserProfileSchema = object({
-    params: object({
-        ...categoryField,
-    }),
-});
-
 export type UpdateUserProfileBody = TypeOf<typeof body>;
 export type CommonProfile = TypeOf<typeof commonProfile>;
 export type CategoryProfile = TypeOf<typeof categoryProfile>;

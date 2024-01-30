@@ -2,6 +2,7 @@ import { Op } from "sequelize";
 import db from "../models";
 
 export const findMemberInfoByTeamId = async (teamId, userInfoAttributes) => {
+    throw new Error("더 이상 사용하지 않는 함수");
     return await db.Member.findAll({
         raw: true,
         where: {
@@ -43,14 +44,14 @@ export const findMemberInfoWithoutLeaderByTeamId = async (teamId, userInfoAttrib
     });
 };
 
-export const insertMember = async (teamId, userId) => {
+export const insertMember = async (teamId: number, userId: number) => {
     await db.Member.create({
         teamId,
         userId,
     });
 };
 
-export const isMemberExist = async (teamId, userId) => {
+export const isMemberExist = async (teamId: number, userId: number) => {
     const member = await db.Member.findOne({
         where: {
             teamId,
@@ -60,7 +61,7 @@ export const isMemberExist = async (teamId, userId) => {
     return member !== null;
 };
 
-export const findMemberToDelete = async (memberIdsToDelete, teamId) => {
+export const findMemberToDelete = async (memberIdsToDelete: number[], teamId: number) => {
     return await db.Member.findAll({
         where: {
             teamId,
@@ -71,7 +72,7 @@ export const findMemberToDelete = async (memberIdsToDelete, teamId) => {
     });
 };
 
-export const deleteMembersById = async (members, teamId) => {
+export const deleteMembers = async (members) => {
     for (const member of members) {
         await member.destroy();
     }

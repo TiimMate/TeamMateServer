@@ -1,30 +1,48 @@
 import { TypeOf, object, z } from "zod";
+import {
+    ageGroupFieldInTeam,
+    categoryField,
+    descriptionField,
+    genderFieldInTeam,
+    gymNameField,
+    logoField,
+    memberIdsToDeleteField,
+    nameField,
+    regionFieldInTeam,
+} from "./fields";
 
-const fieldsWithoutCategory = {
-    logo: z.optional(z.string()),
-    name: z.string().max(20),
-    description: z.optional(z.string()),
-    gender: z.number().int().min(1), //.max(getGendersLength()),
-    ageGroup: z.number().int().min(1), //.max(getAgeGroupsLength()),
-    region: z.string(),
-    gymName: z.string(),
+const commonFields = {
+    ...logoField,
+    ...nameField,
+    ...descriptionField,
+    ...genderFieldInTeam,
+    ...ageGroupFieldInTeam,
+    ...regionFieldInTeam,
+    ...gymNameField,
 };
 
-const categories = z.enum(["농구", "야구", "테니스", "축구", "풋살", "배구", "볼링", "배드민턴", "탁구"]);
-
-export const category = object({
-    category: categories,
+const createTeamBody = object({
+    ...commonFields,
+    ...categoryField,
 });
 
-export const createTeam = object({
-    ...fieldsWithoutCategory,
-    category: categories,
+const updateTeamBody = object({
+    ...commonFields,
+    ...memberIdsToDeleteField,
 });
 
-export const updateTeam = object({
-    ...fieldsWithoutCategory,
-    memberIdsToDelete: z.optional(z.array(z.number().int())),
+const updateTeamBodyWithoutMemberIdsToDelete = object({
+    ...commonFields,
 });
 
-export type CreateTeamSchema = TypeOf<typeof createTeam>;
-export type UpdateTeamSchema = TypeOf<typeof updateTeam>;
+export const createTeamSchema = object({
+    body: createTeamBody,
+});
+
+export const updateTeamSchema = object({
+    body: updateTeamBody,
+});
+
+export type CreateTeamBody = TypeOf<typeof createTeamBody>;
+export type UpdateTeamBody = TypeOf<typeof updateTeamBody>;
+export type UpdateTeamBodyWithoutMemberIdsToDelete = TypeOf<typeof updateTeamBodyWithoutMemberIdsToDelete>;

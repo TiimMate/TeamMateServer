@@ -1,6 +1,5 @@
 import { BaseError } from "../config/error";
 import { status } from "../config/response.status";
-import db from "../models";
 import {
     findGamesByDate,
     findGamesByGender,
@@ -14,13 +13,9 @@ import {
     getTeamDetailforGuesting,
     getTeamIdByLeaderId,
     getTeamCategoryByLeaderId,
-    getTeamById,
+    getTeamByLeaderId,
 } from "../daos/team.dao";
-import {
-    findMemberInfoByTeamId,
-    findMemberInfoWithoutLeaderByTeamId,
-    getMemberCountByTeamId,
-} from "../daos/member.dao";
+import { findMemberInfoWithoutLeaderByTeamId, getMemberCountByTeamId } from "../daos/member.dao";
 import { getUserInfoById, userInfoAttributes } from "../daos/user.dao";
 import { getGameById } from "../daos/games.dao";
 import { readGameResponseDTO, readGameDetailResponseDTO } from "../dtos/games.dto";
@@ -71,7 +66,7 @@ export const createGame = async (userId, body: CreateGameSchema) => {
     const hostTeamId = await getTeamIdByLeaderId(userId);
     const category = await getTeamCategoryByLeaderId(userId);
 
-    const team = await getTeamById(hostTeamId, userId);
+    const team = await getTeamByLeaderId(hostTeamId, userId);
     if (!team) {
         // team 메뉴로 이동
     }
