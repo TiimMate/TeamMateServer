@@ -11,6 +11,7 @@ import {
     addComment,
     fetchComments,
     addRentPost,
+    fetchRentPosts,
 } from "../controllers/posts.controller";
 import { validate } from "../middlewares/validate.middleware";
 import { createPostSchema } from "../schemas/post.schema";
@@ -36,3 +37,6 @@ postsRouter.get("/:postId", verifyUser, asyncHandler(fetchPost));
 
 // 대관정보 글 작성
 postsRouter.post("/rent", verifyUser, validate(createPostSchema), asyncHandler(addRentPost));
+
+// 대관정보 글 목록 조회
+postsRouter.get("/rent", verifyUserIfExists, asyncHandler(fetchRentPosts));
