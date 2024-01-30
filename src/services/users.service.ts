@@ -1,3 +1,5 @@
+import { getUserByProviderId, getUserProfileByCategory, insertUser, setRefreshToken } from "../daos/user.dao";
+import { readUserProfileByCategoryResponseDTO } from "../dtos/users.dto";
 import { BaseError } from "../config/error";
 import { status } from "../config/response.status";
 import { getUserProfile, insertCategoryProfile, setCategoryProfile } from "../daos/profile.dao";
@@ -17,6 +19,11 @@ export const createOrReadUser = async (userInfo: UserInfo): Promise<Payload> => 
 
 export const updateRefreshToken = async (refreshToken: string, userId: number) => {
     await setRefreshToken(refreshToken, userId);
+};
+
+export const readUserProfileByCategory = async (userId, params) => {
+    const profile = await getUserProfileByCategory(userId, params.category);
+    return readUserProfileByCategoryResponseDTO(profile);
 };
 
 export const deleteRefreshToken = async (userId: number) => {

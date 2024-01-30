@@ -64,6 +64,26 @@ export const userInfoAttributes = () => {
     return ["nickname"]; //TODO: add height, weight, positon
 };
 
+export const getUserProfileByCategory = async (userId: number, category) => {
+    return await db.User.findOne({
+        raw: true,
+        where: {
+            id: userId,
+        },
+        include: [
+            {
+                model: db.Profile,
+                where: {
+                    category,
+                },
+                required: false,
+                attributes: ["skillLevel", "mannerLevel", "region", "position", "description"],
+            },
+        ],
+        attributes: ["nickname", "gender", "ageGroup"],
+    });
+};
+
 export const setCommonProfile = async (userId: number, commonProfile: CommonProfile) => {
     await db.User.update(
         { ...commonProfile },
