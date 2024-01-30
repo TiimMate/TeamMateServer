@@ -10,8 +10,8 @@ import {
     addGame,
     modifyGame,
 } from "../controllers/games.controller";
-import { createGame, updateGame } from "../schemas/game.schema";
-import { validateBody } from "../middlewares/validate.middleware";
+import { createGameSchema, updateGameSchema } from "../schemas/game.schema";
+import { validate } from "../middlewares/validate.middleware";
 
 export const gamesRouter = express.Router();
 
@@ -30,5 +30,5 @@ gamesRouter.get("/apply-avail", asyncHandler(fetchTeamsAvailById));
 gamesRouter.get("/:gameId", asyncHandler(fetchGameDetail));
 
 // 연습경기 모집글 작성/수정
-gamesRouter.post("/", validateBody(createGame), asyncHandler(addGame));
-gamesRouter.put("/:gameId", validateBody(updateGame), asyncHandler(modifyGame));
+gamesRouter.post("/", validate(createGameSchema), asyncHandler(addGame));
+gamesRouter.put("/:gameId", validate(updateGameSchema), asyncHandler(modifyGame));

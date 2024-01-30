@@ -68,3 +68,16 @@ export const categoryParam = object({
         ...categoryField,
     }),
 });
+
+export const hostTeamIdField = { hostTeamId: z.number().int().optional() };
+
+export const gameTimeField = {
+    gameTime: z.preprocess((arg) => {
+        if (typeof arg == "string") {
+            return new Date(arg);
+        }
+        return arg;
+    }, z.date()),
+};
+
+export const descriptionFieldInGame = { description: z.string() };
