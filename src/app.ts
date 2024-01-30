@@ -16,6 +16,7 @@ import { gamesRouter } from "./routes/games.route";
 import { guestsRouter } from "./routes/guests.route";
 import { postsRouter } from "./routes/posts.route";
 import { usersRouter } from "./routes/users.route";
+import { matchingsRouter } from "./routes/matchings.route";
 
 const app = express();
 
@@ -40,6 +41,7 @@ app.use("/games", gamesRouter);
 app.use("/guests", guestsRouter);
 app.use("/posts", postsRouter);
 app.use("/users", usersRouter);
+app.use("/matchings", matchingsRouter);
 
 app.use((req: Request, res: Response, next: NextFunction) => {
     const err = new BaseError(status.NOT_FOUND);
