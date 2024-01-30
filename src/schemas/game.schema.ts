@@ -22,8 +22,9 @@ export const createGame = object({
 });
 
 export const updateGame = object({
-    memberIdsToDelete: z.optional(z.array(z.number().int())),
+    // memberIdsToDelete: z.optional(z.array(z.number().int())),
+    ...fields,
 });
 
 export type CreateGameSchema = TypeOf<typeof createGame>;
-export type updateGameSchema = TypeOf<typeof updateGame>;
+export type UpdateGameSchema = TypeOf<typeof updateGame>;
