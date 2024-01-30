@@ -36,24 +36,23 @@ export const findGuestsOfMatchingGuesting = async (userId, date) => {
     return guestResults;
 };
 
-// export const findGuestsOfMatchingHosting = async (userId, date) => {
-//     const guestResults = await db.Guest.findAll({
-//         raw: true,
-//         where: {
-//             teamId: getTeamIdByLeaderId(userId),
-//             [Op.and]: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${date}', '%Y-%m-%d')`),
-//         },
-//         include: [
-//             {
-//                 model: db.Team,
-//                 attributes: ["id", "name", "region", "gender", "ageGroup", "skillLevel"],
-//             },
-//         ],
-//         attributes: ["gameTime"],
-//     });
-
-//     return guestResults;
-// };
+export const findGuestsOfMatchingHosting = async (userId, date) => {
+    const teamId = await getTeamIdByLeaderId(userId);
+    return await db.Guest.findAll({
+        raw: true,
+        where: {
+            teamId: teamId,
+            [Op.and]: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${date}', '%Y-%m-%d')`),
+        },
+        include: [
+            {
+                model: db.Team,
+                attributes: ["id", "name", "region", "gender", "ageGroup", "skillLevel"],
+            },
+        ],
+        attributes: ["gameTime"],
+    });
+};
 
 // export const findGamesOfMatchingGuesting = async (userId, date) => {
 //     const guestUserResults = await db.game.findAll({
