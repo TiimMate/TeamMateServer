@@ -73,3 +73,8 @@ export const readComments = async (params, query) => {
     const comments = await findComment(params.postId, cursorId);
     return readCommentsResonseDTO(comments);
 };
+
+export const createRentPost = async (userId: number, body: CreatePostBody) => {
+    await insertPost(userId, body, PostType.RentalInfo);
+    return;
+};

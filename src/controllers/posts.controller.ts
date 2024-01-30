@@ -10,6 +10,7 @@ import {
     createCommunityPost,
     createComment,
     readComments,
+    createRentPost,
 } from "../services/posts.service";
 
 export const fetchCommunityPosts = async (req, res: Response, next) => {
@@ -42,4 +43,8 @@ export const addComment = async (req, res: Response, next) => {
 
 export const fetchComments = async (req: Request, res: Response, next) => {
     res.send(response(status.SUCCESS, await readComments(req.params, req.query)));
+};
+
+export const addRentPost = async (req, res: Response, next) => {
+    res.send(response(status.SUCCESS, await createRentPost(req.user.id, req.body)));
 };
