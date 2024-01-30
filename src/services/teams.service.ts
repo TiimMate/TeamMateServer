@@ -1,5 +1,6 @@
 import { deleteMembersById, findMemberInfoByTeamId, findMemberToDelete } from "../daos/member.dao";
 import { findTeamPreviewByCategory, getTeamById, getTeamDetail, insertTeam, setTeam } from "../daos/team.dao";
+import { findTeamAvailPreviewById } from "../daos/team.dao";
 import { getUserInfoById, userInfoAttributes } from "../daos/user.dao";
 import { readTeamDetailResponseDTO } from "../dtos/teams.dto";
 import { v4 as uuidv4 } from "uuid";
@@ -40,4 +41,8 @@ export const readTeamDetail = async (userId, params) => {
     const leaderInfo = await getUserInfoById(detail.leaderId);
     const memberInfo = await findMemberInfoByTeamId(teamId, userInfoAttributes);
     return readTeamDetailResponseDTO(detail, leaderInfo, memberInfo, userId == detail.leaderId);
+};
+
+export const readTeamAvailPreviewById = async (userId, query) => {
+    return await findTeamAvailPreviewById(userId, query.category);
 };

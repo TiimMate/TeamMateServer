@@ -1,3 +1,5 @@
+import { BaseError } from "../config/error";
+import { status } from "../config/response.status";
 import { defaultLevel } from "../constants/level.constant";
 import db from "../models";
 import { CreateTeamSchema } from "../schemas/team.schema";
@@ -58,6 +60,16 @@ export const getTeamDetail = async (teamId) => {
     });
 };
 
+export const getTeamDetailforGuesting = async (teamId) => {
+    return await db.Team.findOne({
+        raw: true,
+        where: {
+            id: teamId,
+        },
+        attributes: ["name", "description", "gender", "ageGroup", "gymName", "skillLevel", "mannerLevel", "leaderId"],
+    });
+};
+
 export const getTeamIdByInviteCode = async (inviteCode): Promise<number> => {
     const team = await db.Team.findOne({
         raw: true,
@@ -78,9 +90,44 @@ export const getTeamById = async (teamId, userId) => {
     });
 };
 
+export const getTeamIdByLeaderId = async (userId) => {
+    const team = await db.Team.findOne({
+        raw: true,
+        where: {
+            leaderId: userId,
+        },
+        attributes: ["id"],
+    });
+
+    return team?.id;
+};
+
+export const getTeamCategoryByLeaderId = async (userId) => {
+    const team = await db.Team.findOne({
+        raw: true,
+        where: {
+            leaderId: userId,
+        },
+        attributes: ["category"],
+    });
+
+    return team?.category;
+};
+
 export const setTeam = async (team, body) => {
     Object.keys(body).forEach((field) => {
         team[field] = body[field];
     });
     await team.save();
+};
+
+export const findTeamAvailPreviewById = async (userId, category) => {
+    return await db.Team.findAll({
+        raw: true,
+        where: {
+            category,
+            leaderId: userId,
+        },
+        attributes: ["name"],
+    });
 };

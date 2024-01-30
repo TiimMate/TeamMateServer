@@ -1,4 +1,5 @@
 import db from "../models";
+import { CommonProfile } from "../schemas/user-profile.schema";
 
 export const getUserByProviderId = async (provider, providerId) => {
     return await db.User.findOne({
@@ -18,7 +19,7 @@ export const insertUser = async (provider, providerId, nickname) => {
     });
 };
 
-export const setRefreshToken = async (refreshToken: string, userId: number) => {
+export const setRefreshToken = async (refreshToken: string | null, userId: number) => {
     await db.User.update(
         { refreshToken },
         {
@@ -38,6 +39,15 @@ export const getRefreshToken = async (userId: number) => {
         attributes: ["refreshToken"],
     });
     return user.refreshToken;
+};
+
+export const getUserById = async (id) => {
+    return await db.User.findOne({
+        raw: true,
+        where: {
+            id,
+        },
+    });
 };
 
 export const getUserInfoById = async (id) => {
@@ -72,4 +82,15 @@ export const getUserProfileByCategory = async (userId: number, category) => {
         ],
         attributes: ["nickname", "gender", "ageGroup"],
     });
+};
+
+export const setCommonProfile = async (userId: number, commonProfile: CommonProfile) => {
+    await db.User.update(
+        { ...commonProfile },
+        {
+            where: {
+                id: userId,
+            },
+        },
+    );
 };

@@ -1,5 +1,23 @@
 import { Sequelize } from "sequelize";
 import db from "../models";
+import { CreateGuestingSchema } from "../schemas/guest.schema";
+import { getTeamIdByLeaderId } from "./team.dao";
+
+export const insertGuesting = async (teamId, data: CreateGuestingSchema) => {
+    await db.Guest.create({
+        teamId: teamId,
+        gameTime: data.gameTime,
+        description: data.description,
+        recruitCount: data.recruitCount,
+    });
+};
+
+export const setGuesting = async (guesting, body) => {
+    Object.keys(body).forEach((field) => {
+        guesting[field] = body[field];
+    });
+    await guesting.save();
+};
 
 export const findGuesting = async (date, category) => {
     return await db.Guest.findAll({
@@ -72,30 +90,29 @@ export const findGuestingByRegion = async (date, category, region) => {
     });
 };
 
-// export const findGuestDetail = async (guestId) => {
-//     return await db.Guest.findOne({
-//         raw: true,
-//         where: {
-//             id: guestId,
-//         },
-//         include: [
-//             {
-//                 model: db.Team,
-//                 as: "TeamInfo",
-//                 attributes: ["name", "skill_level", "manner_level", "region", "description", "gender", "age_group"],
-//                 where: {
-//                     id: db.Sequelize.col("Guest.TeamId"),
-//                 },
-//             },
-//             {
-//                 model: db.User,
-//                 as: "TeamMemberInfo",
-//                 attributes: ["nickname"],
-//                 where: {
-//                     id: db.Sequelize.col("User.TeamId"),
-//                 },
-//             },
-//         ],
-//         attributes: ["game_time", "dscription"],
-//     });
-// };
+export const getDetailedGuesting = async (guestingId) => {
+    return await db.Guest.findOne({
+        raw: true,
+        where: {
+            id: guestingId,
+        },
+        attributes: ["teamId", "gameTime", "description", "recruitCount"],
+    });
+};
+
+export const InsertGuestUser = async (guestingId, userId) => {
+    await db.GuestUser.create({
+        guestId: guestingId,
+        userId: userId,
+    });
+};
+
+export const getGuestingById = async (guestingId, userId) => {
+    const teamId = await getTeamIdByLeaderId(userId);
+    return await db.Guest.findOne({
+        where: {
+            id: guestingId,
+            teamId: teamId,
+        },
+    });
+};

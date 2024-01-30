@@ -21,11 +21,11 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
                     allowNull: true,
                 },
                 gender: {
-                    type: new DataTypes.INTEGER(),
+                    type: new DataTypes.STRING(1),
                     allowNull: true,
                 },
                 ageGroup: {
-                    type: new DataTypes.INTEGER(),
+                    type: new DataTypes.STRING(10),
                     allowNull: true,
                 },
                 height: {

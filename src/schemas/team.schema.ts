@@ -1,13 +1,11 @@
 import { TypeOf, object, z } from "zod";
-import { getGendersLength } from "../constants/gender.constant";
-import { getAgeGroupsLength } from "../constants/age-group.constant";
 
 const fieldsWithoutCategory = {
     logo: z.optional(z.string()),
     name: z.string().max(20),
     description: z.optional(z.string()),
-    gender: z.number().int().min(1).max(getGendersLength()),
-    ageGroup: z.number().int().min(1).max(getAgeGroupsLength()),
+    gender: z.number().int().min(1), //.max(getGendersLength()),
+    ageGroup: z.number().int().min(1), //.max(getAgeGroupsLength()),
     region: z.string(),
     gymName: z.string(),
 };
