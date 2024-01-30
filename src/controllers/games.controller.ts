@@ -8,6 +8,7 @@ import {
     readGamesByRegion,
     readGameDetail,
     createGame,
+    updateGame,
 } from "../services/games.service";
 import { readTeamAvailPreviewById } from "../services/teams.service";
 
@@ -39,4 +40,9 @@ export const fetchGameDetail = async (req, res, next) => {
 export const addGame = async (req, res, next) => {
     return res.send(response(status.SUCCESS, await createGame(req.user.id, req.body)));
     // return res.send(response(status.SUCCESS, await createGame(2, req.body))); //for testing
+};
+
+export const modifyGame = async (req, res, next) => {
+    return res.send(response(status.SUCCESS, await updateGame(req.user.id, req.params, req.body)));
+    // return res.send(response(status.SUCCESS, await updateGame(2, req.params, req.body))); //for testing
 };
