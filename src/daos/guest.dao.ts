@@ -104,6 +104,7 @@ export const InsertGuestUser = async (guestingId, userId) => {
     await db.GuestUser.create({
         guestId: guestingId,
         userId: userId,
+        status: 0,
     });
 };
 
