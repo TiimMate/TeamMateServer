@@ -2,6 +2,7 @@ import db from "../models";
 import { Sequelize } from "sequelize";
 import { getStatusById } from "../constants/status.constant";
 import { CreateGameSchema } from "../schemas/game.schema";
+import { getTeamIdByLeaderId } from "../daos/team.dao";
 
 export const findGamesByDate = async (date, category) => {
     const games = await db.Game.findAll({
@@ -118,5 +119,22 @@ export const insertGame = async (hostTeamId, data: CreateGameSchema, category) =
         gameTime: data.gameTime,
         category: category,
         description: data.description,
+    });
+};
+
+export const setGame = async (game, body) => {
+    Object.keys(body).forEach((field) => {
+        game[field] = body[field];
+    });
+    await game.save();
+};
+
+export const getGameById = async (gameId, userId) => {
+    const hostTeamId = await getTeamIdByLeaderId(userId);
+    return await db.Game.findOne({
+        where: {
+            id: gameId,
+            hostTeamId: hostTeamId,
+        },
     });
 };
