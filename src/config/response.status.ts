@@ -113,6 +113,14 @@ export const status: { [key: string]: Status } = {
         message: "게스팅을 찾을 수 없습니다.",
     },
 
+    // game error
+    GAME_NOT_FOUND: {
+        status: StatusCodes.NOT_FOUND,
+        isSuccess: false,
+        code: "GAME001",
+        message: "게임을 찾을 수 없습니다.",
+    },
+
     //post err
     POST_NOT_FOUND: {
         status: StatusCodes.NOT_FOUND,
