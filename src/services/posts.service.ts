@@ -78,3 +78,8 @@ export const createRentPost = async (userId: number, body: CreatePostBody) => {
     await insertPost(userId, body, PostType.RentalInfo);
     return;
 };
+
+export const readRentPosts = async (userId: number | undefined, query) => {
+    const result = await findPostByType(userId, query.cursorId, PostType.RentalInfo);
+    return readPostsResponseDTO(result);
+};
