@@ -1,13 +1,19 @@
-import { getUserByProviderId, getUserProfileByCategory, insertUser, setRefreshToken } from "../daos/user.dao";
-import { readUserProfileByCategoryResponseDTO } from "../dtos/users.dto";
 import { BaseError } from "../config/error";
 import { status } from "../config/response.status";
-import { getUserProfile, insertCategoryProfile, setCategoryProfile } from "../daos/profile.dao";
-import { getUserById, getUserByProviderId, insertUser, setCommonProfile, setRefreshToken } from "../daos/user.dao";
-import { UpdateUserProfileBody, CategoryProfile } from "../schemas/user-profile.schema";
 import { Category } from "../types/category.enum";
 import { Payload } from "../types/payload.interface";
 import { UserInfo } from "../types/user-info.interface";
+import { UpdateUserProfileBody, CategoryProfile } from "../schemas/user-profile.schema";
+import {
+    getUserById,
+    getUserByProviderId,
+    getUserProfileByCategory,
+    insertUser,
+    setCommonProfile,
+    setRefreshToken,
+} from "../daos/user.dao";
+import { getUserProfile, insertCategoryProfile, setCategoryProfile } from "../daos/profile.dao";
+import { readUserProfileByCategoryResponseDTO } from "../dtos/users.dto";
 
 export const createOrReadUser = async (userInfo: UserInfo): Promise<Payload> => {
     let user = await getUserByProviderId(userInfo.provider, userInfo.providerId);

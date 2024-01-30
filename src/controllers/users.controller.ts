@@ -11,4 +11,3 @@ export const fetchUserProfileByCategory = async (req, res: Response, next) => {
 export const modifyUserProfile = async (req, res: Response, next) => {
     res.send(response(status.SUCCESS, await updateUserProfile(req.user.id, req.params, req.body)));
 };
-
