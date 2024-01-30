@@ -19,7 +19,7 @@ import { findMemberInfoWithoutLeaderByTeamId, getMemberCountByTeamId } from "../
 import { getUserInfoById, userInfoAttributes } from "../daos/user.dao";
 import { getGameById } from "../daos/games.dao";
 import { readGameResponseDTO, readGameDetailResponseDTO } from "../dtos/games.dto";
-import { CreateGameSchema, UpdateGameSchema } from "../schemas/game.schema";
+import { CreateGameBody, UpdateGameBody } from "../schemas/game.schema";
 
 export const readGamesByDate = async (query) => {
     const games = await findGamesByDate(query.date, query.category);
@@ -62,7 +62,7 @@ export const readGameDetail = async (params) => {
     return readGameDetailResponseDTO(gameDetail, teamDetail, leaderInfo, memberInfo);
 };
 
-export const createGame = async (userId, body: CreateGameSchema) => {
+export const createGame = async (userId, body: CreateGameBody) => {
     const hostTeamId = await getTeamIdByLeaderId(userId);
     const category = await getTeamCategoryByLeaderId(userId);
 
@@ -75,7 +75,7 @@ export const createGame = async (userId, body: CreateGameSchema) => {
     return;
 };
 
-export const updateGame = async (userId, params, body: UpdateGameSchema) => {
+export const updateGame = async (userId, params, body: UpdateGameBody) => {
     const gameId = params.gameId;
     const game = await getGameById(gameId, userId);
     if (!game) {

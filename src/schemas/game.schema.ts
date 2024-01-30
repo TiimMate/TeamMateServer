@@ -1,4 +1,5 @@
 import { TypeOf, object, z } from "zod";
+import { hostTeamIdField, gameTimeField, descriptionFieldInGame } from "./fields";
 
 const fields = {
     hostTeamId: z.number().int().optional(),
@@ -17,14 +18,28 @@ const fields = {
     // status: z.number().int().min(0),
 };
 
+const body = object({
+    ...hostTeamIdField,
+    ...gameTimeField,
+    ...descriptionFieldInGame,
+});
+
 export const createGame = object({
     ...fields,
 });
 
+export const createGameSchema = object({
+    body: body,
+});
+
+export type CreateGameBody = TypeOf<typeof body>;
+
 export const updateGame = object({
-    // memberIdsToDelete: z.optional(z.array(z.number().int())),
     ...fields,
 });
 
-export type CreateGameSchema = TypeOf<typeof createGame>;
-export type UpdateGameSchema = TypeOf<typeof updateGame>;
+export const updateGameSchema = object({
+    body: body,
+});
+
+export type UpdateGameBody = TypeOf<typeof body>;
