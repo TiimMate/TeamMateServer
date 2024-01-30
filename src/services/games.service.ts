@@ -1,5 +1,5 @@
-// import { BaseError } from "../config/error";
-// import { status } from "../config/response.status";
+import { BaseError } from "../config/error";
+import { status } from "../config/response.status";
 import db from "../models";
 import {
     findGamesByDate,
@@ -8,6 +8,7 @@ import {
     findGamesByRegion,
     getGameDetail,
     insertGame,
+    setGame,
 } from "../daos/games.dao";
 import {
     getTeamDetailforGuesting,
@@ -21,8 +22,9 @@ import {
     getMemberCountByTeamId,
 } from "../daos/member.dao";
 import { getUserInfoById, userInfoAttributes } from "../daos/user.dao";
+import { getGameById } from "../daos/games.dao";
 import { readGameResponseDTO, readGameDetailResponseDTO } from "../dtos/games.dto";
-import { CreateGameSchema } from "../schemas/game.schema";
+import { CreateGameSchema, UpdateGameSchema } from "../schemas/game.schema";
 
 export const readGamesByDate = async (query) => {
     const games = await findGamesByDate(query.date, query.category);
@@ -75,5 +77,15 @@ export const createGame = async (userId, body: CreateGameSchema) => {
     }
 
     await insertGame(hostTeamId, body, category);
+    return;
+};
+
+export const updateGame = async (userId, params, body: UpdateGameSchema) => {
+    const gameId = params.gameId;
+    const game = await getGameById(gameId, userId);
+    if (!game) {
+        throw new BaseError(status.GAME_NOT_FOUND);
+    }
+    await setGame(game, body);
     return;
 };
