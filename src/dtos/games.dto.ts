@@ -1,5 +1,5 @@
-import { getAgeGroupById } from "../constants/age-group.constant";
-import { getGenderById } from "../constants/gender.constant";
+import { getAgeGroup } from "../constants/age-group.constant";
+import { getGender } from "../constants/gender.constant";
 import { getLevelById } from "../constants/level.constant";
 
 export const readGameResponseDTO = (games) => {
@@ -7,9 +7,9 @@ export const readGameResponseDTO = (games) => {
         gameTime: game.gameTime,
         teamName: game["HostTeam.name"],
         teamRegion: game["HostTeam.region"],
-        teamGender: getGenderById(game["HostTeam.gender"]),
+        teamGender: getGender(game["HostTeam.gender"]),
         memberCount: game.memberCount,
-        teamAgeGroup: getAgeGroupById(game["HostTeam.ageGroup"]),
+        teamAgeGroup: getAgeGroup(game["HostTeam.ageGroup"]),
         teamSkillLevel: getLevelById(game["HostTeam.skillLevel"]),
         status: game.status,
     }));
