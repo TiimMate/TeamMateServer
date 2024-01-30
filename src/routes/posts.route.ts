@@ -10,6 +10,7 @@ import {
     addCommunityPost,
     addComment,
     fetchComments,
+    addRentPost,
 } from "../controllers/posts.controller";
 import { validate } from "../middlewares/validate.middleware";
 import { createPostSchema } from "../schemas/post.schema";
@@ -32,3 +33,6 @@ postsRouter.post("/:postId/comments", verifyUser, validate(createCommentSchema),
 postsRouter.get("/:postId/comments", verifyUser, asyncHandler(fetchComments));
 
 postsRouter.get("/:postId", verifyUser, asyncHandler(fetchPost));
+
+// 대관정보 글 작성
+postsRouter.post("/rent", verifyUser, validate(createPostSchema), asyncHandler(addRentPost));
