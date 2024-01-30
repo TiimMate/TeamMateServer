@@ -5,6 +5,7 @@ import {
     descriptionField,
     genderFieldInTeam,
     gymNameField,
+    inviteCodeField,
     logoField,
     memberIdsToDeleteField,
     nameField,
@@ -35,6 +36,10 @@ const updateTeamBodyWithoutMemberIdsToDelete = object({
     ...commonFields,
 });
 
+const createMemberBody = object({
+    ...inviteCodeField,
+});
+
 export const createTeamSchema = object({
     body: createTeamBody,
 });
@@ -43,6 +48,11 @@ export const updateTeamSchema = object({
     body: updateTeamBody,
 });
 
+export const createMemberSchema = object({
+    body: createMemberBody,
+});
+
 export type CreateTeamBody = TypeOf<typeof createTeamBody>;
 export type UpdateTeamBody = TypeOf<typeof updateTeamBody>;
 export type UpdateTeamBodyWithoutMemberIdsToDelete = TypeOf<typeof updateTeamBodyWithoutMemberIdsToDelete>;
+export type CreateMemberBody = TypeOf<typeof createMemberBody>;

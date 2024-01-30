@@ -61,6 +61,8 @@ export const titleField = { title: z.string().max(30) };
 
 export const linkField = { link: z.optional(z.string().max(200)) };
 
+export const inviteCodeField = { inviteCode: z.string().max(100) };
+
 export const categoryParam = object({
     params: object({
         ...categoryField,
