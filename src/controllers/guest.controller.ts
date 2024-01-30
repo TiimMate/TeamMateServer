@@ -12,11 +12,11 @@ import {
 } from "../services/guest.service";
 
 export const addGuesting = async (req, res, next) => {
-    return res.send(response(status.SUCCESS, await createGuesting(1, req.body)));
+    return res.send(response(status.SUCCESS, await createGuesting(req.user.id, req.body)));
 };
 
 export const modifyGuesting = async (req, res, next) => {
-    return res.send(response(status.SUCCESS, await updateGuesting(1, req.params, req.body)));
+    return res.send(response(status.SUCCESS, await updateGuesting(req.user.id, req.params, req.body)));
 };
 
 export const GuestingPreview = async (req, res, next) => {
@@ -40,5 +40,5 @@ export const DetailedGuestingPreview = async (req, res, next) => {
 };
 
 export const applicationGuesting = async (req, res, next) => {
-    return res.send(response(status.SUCCESS, await addGuestUser(1, req.params)));
+    return res.send(response(status.SUCCESS, await addGuestUser(req.user.id, req.params)));
 };
