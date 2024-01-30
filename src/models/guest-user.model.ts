@@ -12,6 +12,10 @@ class GuestUser extends Model<InferAttributes<GuestUser>, InferCreationAttribute
                     type: new DataTypes.INTEGER(),
                     allowNull: false,
                 },
+                status: {
+                    type: new DataTypes.INTEGER(),
+                    allowNull: false,
+                },
             },
             {
                 sequelize,
