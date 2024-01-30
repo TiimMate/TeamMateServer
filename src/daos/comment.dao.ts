@@ -1,13 +1,13 @@
 import db from "../models";
-import { CreateCommunityCommentSchema } from "../schemas/community-comment.schema";
+import { CreateCommentSchema } from "../schemas/comment.schema";
 import { calculateHasNext, generateCursorCondition } from "../utils/paging.util";
 
 const defaultLimit = 20;
 
-export const findCommunityComment = async (postId: number, cursorId: number | undefined) => {
+export const findComment = async (postId: number, cursorId: number | undefined) => {
     const commentsBeforeCursorForPost = { postId, ...generateCursorCondition(cursorId) };
 
-    const comments = await db.CommunityComment.findAll({
+    const comments = await db.Comment.findAll({
         raw: true,
         where: commentsBeforeCursorForPost,
         order: [["createdAt", "DESC"]],
@@ -26,15 +26,15 @@ export const findCommunityComment = async (postId: number, cursorId: number | un
 };
 
 export const getCommentCount = async (postId: number) => {
-    return await db.CommunityComment.count({
+    return await db.Comment.count({
         where: {
             postId,
         },
     });
 };
 
-export const insertCommunityComment = async (userId: number, postId: number, body: CreateCommunityCommentSchema) => {
-    await db.CommunityComment.create({
+export const insertComment = async (userId: number, postId: number, body: CreateCommentSchema) => {
+    await db.Comment.create({
         postId,
         authorId: userId,
         content: body.content,

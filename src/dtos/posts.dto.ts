@@ -9,3 +9,29 @@ export const readPostsResponseDTO = (result) => {
         hasNext: result.hasNext,
     };
 };
+
+export const readPostResponseDTO = (post, imageUrls, commentCount, comments, isBookmarked) => {
+    return {
+        post: {
+            title: post.title,
+            contnet: post.content,
+            link: post.link,
+            imageUrls: imageUrls,
+        },
+        isBookmarked,
+        commentCount,
+        ...readCommentsResonseDTO(comments),
+    };
+};
+
+export const readCommentsResonseDTO = (comments) => {
+    return {
+        comments: comments.ascendingComments.map((comment) => ({
+            id: comment.id,
+            nickname: comment["User.nickname"],
+            content: comment.content,
+            createdAt: comment.createdAt,
+        })),
+        commentHasNext: comments.hasNext,
+    };
+};

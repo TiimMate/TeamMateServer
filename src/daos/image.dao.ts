@@ -1,7 +1,7 @@
 import db from "../models";
 
-export const findCommunityImage = async (postId: number) => {
-    return await db.CommunityImage.findAll({
+export const findImage = async (postId: number) => {
+    return await db.Image.findAll({
         where: {
             postId,
         },

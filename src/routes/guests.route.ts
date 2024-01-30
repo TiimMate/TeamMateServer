@@ -21,6 +21,7 @@ guestsRouter.post("/", validateBody(createGuesting), asyncHandler(addGuesting));
 guestsRouter.put("/:guestingId", validateBody(updateGuesting), asyncHandler(modifyGuesting));
 // guestsRouter.put("/:guestingId", asyncHandler(modifyGuesting));
 
+
 guestsRouter.get("/", asyncHandler(GuestingPreview));
 
 guestsRouter.get("/level", asyncHandler(GuestingPreviewByLevel));

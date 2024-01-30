@@ -16,15 +16,20 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
                     type: new DataTypes.STRING(50),
                     allowNull: false,
                 },
-                email: {
-                    type: new DataTypes.STRING(50),
-                    allowNull: false,
-                    validate: {
-                        isEmail: true,
-                    },
-                },
                 refreshToken: {
                     type: new DataTypes.STRING(150),
+                    allowNull: true,
+                },
+                gender: {
+                    type: new DataTypes.STRING(1),
+                    allowNull: true,
+                },
+                ageGroup: {
+                    type: new DataTypes.STRING(10),
+                    allowNull: true,
+                },
+                height: {
+                    type: new DataTypes.INTEGER(),
                     allowNull: true,
                 },
             },
@@ -41,13 +46,13 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
         );
     }
     static associate(db) {
+        db.User.hasMany(db.Profile, { foreignKey: "user_id" });
         db.User.hasMany(db.Team, { foreignKey: "leader_id" });
         db.User.hasMany(db.Member, { foreignKey: "user_id" });
         db.User.hasMany(db.GuestUser, { foreignKey: "user_id" });
         db.User.hasMany(db.Post, { foreignKey: "author_id" });
         db.User.hasMany(db.Bookmark, { foreignKey: "user_id" });
-        db.User.hasMany(db.CommunityComment, { foreignKey: "author_id" });
-        // db.User.hasMany(db.RentalInformationComment, { foreignKey: "author_id" });
+        db.User.hasMany(db.Comment, { foreignKey: "author_id" });
     }
 }
 

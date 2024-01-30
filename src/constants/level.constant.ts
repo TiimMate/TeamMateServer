@@ -12,5 +12,5 @@ const Levels: { [key: number]: Level } = {
 export const defaultLevel = 1;
 
 export const getLevelById = (id: number): string | undefined => {
-    return Levels[id].name;
+    return Levels[id]?.name;
 };

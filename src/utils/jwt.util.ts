@@ -2,18 +2,10 @@ import jwt from "jsonwebtoken";
 import { tokenType } from "../services/auth.service";
 import { BaseError } from "../config/error";
 import { status } from "../config/response.status";
-import { Payload } from "../services/users.service";
 import { Request } from "express";
-
-interface Verified {
-    isExpired: boolean;
-    decoded: Decoded;
-}
-
-export interface Decoded extends Payload {
-    iat: number;
-    exp: number;
-}
+import { Payload } from "../types/payload.interface";
+import { Verified } from "../types/verified.interface";
+import { Decoded } from "../types/decoded.interface";
 
 export const generateAccessToken = (payload: Payload): string => {
     return jwt.sign(payload, process.env.JWT_ACCESS_SECRET!, { expiresIn: "15m" });

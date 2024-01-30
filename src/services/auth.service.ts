@@ -1,5 +1,5 @@
 import { Request } from "express";
-import { Payload, updateRefreshToken } from "./users.service";
+import { createOrReadUser, updateRefreshToken, deleteRefreshToken } from "./users.service";
 import { BaseError } from "../config/error";
 import { status } from "../config/response.status";
 import { getRefreshToken } from "../daos/user.dao";
@@ -11,8 +11,90 @@ import {
     verifyAccessToken,
     isRefreshTokenValid,
 } from "../utils/jwt.util";
+import redaxios from "redaxios";
+import { UserInfo } from "../types/user-info.interface";
+import { Provider } from "../types/provider.enum";
+import { Payload } from "../types/payload.interface";
 
 export const tokenType = "Bearer ";
+
+export const kakaoLogin = async (body) => {
+    const accessToken = await getKakaoAccessToken(body.code);
+    const userInfo = await getKakaoUserInfo(accessToken);
+    const payload = await createOrReadUser(userInfo);
+    return login(payload);
+};
+
+const getKakaoAccessToken = async (code: string) => {
+    const url = "https://kauth.kakao.com/oauth/token";
+    const response = await redaxios.post(
+        url,
+        {
+            params: {
+                grant_type: "authorization_code",
+                client_id: process.env.KAKAO_CLIENT_ID,
+                redirect_uri: process.env.KAKAO_REDIRECT_URI,
+                code: code,
+            },
+        },
+        {
+            headers: {
+                "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+            },
+        },
+    );
+    return response.data.access_token;
+};
+
+const getKakaoUserInfo = async (accessToken: string): Promise<UserInfo> => {
+    const url = "https://kapi.kakao.com/v2/user/me";
+    const response = await redaxios.get(url, {
+        headers: {
+            "Authorization": `Bearer ${accessToken}`,
+            "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+        },
+    });
+    return {
+        provider: Provider.Kakao,
+        providerId: response.data.id,
+        nickname: response.data.kakao_account.profile.nickname,
+    };
+};
+
+export const naverLogin = async (body) => {
+    const accessToken = await getNaverAccessToken(body.code, body.state);
+    const userInfo = await getNaverUserInfo(accessToken);
+    const payload = await createOrReadUser(userInfo);
+    return login(payload);
+};
+
+const getNaverAccessToken = async (code: string, state: string) => {
+    const url = "https://nid.naver.com/oauth2.0/token";
+    const response = await redaxios.get(url, {
+        params: {
+            grant_type: "authorization_code",
+            client_id: process.env.NAVER_CLIENT_ID,
+            client_secret: process.env.NAVER_CLIENT_SECRET,
+            code: code,
+            state: state,
+        },
+    });
+    return response.data.access_token;
+};
+
+const getNaverUserInfo = async (accessToken: string): Promise<UserInfo> => {
+    const url = "https://openapi.naver.com/v1/nid/me";
+    const response = await redaxios.get(url, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+    return {
+        provider: Provider.Naver,
+        providerId: response.data.response.id,
+        nickname: response.data.response.name,
+    };
+};
 
 export const login = async (payload: Payload) => {
     const accessToken = generateAccessToken(payload);
@@ -36,4 +118,9 @@ export const generateNewAccessToken = async (req: Request) => {
 
 const isRefreshTokenMatching = async (refreshToken, userId: number) => {
     return refreshToken === (await getRefreshToken(userId));
+};
+
+export const logoutUser = async (userId: number) => {
+    await deleteRefreshToken(userId);
+    return;
 };
