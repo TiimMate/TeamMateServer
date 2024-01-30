@@ -1,7 +1,12 @@
 import { TypeOf, object, z } from "zod";
+import { contentFieldInComment } from "./fields";
 
-export const createComment = object({
-    content: z.string().max(500),
+const body = object({
+    ...contentFieldInComment,
 });
 
-export type CreateCommentSchema = TypeOf<typeof createComment>;
+export const createCommentSchema = object({
+    body: body,
+});
+
+export type CreateCommentBody = TypeOf<typeof body>;

@@ -1,8 +1,7 @@
 import db from "../models";
 
-export const insertOrDeleteBookmark = async (userId, postId) => {
+export const insertOrDeleteBookmark = async (userId: number, postId: number) => {
     const bookmark = await getBookmark(userId, postId);
-
     if (bookmark) {
         await bookmark.destroy();
     } else {

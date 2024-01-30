@@ -53,6 +53,14 @@ export const gymNameField = { gymName: z.string().max(100) };
 
 export const memberIdsToDeleteField = { memberIdsToDelete: z.optional(z.array(z.number().int())) };
 
+export const contentFieldInPost = { content: z.string().max(1000) };
+
+export const contentFieldInComment = { content: z.string().max(500) };
+
+export const titleField = { title: z.string().max(30) };
+
+export const linkField = { link: z.optional(z.string().max(200)) };
+
 export const categoryParam = object({
     params: object({
         ...categoryField,

@@ -1,20 +1,20 @@
 import { BaseError } from "../config/error";
 import { status } from "../config/response.status";
+import { PostType } from "../types/post-type.enum";
+import { CreateCommentBody } from "../schemas/comment.schema";
+import { CreatePostBody } from "../schemas/post.schema";
 import { getBookmark, insertOrDeleteBookmark } from "../daos/bookmark.dao";
 import { findComment, getCommentCount, insertComment } from "../daos/comment.dao";
 import { findImage } from "../daos/image.dao";
 import { findPostByType, findPostByAuthorId, findBookmarkedPost, getPost, insertPost } from "../daos/post.dao";
 import { readCommentsResonseDTO, readPostResponseDTO, readPostsResponseDTO } from "../dtos/posts.dto";
-import { CreateCommentSchema } from "../schemas/comment.schema";
-import { CreatePostSchema } from "../schemas/post.schema";
-import { PostType } from "../types/post-type.enum";
 
 export const readCommunityPosts = async (userId: number | undefined, query) => {
     const result = await findPostByType(userId, query.cursorId, PostType.Community);
     return readPostsResponseDTO(result);
 };
 
-export const readPostsByAuthor = async (userId: number, query) => {
+export const readMyPosts = async (userId: number, query) => {
     const result = await findPostByAuthorId(userId, query.cursorId);
     return readPostsResponseDTO(result);
 };
@@ -24,12 +24,12 @@ export const readBookmarkedPosts = async (userId: number, query) => {
     return readPostsResponseDTO(result);
 };
 
-export const createOrDeleteBookmark = async (userId, params) => {
+export const createOrDeleteBookmark = async (userId: number, params) => {
     await insertOrDeleteBookmark(userId, params.postId);
     return;
 };
 
-export const readPost = async (userId, params) => {
+export const readPost = async (userId: number, params) => {
     const postId = params.postId;
     const post = handlePostNotFound(await getPost(postId));
     const imageUrls = await findImage(postId);
@@ -46,13 +46,13 @@ const checkIsBookmarked = async (userId: number | undefined, postId: number) => 
     return Boolean(await getBookmark(userId, postId));
 };
 
-export const createCommunityPost = async (userId: number, body: CreatePostSchema) => {
+export const createCommunityPost = async (userId: number, body: CreatePostBody) => {
     await insertPost(userId, body, PostType.Community);
     return;
 };
 
-export const createComment = async (userId: number, params, body: CreateCommentSchema) => {
-    const postId = params.postId;
+export const createComment = async (userId: number, params, body: CreateCommentBody) => {
+    const postId: number = params.postId;
     handlePostNotFound(await getPost(postId));
     await insertComment(userId, postId, body);
     return;

@@ -1,4 +1,5 @@
 import { TypeOf, object, z } from "zod";
+import { contentFieldInPost, linkField, titleField } from "./fields";
 
 export const createPost = object({
     title: z.string().max(30),
@@ -6,4 +7,14 @@ export const createPost = object({
     link: z.optional(z.string().max(200)),
 });
 
-export type CreatePostSchema = TypeOf<typeof createPost>;
+const body = object({
+    ...titleField,
+    ...contentFieldInPost,
+    ...linkField,
+});
+
+export const createPostSchema = object({
+    body: body,
+});
+
+export type CreatePostBody = TypeOf<typeof body>;

@@ -11,13 +11,13 @@ import {
     addComment,
     fetchComments,
 } from "../controllers/posts.controller";
-import { validateBody } from "../middlewares/validate.middleware";
-import { createPost } from "../schemas/post.schema";
-import { createComment } from "../schemas/comment.schema";
+import { validate } from "../middlewares/validate.middleware";
+import { createPostSchema } from "../schemas/post.schema";
+import { createCommentSchema } from "../schemas/comment.schema";
 
 export const postsRouter = express.Router();
 
-postsRouter.post("/community", verifyUser, validateBody(createPost), asyncHandler(addCommunityPost));
+postsRouter.post("/community", verifyUser, validate(createPostSchema), asyncHandler(addCommunityPost));
 
 postsRouter.get("/community", verifyUserIfExists, asyncHandler(fetchCommunityPosts));
 
@@ -27,7 +27,7 @@ postsRouter.get("/bookmarks", verifyUser, asyncHandler(fetchBookmarkedPosts));
 
 postsRouter.post("/:postId/bookmark", verifyUser, asyncHandler(addOrRemoveBookmark));
 
-postsRouter.post("/:postId/comments", verifyUser, validateBody(createComment), asyncHandler(addComment));
+postsRouter.post("/:postId/comments", verifyUser, validate(createCommentSchema), asyncHandler(addComment));
 
 postsRouter.get("/:postId/comments", verifyUser, asyncHandler(fetchComments));
 
