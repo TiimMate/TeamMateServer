@@ -13,7 +13,7 @@ import {
 } from "../daos/guest.dao";
 import { findMemberInfoByTeamId, getMemberCountByTeamId } from "../daos/member.dao";
 import { getTeamById, getTeamDetailforGuesting, getTeamIdByLeaderId } from "../daos/team.dao";
-import { getUserById, getUserInfoById, userInfoAttributes } from "../daos/user.dao";
+import { getUser, getUserInfoById, userInfoAttributes } from "../daos/user.dao";
 import { readGuestingDetailResponseDTO, readGuestingResponseDTO } from "../dtos/guests.dto";
 import { CreateGuestingSchema, UpdateGuestingSchema } from "../schemas/guest.schema";
 
@@ -80,7 +80,7 @@ export const readDetailedGuesting = async (params) => {
 
 export const addGuestUser = async (userId, params) => {
     const guestingId = params.guestingId;
-    const user = await getUserById(userId);
+    const user = await getUser(userId);
     if (!user) {
         // user 정보 수정 API 연결
     }
