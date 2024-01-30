@@ -102,9 +102,32 @@ export const getTeamIdByLeaderId = async (userId) => {
     return team?.id;
 };
 
+export const getTeamCategoryByLeaderId = async (userId) => {
+    const team = await db.Team.findOne({
+        raw: true,
+        where: {
+            leaderId: userId,
+        },
+        attributes: ["category"],
+    });
+
+    return team?.category;
+};
+
 export const setTeam = async (team, body) => {
     Object.keys(body).forEach((field) => {
         team[field] = body[field];
     });
     await team.save();
+};
+
+export const findTeamAvailPreviewById = async (userId, category) => {
+    return await db.Team.findAll({
+        raw: true,
+        where: {
+            category,
+            leaderId: userId,
+        },
+        attributes: ["name"],
+    });
 };

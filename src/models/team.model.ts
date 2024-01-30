@@ -17,11 +17,11 @@ class Team extends Model<InferAttributes<Team>, InferCreationAttributes<Team>> {
                     allowNull: true,
                 },
                 gender: {
-                    type: new DataTypes.INTEGER(),
+                    type: new DataTypes.STRING(1),
                     allowNull: false,
                 },
                 ageGroup: {
-                    type: new DataTypes.INTEGER(),
+                    type: new DataTypes.STRING(10),
                     allowNull: false,
                 },
                 region: {

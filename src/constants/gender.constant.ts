@@ -1,17 +1,19 @@
-type Gender = {
-    name: string;
+import { Gender } from "../types/gender.enum";
+
+const Genders: Record<Exclude<Gender, Gender.Mixed>, string> = {
+    [Gender.Female]: "여성",
+    [Gender.Male]: "남성",
 };
 
-const Genders: { [key: number]: Gender } = {
-    1: { name: "여성" },
-    2: { name: "남성" },
-    3: { name: "혼성" },
+const TeamGenders: Record<Gender, string> = {
+    ...Genders,
+    [Gender.Mixed]: "혼성",
 };
 
-export const getGendersLength = (): number => {
-    return Object.keys(Genders).length;
+export const getGender = (key: Exclude<Gender, Gender.Mixed>): string | undefined => {
+    return Genders[key];
 };
 
-export const getGenderById = (id: number): string | undefined => {
-    return Genders[id].name;
+export const getTeamGender = (key: Gender): string | undefined => {
+    return TeamGenders[key];
 };
