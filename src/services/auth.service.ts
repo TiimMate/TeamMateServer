@@ -18,6 +18,31 @@ import { Payload } from "../types/payload.interface";
 
 export const tokenType = "Bearer ";
 
+export const googleLogin = async (body) => {
+    const accessToken = await getGoogleAccessToken(body.code);
+    const userInfo = await getGoogleUserInfo(accessToken);
+    const payload = await createOrReadUser(userInfo);
+    return login(payload);
+};
+
+const getGoogleAccessToken = async (code: string) => {
+    const url = "https://oauth2.googleapis.com/token";
+    const response = await redaxios.post(
+        `${url}?client_id=${process.env.GOOGLE_CLIENT_ID}&client_secret=${process.env.GOOGLE_CLIENT_SECRET}&code=${code}&grant_type=authorization_code&redirect_uri=${process.env.GOOGLE_REDIRECT_URI}`,
+    );
+    return response.data.access_token;
+};
+
+const getGoogleUserInfo = async (accessToken: string) => {
+    const url = "https://www.googleapis.com/userinfo/v2/me";
+    const response = await redaxios.get(`${url}?access_token=${accessToken}`);
+    return {
+        provider: Provider.Google,
+        providerId: response.data.id,
+        nickname: response.data.name,
+    };
+};
+
 export const kakaoLogin = async (body) => {
     const accessToken = await getKakaoAccessToken(body.code);
     const userInfo = await getKakaoUserInfo(accessToken);
