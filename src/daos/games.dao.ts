@@ -3,7 +3,7 @@ import { Sequelize } from "sequelize";
 import { getStatusById } from "../constants/status.constant";
 import { CreateGameBody } from "../schemas/game.schema";
 import { ApplyGameBody } from "../schemas/game-apply.schema";
-import { getTeamIdByLeaderId, getTeamByTeamId } from "../daos/team.dao";
+import { getTeamIdByLeaderId } from "../daos/team.dao";
 
 export const findGamesByDate = async (date, category) => {
     const games = await db.Game.findAll({
