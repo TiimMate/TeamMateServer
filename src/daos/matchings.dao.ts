@@ -102,3 +102,19 @@ export const findGamesOfMatchingHosting = async (userId, date) => {
         attributes: ["gameTime"],
     });
 };
+
+export const getApplyGuestingUser = async (guestingId) => {
+    return await db.GuestUser.findAll({
+        raw: true,
+        where: {
+            guestId: guestingId,
+        },
+        include: [
+            {
+                model: db.User,
+                attributes: ["nickname", "height"],
+            },
+        ],
+        attributes: ["status"],
+    });
+};

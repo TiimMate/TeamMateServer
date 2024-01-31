@@ -3,9 +3,10 @@ import {
     findGuestsOfMatchingHosting,
     findGuestsOfMatchingGuesting,
     findGamesOfMatchingHosting,
+    getApplyGuestingUser,
 } from "../daos/matchings.dao";
 import { getMemberCountByTeamId } from "../daos/member.dao";
-import { readMatchingResponseDTO } from "../dtos/matchings.dto";
+import { readApplyGuestingUserResponseDTO, readMatchingResponseDTO } from "../dtos/matchings.dto";
 
 export const readMatchingGuesting = async (userId, query) => {
     const matchingGuestings = await findGuestsOfMatchingGuesting(userId, query.date);
@@ -22,7 +23,6 @@ export const readMatchingGuesting = async (userId, query) => {
     // const gameResponseDTO = readMatchingResponseDTO(matchingGames);
 
     // return { guesting: guestingResponseDTO, game: gameResponseDTO };
-    // return { guesting: guestingResponseDTO };
 };
 
 export const readMatchingHosting = async (userId, query) => {
@@ -40,4 +40,11 @@ export const readMatchingHosting = async (userId, query) => {
     const gameResponseDTO = readMatchingResponseDTO(matchingGames);
 
     return { guesting: guestingResponseDTO, game: gameResponseDTO };
+};
+
+export const readApplyGuestingUser = async (params) => {
+    const guestingId = params.guestingId;
+    const applyGuestingUser = await getApplyGuestingUser(guestingId);
+
+    return readApplyGuestingUserResponseDTO(applyGuestingUser);
 };

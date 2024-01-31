@@ -13,3 +13,11 @@ export const readMatchingResponseDTO = (matchings) => {
         teamSkillLevel: getLevelById(matching["Team.skillLevel"]),
     }));
 };
+
+export const readApplyGuestingUserResponseDTO = (guestingUsers) => {
+    return guestingUsers.map((guestingUsers) => ({
+        nickname: guestingUsers["User.nickname"],
+        height: guestingUsers["User.height"],
+        status: guestingUsers.status,
+    }));
+};
