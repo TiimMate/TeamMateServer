@@ -81,3 +81,5 @@ export const gameTimeField = {
 };
 
 export const descriptionFieldInGame = { description: z.string() };
+
+export const teamIdField = { teamId: z.number().int() };
