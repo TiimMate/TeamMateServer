@@ -2,7 +2,8 @@ import db from "../models";
 import { Sequelize } from "sequelize";
 import { getStatusById } from "../constants/status.constant";
 import { CreateGameBody } from "../schemas/game.schema";
-import { getTeamIdByLeaderId } from "../daos/team.dao";
+import { ApplyGameBody } from "../schemas/game-apply.schema";
+import { getTeamIdByLeaderId, getTeamByTeamId } from "../daos/team.dao";
 
 export const findGamesByDate = async (date, category) => {
     const games = await db.Game.findAll({
@@ -136,5 +137,17 @@ export const getGameById = async (gameId, userId) => {
             id: gameId,
             hostTeamId: hostTeamId,
         },
+    });
+};
+
+export const insertGameApplication = async (gameId: number, body: ApplyGameBody) => {
+    const teamId = body.teamId; // ApplyGameBody 내의 teamId를 추출
+
+    const insertQuery =
+        "INSERT INTO game_apply (game_id, team_id, created_at, updated_at) VALUES (:gameId, :teamId, NOW(), NOW())";
+
+    await db.sequelize.query(insertQuery, {
+        replacements: { gameId: gameId, teamId: teamId },
+        type: db.sequelize.QueryTypes.INSERT,
     });
 };
