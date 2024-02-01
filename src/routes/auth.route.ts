@@ -1,9 +1,11 @@
 import express from "express";
 import asyncHandler from "express-async-handler";
-import { authKakao, authNaver, refreshAccessToken, logout } from "../controllers/auth.controller";
+import { authGoogle, authKakao, authNaver, refreshAccessToken, logout } from "../controllers/auth.controller";
 import { verifyUser } from "../middlewares/auth.middleware";
 
 export const authRouter = express.Router();
+
+authRouter.post("/google", asyncHandler(authGoogle));
 
 authRouter.post("/kakao", asyncHandler(authKakao));
 

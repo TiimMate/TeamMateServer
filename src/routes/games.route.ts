@@ -9,6 +9,7 @@ import {
     fetchGameDetail,
     addGame,
     modifyGame,
+    applyGame,
 } from "../controllers/games.controller";
 import { createGameSchema, updateGameSchema } from "../schemas/game.schema";
 import { validate } from "../middlewares/validate.middleware";
@@ -25,6 +26,9 @@ gamesRouter.get("/by-region", asyncHandler(fetchGamesByRegion));
 
 // 연습경기 신청 가능 팀 목록 조회
 gamesRouter.get("/apply-avail", asyncHandler(fetchTeamsAvailById));
+
+// 연습경기 신청
+gamesRouter.post("/:gameId/application", asyncHandler(applyGame));
 
 // 연습경기 모집글 상세 조회
 gamesRouter.get("/:gameId", asyncHandler(fetchGameDetail));

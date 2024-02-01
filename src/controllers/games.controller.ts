@@ -1,3 +1,4 @@
+import { application } from "express";
 import { Response } from "express";
 import { response } from "../config/response";
 import { status } from "../config/response.status";
@@ -9,6 +10,7 @@ import {
     readGameDetail,
     createGame,
     updateGame,
+    addGameApplication,
 } from "../services/games.service";
 import { readTeamAvailPreviewById } from "../services/teams.service";
 
@@ -45,4 +47,8 @@ export const addGame = async (req, res, next) => {
 export const modifyGame = async (req, res, next) => {
     return res.send(response(status.SUCCESS, await updateGame(req.user.id, req.params, req.body)));
     // return res.send(response(status.SUCCESS, await updateGame(2, req.params, req.body))); //for testing
+};
+
+export const applyGame = async (req, res, next) => {
+    return res.send(response(status.SUCCESS, await addGameApplication(req.params, req.body)));
 };
