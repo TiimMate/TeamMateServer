@@ -15,6 +15,4 @@ matchingsRouter.get("/hosting", asyncHandler(matchingHostingPreview));
 
 matchingsRouter.get("/hosting/appliedGuests/:guestingId", asyncHandler(ApplyGuestingUserPreview));
 
-// matchingsRouter.get("/hosting/appliedGames/:gameId", asyncHandler(matchingHostingPreview));
-
 matchingsRouter.put("/confirmGuestingUser/:guestUserId", asyncHandler(modifyGuestStatus));

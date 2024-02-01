@@ -1,6 +1,6 @@
 import { BaseError } from "../config/error";
 import {
-    // findGamesOfMatchingGuesting,
+    findGamesOfMatchingGuesting,
     findGuestsOfMatchingHosting,
     findGuestsOfMatchingGuesting,
     findGamesOfMatchingHosting,
@@ -18,16 +18,15 @@ export const readMatchingGuesting = async (userId, query) => {
         matchingGuesting.memberCount = (await getMemberCountByTeamId(matchingGuesting["Team.id"])) + 1;
     }
 
-    // const matchingGames = await findGamesOfMatchingGuesting(userId, query.date);
-    // for (const matchingGame of matchingGames) {
-    //     matchingGames.memberCount = (await getMemberCountByTeamId(matchingGame["Team.id"])) + 1;
-    // }
+    const matchingGames = await findGamesOfMatchingGuesting(userId, query.date);
+    for (const matchingGame of matchingGames) {
+        matchingGame.memberCount = (await getMemberCountByTeamId(matchingGame["Team.id"])) + 1;
+    }
 
     const guestingResponseDTO = readMatchingResponseDTO(matchingGuestings);
-    // const gameResponseDTO = readMatchingResponseDTO(matchingGames);
+    const gameResponseDTO = readMatchingResponseDTO(matchingGames);
 
-    return { guesting: guestingResponseDTO };
-    // return { guesting: guestingResponseDTO, game: gameResponseDTO };
+    return { guesting: guestingResponseDTO, game: gameResponseDTO };
 };
 
 export const readMatchingHosting = async (userId, query) => {
