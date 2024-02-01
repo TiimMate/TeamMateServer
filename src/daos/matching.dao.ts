@@ -1,6 +1,7 @@
 import { Sequelize } from "sequelize";
 import db from "../models";
-import { getTeamIdByLeaderId } from "./team.dao";
+import { getTeamIdByLeaderId, getTeamNameByTeamId } from "./team.dao";
+import { getMemberCountByTeamId } from "./member.dao";
 
 const { Op } = require("sequelize");
 
@@ -77,3 +78,26 @@ export const findGuestsOfMatchingHosting = async (userId, date) => {
 //         attributes: ["gameTime", "status"],
 //         order: [["created_at", "DESC"]],
 //     });
+
+export const getHostingApplicantsTeamList = async (gameId: number) => {
+    const selectQuery = "SELECT team_id FROM game_apply WHERE game_id = :gameId;";
+
+    const teamIdsResult = await db.sequelize.query(selectQuery, {
+        type: db.sequelize.QueryTypes.SELECT,
+        replacements: { gameId: gameId },
+    });
+
+    const teamsWithNames = await Promise.all(
+        teamIdsResult.map(async (team) => {
+            const name = await getTeamNameByTeamId(team.team_id);
+            const memberCount = await getMemberCountByTeamId(team.team_id);
+            return {
+                team_id: team.team_id,
+                name: name,
+                memberCount: memberCount,
+            };
+        }),
+    );
+
+    return teamsWithNames;
+};
