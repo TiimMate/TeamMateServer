@@ -118,6 +118,17 @@ export const getTeamCategoryByLeaderId = async (userId: number) => {
     return team?.category;
 };
 
+export const getTeamNameByTeamId = async (teamId: number) => {
+    const team = await db.Team.findOne({
+        raw: true,
+        where: {
+            id: teamId,
+        },
+        attributes: ["name"],
+    });
+    return team?.name;
+};
+
 export const setTeam = async (team, body: UpdateTeamBodyWithoutMemberIdsToDelete) => {
     Object.keys(body).forEach((field) => {
         team[field] = body[field];
