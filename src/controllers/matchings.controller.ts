@@ -1,6 +1,11 @@
 import { response } from "../config/response";
 import { status } from "../config/response.status";
-import { readApplyGuestingUser, readMatchingGuesting, readMatchingHosting } from "../services/matchings.service";
+import {
+    readApplyGuestingUser,
+    readMatchingGuesting,
+    readMatchingHosting,
+    updateGuestStatus,
+} from "../services/matchings.service";
 
 export const matchingGuestingPreview = async (req, res, next) => {
     return res.send(response(status.SUCCESS, await readMatchingGuesting(1, req.query)));
@@ -14,4 +19,8 @@ export const matchingHostingPreview = async (req, res, next) => {
 
 export const ApplyGuestingUserPreview = async (req, res, next) => {
     return res.send(response(status.SUCCESS, await readApplyGuestingUser(req.params)));
+};
+
+export const modifyGuestStatus = async (req, res, next) => {
+    return res.send(response(status.SUCCESS, await updateGuestStatus(req.params)));
 };

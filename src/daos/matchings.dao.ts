@@ -36,36 +36,36 @@ export const findGuestsOfMatchingGuesting = async (userId, date) => {
     return guestResults;
 };
 
-// export const findGamesOfMatchingGuesting = async (userId, date) => {
-//     const teamId = await getTeamIdByLeaderId(userId);
-//     const gameApplyResults = await db.GameApply.findAll({
-//         raw: true,
-//         where: {
-//             teamId: teamId,
-//         },
-//         attributes: ["game_id"],
-//     });
+export const findGamesOfMatchingGuesting = async (userId, date) => {
+    const teamId = await getTeamIdByLeaderId(userId);
+    const gameApplyResults = await db.GameApply.findAll({
+        raw: true,
+        where: {
+            teamId: teamId,
+        },
+        attributes: ["game_id"],
+    });
 
-//     const guestIds = gameApplyResults.map((gameApply) => gameApply.gameId);
-//     const games = await db.Game.findAll({
-//         raw: true,
-//         where: {
-//             opposing_team_id: {
-//                 [Op.in]: guestIds,
-//             },
-//             [Op.and]: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${date}', '%Y-%m-%d')`),
-//         },
-//         include: [
-//             {
-//                 model: db.Team,
-//                 attributes: ["id", "name", "region", "gender", "ageGroup", "skillLevel"],
-//             },
-//         ],
-//         attributes: ["gameTime"],
-//     });
+    const guestIds = gameApplyResults.map((gameApply) => gameApply.gameId);
+    const games = await db.Game.findAll({
+        raw: true,
+        where: {
+            opposing_team_id: {
+                [Op.in]: guestIds,
+            },
+            [Op.and]: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${date}', '%Y-%m-%d')`),
+        },
+        include: [
+            {
+                model: db.Team,
+                attributes: ["id", "name", "region", "gender", "ageGroup", "skillLevel"],
+            },
+        ],
+        attributes: ["gameTime"],
+    });
 
-//     return games;
-// };
+    return games;
+};
 
 export const findGuestsOfMatchingHosting = async (userId, date) => {
     const teamId = await getTeamIdByLeaderId(userId);
@@ -116,5 +116,18 @@ export const getApplyGuestingUser = async (guestingId) => {
             },
         ],
         attributes: ["status"],
+    });
+};
+
+export const setGuestStatus = async (guestUser) => {
+    guestUser["status"] = 1;
+    await guestUser.save();
+};
+
+export const getGuestUserById = async (guestUserId) => {
+    return await db.GuestUser.findOne({
+        where: {
+            id: guestUserId,
+        },
     });
 };

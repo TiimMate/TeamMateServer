@@ -113,6 +113,13 @@ export const status: { [key: string]: Status } = {
         message: "게스팅을 찾을 수 없습니다.",
     },
 
+    GUESTUSER_NOT_FOUND: {
+        status: StatusCodes.NOT_FOUND,
+        isSuccess: false,
+        code: "GUESTER001",
+        message: "해당 게스트 신청 유저를 찾을 수 없습니다.",
+    },
+
     // game error
     GAME_NOT_FOUND: {
         status: StatusCodes.NOT_FOUND,
