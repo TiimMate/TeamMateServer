@@ -12,14 +12,14 @@ import {
     setGuesting,
 } from "../daos/guest.dao";
 import { findMemberInfoByTeamId, getMemberCountByTeamId } from "../daos/member.dao";
-import { getTeamById, getTeamDetailforGuesting, getTeamIdByLeaderId } from "../daos/team.dao";
+import { getTeamByLeaderId, getTeamDetailforGuesting, getTeamIdByLeaderId } from "../daos/team.dao";
 import { getUser, getUserInfoById, userInfoAttributes } from "../daos/user.dao";
 import { readGuestingDetailResponseDTO, readGuestingResponseDTO } from "../dtos/guests.dto";
 import { CreateGuestingSchema, UpdateGuestingSchema } from "../schemas/guest.schema";
 
 export const createGuesting = async (userId, body: CreateGuestingSchema) => {
     const teamId = await getTeamIdByLeaderId(userId);
-    const team = await getTeamById(teamId, userId);
+    const team = await getTeamByLeaderId(teamId, userId);
     if (!team) {
         // team 메뉴로 이동
     }

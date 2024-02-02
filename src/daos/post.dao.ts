@@ -1,5 +1,5 @@
 import db from "../models";
-import { CreatePostSchema } from "../schemas/post.schema";
+import { CreatePostBody } from "../schemas/post.schema";
 import { PostType } from "../types/post-type.enum";
 import { calculateHasNext, generateCursorCondition } from "../utils/paging.util";
 
@@ -66,7 +66,7 @@ const findPost = async (postFilter: object, bookmarkInclude: Array<any>) => {
     return { posts, hasNext: calculateHasNext(posts, defaultLimit) };
 };
 
-export const insertPost = async (userId: number, data: CreatePostSchema, type: PostType) => {
+export const insertPost = async (userId: number, data: CreatePostBody, type: PostType) => {
     await db.Post.create({
         title: data.title,
         content: data.content,

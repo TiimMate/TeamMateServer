@@ -1,10 +1,9 @@
-import { BaseError } from "../config/error";
-import { status } from "../config/response.status";
-import { defaultLevel } from "../constants/level.constant";
 import db from "../models";
-import { CreateTeamSchema } from "../schemas/team.schema";
+import { defaultLevel } from "../constants/level.constant";
+import { CreateTeamBody, UpdateTeamBodyWithoutMemberIdsToDelete } from "../schemas/team.schema";
+import { Category } from "../types/category.enum";
 
-export const findTeamPreviewByCategory = async (userId, category) => {
+export const findTeamPreviewByCategory = async (userId: number, category: Category) => {
     const teamsAsLeader = await db.Team.findAll({
         raw: true,
         where: {
@@ -33,7 +32,7 @@ export const findTeamPreviewByCategory = async (userId, category) => {
     return previews;
 };
 
-export const insertTeam = async (data: CreateTeamSchema, userId: number, inviteCode: string) => {
+export const insertTeam = async (data: CreateTeamBody, userId: number, inviteCode: string) => {
     await db.Team.create({
         logo: data.logo,
         name: data.name,
@@ -50,17 +49,24 @@ export const insertTeam = async (data: CreateTeamSchema, userId: number, inviteC
     });
 };
 
-export const getTeamDetail = async (teamId) => {
-    return await db.Team.findOne({
+export const getTeamDetail = async (teamId: number) => {
+    return await db.Team.findAll({
         raw: true,
         where: {
             id: teamId,
         },
-        attributes: ["name", "logo", "skillLevel", "mannerLevel", "description", "leaderId"],
+        include: [
+            {
+                model: db.Member,
+                attributes: ["userId"],
+                required: false,
+            },
+        ],
+        attributes: ["name", "logo", "skillLevel", "mannerLevel", "description", "leaderId", "category"],
     });
 };
 
-export const getTeamDetailforGuesting = async (teamId) => {
+export const getTeamDetailforGuesting = async (teamId: number) => {
     return await db.Team.findOne({
         raw: true,
         where: {
@@ -70,7 +76,7 @@ export const getTeamDetailforGuesting = async (teamId) => {
     });
 };
 
-export const getTeamIdByInviteCode = async (inviteCode): Promise<number> => {
+export const getTeamIdByInviteCode = async (inviteCode: string): Promise<number> => {
     const team = await db.Team.findOne({
         raw: true,
         where: {
@@ -81,7 +87,7 @@ export const getTeamIdByInviteCode = async (inviteCode): Promise<number> => {
     return team?.id;
 };
 
-export const getTeamById = async (teamId, userId) => {
+export const getTeamByLeaderId = async (teamId: number, userId: number) => {
     return await db.Team.findOne({
         where: {
             id: teamId,
@@ -90,7 +96,7 @@ export const getTeamById = async (teamId, userId) => {
     });
 };
 
-export const getTeamIdByLeaderId = async (userId) => {
+export const getTeamIdByLeaderId = async (userId: number) => {
     const team = await db.Team.findOne({
         raw: true,
         where: {
@@ -98,11 +104,10 @@ export const getTeamIdByLeaderId = async (userId) => {
         },
         attributes: ["id"],
     });
-
     return team?.id;
 };
 
-export const getTeamCategoryByLeaderId = async (userId) => {
+export const getTeamCategoryByLeaderId = async (userId: number) => {
     const team = await db.Team.findOne({
         raw: true,
         where: {
@@ -110,18 +115,28 @@ export const getTeamCategoryByLeaderId = async (userId) => {
         },
         attributes: ["category"],
     });
-
     return team?.category;
 };
 
-export const setTeam = async (team, body) => {
+export const getTeamNameByTeamId = async (teamId: number) => {
+    const team = await db.Team.findOne({
+        raw: true,
+        where: {
+            id: teamId,
+        },
+        attributes: ["name"],
+    });
+    return team?.name;
+};
+
+export const setTeam = async (team, body: UpdateTeamBodyWithoutMemberIdsToDelete) => {
     Object.keys(body).forEach((field) => {
         team[field] = body[field];
     });
     await team.save();
 };
 
-export const findTeamAvailPreviewById = async (userId, category) => {
+export const findTeamPreviewByCategoryForLeader = async (userId: number, category: Category) => {
     return await db.Team.findAll({
         raw: true,
         where: {

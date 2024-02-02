@@ -1,6 +1,5 @@
 import { BaseError } from "../config/error";
 import { status } from "../config/response.status";
-import db from "../models";
 import {
     findGamesByDate,
     findGamesByGender,
@@ -9,22 +8,20 @@ import {
     getGameDetail,
     insertGame,
     setGame,
+    insertGameApplication,
 } from "../daos/games.dao";
 import {
     getTeamDetailforGuesting,
     getTeamIdByLeaderId,
     getTeamCategoryByLeaderId,
-    getTeamById,
+    getTeamByLeaderId,
 } from "../daos/team.dao";
-import {
-    findMemberInfoByTeamId,
-    findMemberInfoWithoutLeaderByTeamId,
-    getMemberCountByTeamId,
-} from "../daos/member.dao";
+import { findMemberInfoWithoutLeaderByTeamId, getMemberCountByTeamId } from "../daos/member.dao";
 import { getUserInfoById, userInfoAttributes } from "../daos/user.dao";
 import { getGameById } from "../daos/games.dao";
 import { readGameResponseDTO, readGameDetailResponseDTO } from "../dtos/games.dto";
-import { CreateGameSchema, UpdateGameSchema } from "../schemas/game.schema";
+import { CreateGameBody, UpdateGameBody } from "../schemas/game.schema";
+import { ApplyGameBody } from "../schemas/game-apply.schema";
 
 export const readGamesByDate = async (query) => {
     const games = await findGamesByDate(query.date, query.category);
@@ -67,11 +64,11 @@ export const readGameDetail = async (params) => {
     return readGameDetailResponseDTO(gameDetail, teamDetail, leaderInfo, memberInfo);
 };
 
-export const createGame = async (userId, body: CreateGameSchema) => {
+export const createGame = async (userId, body: CreateGameBody) => {
     const hostTeamId = await getTeamIdByLeaderId(userId);
     const category = await getTeamCategoryByLeaderId(userId);
 
-    const team = await getTeamById(hostTeamId, userId);
+    const team = await getTeamByLeaderId(hostTeamId, userId);
     if (!team) {
         // team 메뉴로 이동
     }
@@ -80,12 +77,19 @@ export const createGame = async (userId, body: CreateGameSchema) => {
     return;
 };
 
-export const updateGame = async (userId, params, body: UpdateGameSchema) => {
+export const updateGame = async (userId, params, body: UpdateGameBody) => {
     const gameId = params.gameId;
     const game = await getGameById(gameId, userId);
     if (!game) {
         throw new BaseError(status.GAME_NOT_FOUND);
     }
     await setGame(game, body);
+    return;
+};
+
+export const addGameApplication = async (params, body: ApplyGameBody) => {
+    const gameId = params.gameId;
+
+    await insertGameApplication(gameId, body);
     return;
 };
