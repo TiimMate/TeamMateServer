@@ -161,3 +161,7 @@ export const getGame = async (gameId: number) => {
         attributes: ["hostTeamId", "opposingTeamId", "gameTime"],
     });
 };
+
+export const updateOpposingTeam = async (gameId: number, opposingTeamId: number) => {
+    await db.Game.update({ opposingTeamId: opposingTeamId, status: 1 }, { where: { id: gameId } });
+};
