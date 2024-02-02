@@ -1,5 +1,8 @@
 import express from "express";
 import asyncHandler from "express-async-handler";
+import { validateBody } from "../middlewares/validate.middleware";
+import { verifyUser } from "../middlewares/auth.middleware";
+import { createGuesting, updateGuesting } from "../schemas/guest.schema";
 import {
     GuestingPreview,
     GuestingPreviewByLevel,
@@ -10,17 +13,14 @@ import {
     modifyGuesting,
     applicationGuesting,
 } from "../controllers/guest.controller";
-import { createGuesting, updateGuesting } from "../schemas/guest.schema";
-import { validateBody } from "../middlewares/validate.middleware";
 
 export const guestsRouter = express.Router({ mergeParams: true });
 
+guestsRouter.use(verifyUser);
+
 guestsRouter.post("/", validateBody(createGuesting), asyncHandler(addGuesting));
-// guestsRouter.post("/", asyncHandler(addGuesting));
 
 guestsRouter.put("/:guestingId", validateBody(updateGuesting), asyncHandler(modifyGuesting));
-// guestsRouter.put("/:guestingId", asyncHandler(modifyGuesting));
-
 
 guestsRouter.get("/", asyncHandler(GuestingPreview));
 
