@@ -151,3 +151,7 @@ export const insertGameApplication = async (gameId: number, body: ApplyGameBody)
         type: db.sequelize.QueryTypes.INSERT,
     });
 };
+
+export const updateOpposingTeam = async (gameId: number, opposingTeamId: number) => {
+    await db.Game.update({ opposingTeamId: opposingTeamId, status: 1 }, { where: { id: gameId } });
+};
