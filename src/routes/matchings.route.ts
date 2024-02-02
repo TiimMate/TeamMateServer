@@ -6,6 +6,8 @@ import {
     matchingGuestingPreview,
     matchingHostingPreview,
     modifyGuestStatus,
+    fetchHostingApplicantsTeamList,
+    gameApplicationApproval,
 } from "../controllers/matchings.controller";
 
 export const matchingsRouter = express.Router({ mergeParams: true });

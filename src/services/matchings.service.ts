@@ -7,6 +7,7 @@ import {
     getApplyGuestingUser,
     setGuestStatus,
     getGuestUserById,
+    getHostingApplicantsTeamList,
 } from "../daos/matchings.dao";
 import { getMemberCountByTeamId } from "../daos/member.dao";
 import { readApplyGuestingUserResponseDTO, readMatchingResponseDTO } from "../dtos/matchings.dto";
@@ -64,3 +65,8 @@ export const updateGuestStatus = async (params) => {
     return;
 };
 
+export const readHostingApplicantsList = async (userId, params) => {
+    const gameId = params.gameId;
+
+    return await getHostingApplicantsTeamList(gameId);
+};
