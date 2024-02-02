@@ -2,8 +2,8 @@ import { TypeOf, object, z } from "zod";
 import { mannerScoreField, skillScoreField } from "./fields";
 
 const createTeamReviewBody = object({
-    team_match_id: z.optional(z.number().int()),
-    guest_match_id: z.optional(z.number().int()),
+    teamMatchId: z.optional(z.number().int()),
+    guestMatchId: z.optional(z.number().int()),
     ...skillScoreField,
     ...mannerScoreField,
 });
