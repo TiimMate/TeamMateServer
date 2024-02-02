@@ -18,7 +18,7 @@ import {
 } from "../daos/team.dao";
 import { findMemberInfoWithoutLeaderByTeamId, getMemberCountByTeamId } from "../daos/member.dao";
 import { getUserInfoById, userInfoAttributes } from "../daos/user.dao";
-import { getGameById } from "../daos/games.dao";
+import { getGameByUserId } from "../daos/games.dao";
 import { readGameResponseDTO, readGameDetailResponseDTO } from "../dtos/games.dto";
 import { CreateGameBody, UpdateGameBody } from "../schemas/game.schema";
 import { ApplyGameBody } from "../schemas/game-apply.schema";
@@ -79,7 +79,7 @@ export const createGame = async (userId, body: CreateGameBody) => {
 
 export const updateGame = async (userId, params, body: UpdateGameBody) => {
     const gameId = params.gameId;
-    const game = await getGameById(gameId, userId);
+    const game = await getGameByUserId(gameId, userId);
     if (!game) {
         throw new BaseError(status.GAME_NOT_FOUND);
     }
