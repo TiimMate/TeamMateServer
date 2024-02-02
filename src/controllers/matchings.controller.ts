@@ -6,6 +6,7 @@ import {
     readMatchingHosting,
     updateGuestStatus,
 } from "../services/matchings.service";
+import { addOpposingTeam } from "../services/teams.service";
 
 export const matchingGuestingPreview = async (req, res, next) => {
     // return res.send(response(status.SUCCESS, await readMatchingGuesting(1, req.query)));
@@ -23,4 +24,14 @@ export const ApplyGuestingUserPreview = async (req, res, next) => {
 
 export const modifyGuestStatus = async (req, res, next) => {
     return res.send(response(status.SUCCESS, await updateGuestStatus(req.params)));
+};
+
+export const fetchHostingApplicantsTeamList = async (req, res, next) => {
+    // return res.send(response(status.SUCCESS, await readHostingApplicantsList(req.user.id, req.query)));
+    return res.send(response(status.SUCCESS, await readHostingApplicantsList(1, req.params)));
+};
+
+export const gameApplicationApproval = async (req, res, next) => {
+    return res.send(response(status.SUCCESS, await readHostingApplicantsList(req.user.id, req.query)));
+    // return res.send(response(status.SUCCESS, await addOpposingTeam(1, req.params, req.body))); // for testing
 };
