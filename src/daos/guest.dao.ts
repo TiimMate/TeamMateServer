@@ -1,5 +1,5 @@
-import { Sequelize } from "sequelize";
 import db from "../models";
+import { Sequelize } from "sequelize";
 import { CreateGuestingSchema } from "../schemas/guest.schema";
 import { getTeamIdByLeaderId } from "./team.dao";
 
@@ -115,5 +115,25 @@ export const getGuestingById = async (guestingId, userId) => {
             id: guestingId,
             teamId: teamId,
         },
+    });
+};
+
+export const getGuestingByAcceptedUserId = async (guestingId: number, userId: number) => {
+    return await db.Guest.findOne({
+        raw: true,
+        where: {
+            id: guestingId,
+        },
+        include: [
+            {
+                model: db.GuestUser,
+                where: {
+                    userId,
+                    status: 1,
+                },
+                attributes: [],
+            },
+        ],
+        attributes: ["teamId", "gameTime"],
     });
 };

@@ -130,7 +130,7 @@ export const setGame = async (game, body) => {
     await game.save();
 };
 
-export const getGameById = async (gameId, userId) => {
+export const getGameByUserId = async (gameId, userId) => {
     const hostTeamId = await getTeamIdByLeaderId(userId);
     return await db.Game.findOne({
         where: {
@@ -149,6 +149,16 @@ export const insertGameApplication = async (gameId: number, body: ApplyGameBody)
     await db.sequelize.query(insertQuery, {
         replacements: { gameId: gameId, teamId: teamId },
         type: db.sequelize.QueryTypes.INSERT,
+    });
+};
+
+export const getGame = async (gameId: number) => {
+    return await db.Game.findOne({
+        raw: true,
+        where: {
+            id: gameId,
+        },
+        attributes: ["hostTeamId", "opposingTeamId", "gameTime"],
     });
 };
 

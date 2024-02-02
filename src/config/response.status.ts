@@ -143,4 +143,30 @@ export const status: { [key: string]: Status } = {
         code: "USER001",
         message: "요청한 유저를 찾을 수 없습니다.",
     },
+
+    //review err
+    MATCH_ID_REQUIRED: {
+        status: StatusCodes.BAD_REQUEST,
+        isSuccess: false,
+        code: "REVIEW001",
+        message: "TeamMatchId 또는 GuestMatchId 중 하나가 필요합니다.",
+    },
+    NO_REVIEW_TARGET: {
+        status: StatusCodes.NOT_FOUND,
+        isSuccess: false,
+        code: "REVIEW002",
+        message: "리뷰할 대상이 없습니다.",
+    },
+    REVIEW_NOT_CURRENTLY_WRITABLE: {
+        status: StatusCodes.BAD_REQUEST,
+        isSuccess: false,
+        code: "REVIEW003",
+        message: "리뷰 작성 가능한 시간이 아닙니다.",
+    },
+    REVIEW_ALREADY_WRITTEN: {
+        status: StatusCodes.CONFLICT,
+        isSuccess: false,
+        code: "REVIEW004",
+        message: "이미 리뷰를 작성했습니다.",
+    },
 };

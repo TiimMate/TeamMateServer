@@ -83,3 +83,7 @@ export const gameTimeField = {
 export const descriptionFieldInGame = { description: z.string() };
 
 export const teamIdField = { teamId: z.number().int() };
+
+export const skillScoreField = { skillScore: z.number().int().min(1).max(5) };
+
+export const mannerScoreField = { mannerScore: z.number().int().min(1).max(5) };
