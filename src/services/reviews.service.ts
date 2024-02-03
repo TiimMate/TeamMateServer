@@ -2,9 +2,11 @@ import { BaseError } from "../config/error";
 import { status } from "../config/response.status";
 import { CreateTeamReviewBody } from "../schemas/team-review.schema";
 import { getGame } from "../daos/games.dao";
-import { findLeaderId } from "../daos/team.dao";
+import { findLeaderId, getLeaderId } from "../daos/team.dao";
 import { getGuestingByAcceptedUserId } from "../daos/guest.dao";
 import { getExistingTeamReview, insertTeamReview } from "../daos/team-review.dao";
+import { CreateUserReviewBody } from "../schemas/user-review.schema";
+import { getExistingUserReview, insertUserReview } from "../daos/user-review.dao";
 
 export const createTeamReview = async (userId: number, body: CreateTeamReviewBody) => {
     const { teamMatchId, guestMatchId } = body;
@@ -18,11 +20,7 @@ export const createTeamReview = async (userId: number, body: CreateTeamReviewBod
     if (!result?.reviewedTeamId) {
         throw new BaseError(status.NO_REVIEW_TARGET);
     }
-    const currentTime = getCurrentTime();
-    console.log(result.gameTime, currentTime);
-    if (result.gameTime > currentTime) {
-        throw new BaseError(status.REVIEW_NOT_CURRENTLY_WRITABLE);
-    }
+    validateReviewableTime(result.gameTime, getCurrentTime());
     const review = await getExistingTeamReview(userId, result.reviewedTeamId, teamMatchId, guestMatchId);
     if (review) {
         throw new BaseError(status.REVIEW_ALREADY_WRITTEN);
@@ -50,4 +48,36 @@ const retrieveReviewedTeamIdAndGameTime = async (userId: number, teamMatchId?: n
 
 const getCurrentTime = (): Date => {
     return new Date();
+};
+
+export const createUserReview = async (userId: number, body: CreateUserReviewBody) => {
+    const { guestMatchId, revieweeId } = body;
+    const result = await retrieveRevieweeIdAndGameTime(userId, guestMatchId, revieweeId);
+
+    //validate user write permission
+    if (!result.revieweeId) {
+        throw new BaseError(status.NO_REVIEW_TARGET);
+    }
+    validateReviewableTime(result.gameTime, getCurrentTime());
+    const review = await getExistingUserReview(userId, result.revieweeId, guestMatchId);
+    if (review) {
+        throw new BaseError(status.REVIEW_ALREADY_WRITTEN);
+    }
+
+    await insertUserReview(userId, body);
+    return;
+};
+
+const retrieveRevieweeIdAndGameTime = async (userId: number, guestMatchId: number, revieweeId: number) => {
+    const guestMatch = await getGuestingByAcceptedUserId(guestMatchId, revieweeId);
+    if (!guestMatch.teamId || userId != (await getLeaderId(guestMatch.teamId))) {
+        return { revieweeId: null, gameTime: guestMatch.gameTime };
+    }
+    return { revieweeId, gameTime: guestMatch.gameTime };
+};
+
+const validateReviewableTime = (gameTime: Date, currentTime: Date) => {
+    if (gameTime > currentTime) {
+        throw new BaseError(status.REVIEW_NOT_CURRENTLY_WRITABLE);
+    }
 };
