@@ -1,7 +1,8 @@
 import { TypeOf, object } from "zod";
-import { guestMatchIdFieldInUserReview, mannerScoreField, skillScoreField } from "./fields";
+import { guestMatchIdFieldInUserReview, mannerScoreField, revieweeIdField, skillScoreField } from "./fields";
 
 const createUserReviewBody = object({
+    ...revieweeIdField,
     ...guestMatchIdFieldInUserReview,
     ...skillScoreField,
     ...mannerScoreField,
