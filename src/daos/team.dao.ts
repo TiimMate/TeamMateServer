@@ -157,3 +157,13 @@ export const findLeaderId = async (hostingTeamId: number, opposingTeamId: number
         attributes: ["id", "leaderId"],
     });
 };
+
+export const getLeaderId = async (teamId: number) => {
+    return await db.Team.findOne({
+        raw: true,
+        where: {
+            id: teamId,
+        },
+        attributes: ["leaderId"],
+    });
+};
