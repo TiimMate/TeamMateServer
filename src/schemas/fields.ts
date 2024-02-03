@@ -87,3 +87,9 @@ export const teamIdField = { teamId: z.number().int() };
 export const skillScoreField = { skillScore: z.number().int().min(1).max(5) };
 
 export const mannerScoreField = { mannerScore: z.number().int().min(1).max(5) };
+
+export const guestMatchIdFieldInUserReview = { guest_match_id: z.number().int() };
+
+export const guestMatchIdFieldInTeamReview = { guest_match_id: z.optional(z.number().int()) };
+
+export const teamMatchIdField = { teamMatchId: z.optional(z.number().int()) };
