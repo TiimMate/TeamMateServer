@@ -1,19 +1,28 @@
-import { TypeOf, object, z } from "zod";
+import { TypeOf, object } from "zod";
+import { teamIdField, gameTimeField, descriptionField, recruitCountField } from "./fields";
 
-const fields = {
-    teamId: z.number().int(),
-    gameTime: z.date(),
-    description: z.optional(z.string()),
-    recruitCount: z.number().int().min(1),
+const body = {
+    ...teamIdField,
+    ...gameTimeField,
+    ...descriptionField,
+    ...recruitCountField,
 };
 
-export const createGuesting = object({
-    ...fields,
+const createGuestBody = object({
+    ...body,
 });
 
-export const updateGuesting = object({
-    ...fields,
+const updateGuestBody = object({
+    ...body,
 });
 
-export type CreateGuestingSchema = TypeOf<typeof createGuesting>;
-export type UpdateGuestingSchema = TypeOf<typeof updateGuesting>;
+export const createGuestingSchema = object({
+    body: createGuestBody,
+});
+
+export const updateGuestingSchema = object({
+    body: updateGuestBody,
+});
+
+export type CreateGuestingBody = TypeOf<typeof createGuestBody>;
+export type UpdateGuestingBody = TypeOf<typeof updateGuestBody>;
