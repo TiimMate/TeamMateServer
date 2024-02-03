@@ -43,6 +43,7 @@ class Guest extends Model<InferAttributes<Guest>, InferCreationAttributes<Guest>
         db.Guest.hasMany(db.GuestUser, { foreignKey: "guest_id" });
         db.Guest.belongsTo(db.Team, { foreignKey: "team_id" });
         db.Guest.hasMany(db.TeamReview, { foreignKey: "guest_match_id" });
+        db.Guest.hasMany(db.UserReview, { foreignKey: "guest_match_id" });
     }
 }
 

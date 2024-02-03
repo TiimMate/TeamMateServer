@@ -54,6 +54,8 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
         db.User.hasMany(db.Bookmark, { foreignKey: "user_id" });
         db.User.hasMany(db.Comment, { foreignKey: "author_id" });
         db.User.hasMany(db.TeamReview, { foreignKey: "reviewer_id" });
+        db.User.hasMany(db.UserReview, { foreignKey: "reviewer_id" });
+        db.User.hasMany(db.UserReview, { foreignKey: "reviewee_id" });
     }
 }
 
