@@ -1,9 +1,9 @@
-import { TypeOf, object, z } from "zod";
-import { mannerScoreField, skillScoreField } from "./fields";
+import { TypeOf, object } from "zod";
+import { guestMatchIdFieldInTeamReview, mannerScoreField, skillScoreField, teamMatchIdField } from "./fields";
 
 const createTeamReviewBody = object({
-    teamMatchId: z.optional(z.number().int()),
-    guestMatchId: z.optional(z.number().int()),
+    ...teamMatchIdField,
+    ...guestMatchIdFieldInTeamReview,
     ...skillScoreField,
     ...mannerScoreField,
 });
