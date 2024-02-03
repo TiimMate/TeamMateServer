@@ -159,11 +159,12 @@ export const findLeaderId = async (hostingTeamId: number, opposingTeamId: number
 };
 
 export const getLeaderId = async (teamId: number) => {
-    return await db.Team.findOne({
+    const team = await db.Team.findOne({
         raw: true,
         where: {
             id: teamId,
         },
         attributes: ["leaderId"],
     });
+    return team.leaderId;
 };

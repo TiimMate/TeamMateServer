@@ -46,10 +46,6 @@ const retrieveReviewedTeamIdAndGameTime = async (userId: number, teamMatchId?: n
     }
 };
 
-const getCurrentTime = (): Date => {
-    return new Date();
-};
-
 export const createUserReview = async (userId: number, body: CreateUserReviewBody) => {
     const { guestMatchId, revieweeId } = body;
     const result = await retrieveRevieweeIdAndGameTime(userId, guestMatchId, revieweeId);
@@ -70,14 +66,22 @@ export const createUserReview = async (userId: number, body: CreateUserReviewBod
 
 const retrieveRevieweeIdAndGameTime = async (userId: number, guestMatchId: number, revieweeId: number) => {
     const guestMatch = await getGuestingByAcceptedUserId(guestMatchId, revieweeId);
-    if (!guestMatch.teamId || userId != (await getLeaderId(guestMatch.teamId))) {
-        return { revieweeId: null, gameTime: guestMatch.gameTime };
+    if (!guestMatch) {
+        return { revieweeId: null, gameTime: null };
     }
-    return { revieweeId, gameTime: guestMatch.gameTime };
+    const leaderId = await getLeaderId(guestMatch.teamId);
+    return {
+        revieweeId: userId === leaderId ? revieweeId : null,
+        gameTime: guestMatch.gameTime,
+    };
 };
 
 const validateReviewableTime = (gameTime: Date, currentTime: Date) => {
     if (gameTime > currentTime) {
         throw new BaseError(status.REVIEW_NOT_CURRENTLY_WRITABLE);
     }
+};
+
+const getCurrentTime = (): Date => {
+    return new Date();
 };
