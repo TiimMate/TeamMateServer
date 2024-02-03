@@ -11,23 +11,20 @@ import {
     insertGuesting,
     setGuesting,
 } from "../daos/guest.dao";
-import { findMemberInfoByTeamId, getMemberCountByTeamId } from "../daos/member.dao";
-import { getTeamByLeaderId, getTeamDetailforGuesting, getTeamIdByLeaderId } from "../daos/team.dao";
-import { getUser, getUserInfoById, userInfoAttributes } from "../daos/user.dao";
+import { readMembersInfo } from "../services/teams.service";
+import { getMemberCountByTeamId } from "../daos/member.dao";
+import { getTeamDetailforGuesting, getTeamIdByLeaderId } from "../daos/team.dao";
+import { getUserInfoByCategory } from "../daos/user.dao";
 import { readGuestingDetailResponseDTO, readGuestingResponseDTO } from "../dtos/guests.dto";
-import { CreateGuestingSchema, UpdateGuestingSchema } from "../schemas/guest.schema";
+import { CreateGuestingBody, UpdateGuestingBody } from "../schemas/guest.schema";
 
-export const createGuesting = async (userId, body: CreateGuestingSchema) => {
+export const createGuesting = async (userId, body: CreateGuestingBody) => {
     const teamId = await getTeamIdByLeaderId(userId);
-    const team = await getTeamByLeaderId(teamId, userId);
-    if (!team) {
-        // team 메뉴로 이동
-    }
     await insertGuesting(teamId, body);
     return;
 };
 
-export const updateGuesting = async (userId, params, body: UpdateGuestingSchema) => {
+export const updateGuesting = async (userId, params, body: UpdateGuestingBody) => {
     const guestingId = params.guestingId;
     const guesting = await getGuestingById(guestingId, userId);
     if (!guesting) {
@@ -73,17 +70,13 @@ export const readDetailedGuesting = async (params) => {
     const guestingId = params.guestingId;
     const guestingDetail = await getDetailedGuesting(guestingId);
     const TeamDetail = await getTeamDetailforGuesting(guestingDetail.teamId);
-    const leaderInfo = await getUserInfoById(TeamDetail.leaderId);
-    const memberInfo = await findMemberInfoByTeamId(guestingDetail.teamId, userInfoAttributes);
+    const leaderInfo = await getUserInfoByCategory(TeamDetail.leaderId, TeamDetail.category);
+    const memberInfo = await readMembersInfo(TeamDetail, TeamDetail.category);
     return readGuestingDetailResponseDTO(guestingDetail, TeamDetail, leaderInfo, memberInfo);
 };
 
 export const addGuestUser = async (userId, params) => {
     const guestingId = params.guestingId;
-    const user = await getUser(userId);
-    if (!user) {
-        // user 정보 수정 API 연결
-    }
     await InsertGuestUser(guestingId, userId);
     return;
 };

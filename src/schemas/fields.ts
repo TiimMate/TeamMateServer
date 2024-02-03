@@ -83,3 +83,37 @@ export const gameTimeField = {
 export const descriptionFieldInGame = { description: z.string() };
 
 export const teamIdField = { teamId: z.number().int() };
+
+export const guestIdField = { guestId: z.number().int() };
+
+export const userIdField = { userId: z.number().int() };
+
+export const statusField = { status: z.number().int() };
+
+export const recruitCountField = { recruitCount: z.number().int() };
+
+export const levelField = { level: z.number().int().optional() };
+
+export const dateParam = object({
+    params: object({
+        ...gameTimeField,
+    }),
+});
+
+export const levelParam = object({
+    params: object({
+        ...levelField,
+    }),
+});
+
+export const genderParam = object({
+    params: object({
+        ...genderFieldInTeam,
+    }),
+});
+
+export const regionParam = object({
+    params: object({
+        ...regionFieldInTeam,
+    }),
+});

@@ -1,9 +1,11 @@
 import { Sequelize } from "sequelize";
 import db from "../models";
-import { CreateGuestingSchema } from "../schemas/guest.schema";
+import { CreateGuestingBody, UpdateGuestingBody } from "../schemas/guest.schema";
 import { getTeamIdByLeaderId } from "./team.dao";
+import { Category } from "../types/category.enum";
+import { Gender } from "../types/gender.enum";
 
-export const insertGuesting = async (teamId, data: CreateGuestingSchema) => {
+export const insertGuesting = async (teamId: number, data: CreateGuestingBody) => {
     await db.Guest.create({
         teamId: teamId,
         gameTime: data.gameTime,
@@ -12,14 +14,14 @@ export const insertGuesting = async (teamId, data: CreateGuestingSchema) => {
     });
 };
 
-export const setGuesting = async (guesting, body) => {
+export const setGuesting = async (guesting, body: UpdateGuestingBody) => {
     Object.keys(body).forEach((field) => {
         guesting[field] = body[field];
     });
     await guesting.save();
 };
 
-export const findGuesting = async (date, category) => {
+export const findGuesting = async (date: string, category: Category) => {
     return await db.Guest.findAll({
         raw: true,
         where: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${date}', '%Y-%m-%d')`),
@@ -36,7 +38,7 @@ export const findGuesting = async (date, category) => {
     });
 };
 
-export const findGuestingByGender = async (date, category, gender) => {
+export const findGuestingByGender = async (date: string, category: Category, gender: Gender) => {
     return await db.Guest.findAll({
         raw: true,
         where: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${date}', '%Y-%m-%d')`),
@@ -54,7 +56,7 @@ export const findGuestingByGender = async (date, category, gender) => {
     });
 };
 
-export const findGuestingByLevel = async (date, category, skillLevel) => {
+export const findGuestingByLevel = async (date: string, category: Category, skillLevel: number) => {
     return await db.Guest.findAll({
         raw: true,
         where: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${date}', '%Y-%m-%d')`),
@@ -72,7 +74,7 @@ export const findGuestingByLevel = async (date, category, skillLevel) => {
     });
 };
 
-export const findGuestingByRegion = async (date, category, region) => {
+export const findGuestingByRegion = async (date: string, category: Category, region: number) => {
     return await db.Guest.findAll({
         raw: true,
         where: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${date}', '%Y-%m-%d')`),
@@ -90,7 +92,7 @@ export const findGuestingByRegion = async (date, category, region) => {
     });
 };
 
-export const getDetailedGuesting = async (guestingId) => {
+export const getDetailedGuesting = async (guestingId: number) => {
     return await db.Guest.findOne({
         raw: true,
         where: {
@@ -100,7 +102,7 @@ export const getDetailedGuesting = async (guestingId) => {
     });
 };
 
-export const InsertGuestUser = async (guestingId, userId) => {
+export const InsertGuestUser = async (guestingId: number, userId: number) => {
     await db.GuestUser.create({
         guestId: guestingId,
         userId: userId,
@@ -108,7 +110,7 @@ export const InsertGuestUser = async (guestingId, userId) => {
     });
 };
 
-export const getGuestingById = async (guestingId, userId) => {
+export const getGuestingById = async (guestingId: number, userId: number) => {
     const teamId = await getTeamIdByLeaderId(userId);
     return await db.Guest.findOne({
         where: {

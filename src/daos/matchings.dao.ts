@@ -1,10 +1,11 @@
 import { Sequelize } from "sequelize";
 import db from "../models";
 import { getTeamIdByLeaderId } from "./team.dao";
+import { UpdateGuestUserBody } from "../schemas/guest-user.schema";
 
 const { Op } = require("sequelize");
 
-export const findGuestsOfMatchingGuesting = async (userId, date) => {
+export const findGuestsOfMatchingGuesting = async (userId: number, date: string) => {
     const guestUserResults = await db.GuestUser.findAll({
         raw: true,
         where: {
@@ -36,7 +37,7 @@ export const findGuestsOfMatchingGuesting = async (userId, date) => {
     return guestResults;
 };
 
-export const findGamesOfMatchingGuesting = async (userId, date) => {
+export const findGamesOfMatchingGuesting = async (userId: number, date: string) => {
     const team_id = await getTeamIdByLeaderId(userId);
     const gameApplyResults = await db.sequelize.query("SELECT game_id FROM game_apply WHERE team_id = :team_id", {
         type: db.sequelize.QueryTypes.SELECT,
@@ -65,7 +66,7 @@ export const findGamesOfMatchingGuesting = async (userId, date) => {
     return games;
 };
 
-export const findGuestsOfMatchingHosting = async (userId, date) => {
+export const findGuestsOfMatchingHosting = async (userId: number, date: string) => {
     const teamId = await getTeamIdByLeaderId(userId);
     return await db.Guest.findAll({
         raw: true,
@@ -83,7 +84,7 @@ export const findGuestsOfMatchingHosting = async (userId, date) => {
     });
 };
 
-export const findGamesOfMatchingHosting = async (userId, date) => {
+export const findGamesOfMatchingHosting = async (userId: number, date: string) => {
     const teamId = await getTeamIdByLeaderId(userId);
     return await db.Game.findAll({
         raw: true,
@@ -101,7 +102,7 @@ export const findGamesOfMatchingHosting = async (userId, date) => {
     });
 };
 
-export const getApplyGuestingUser = async (guestingId) => {
+export const getApplyGuestingUser = async (guestingId: number) => {
     return await db.GuestUser.findAll({
         raw: true,
         where: {
@@ -117,12 +118,13 @@ export const getApplyGuestingUser = async (guestingId) => {
     });
 };
 
-export const setGuestStatus = async (guestUser) => {
-    guestUser["status"] = 1;
-    await guestUser.save();
+export const setGuestStatus = async (guestUser: UpdateGuestUserBody) => {
+    const guestUserInstance = await db.GuestUser.findByPk(guestUser.guestId);
+    guestUserInstance.status = 1;
+    await guestUserInstance.save();
 };
 
-export const getGuestUserById = async (guestUserId) => {
+export const getGuestUserById = async (guestUserId: number) => {
     return await db.GuestUser.findOne({
         where: {
             id: guestUserId,

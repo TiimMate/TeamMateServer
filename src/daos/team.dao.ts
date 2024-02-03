@@ -72,7 +72,24 @@ export const getTeamDetailforGuesting = async (teamId: number) => {
         where: {
             id: teamId,
         },
-        attributes: ["name", "description", "gender", "ageGroup", "gymName", "skillLevel", "mannerLevel", "leaderId"],
+        include: [
+            {
+                model: db.Member,
+                attributes: ["userId"],
+                required: false,
+            },
+        ],
+        attributes: [
+            "name",
+            "description",
+            "gender",
+            "ageGroup",
+            "gymName",
+            "skillLevel",
+            "mannerLevel",
+            "leaderId",
+            "category",
+        ],
     });
 };
 

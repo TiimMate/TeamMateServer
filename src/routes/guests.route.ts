@@ -1,8 +1,9 @@
 import express from "express";
 import asyncHandler from "express-async-handler";
-import { validateBody } from "../middlewares/validate.middleware";
 import { verifyUser } from "../middlewares/auth.middleware";
-import { createGuesting, updateGuesting } from "../schemas/guest.schema";
+import { validate } from "../middlewares/validate.middleware";
+import { categoryParam, dateParam, genderParam, levelParam, regionParam } from "../schemas/fields";
+import { createGuestingSchema, updateGuestingSchema } from "../schemas/guest.schema";
 import {
     GuestingPreview,
     GuestingPreviewByLevel,
@@ -14,22 +15,40 @@ import {
     applicationGuesting,
 } from "../controllers/guest.controller";
 
-export const guestsRouter = express.Router({ mergeParams: true });
+export const guestsRouter = express.Router();
 
 guestsRouter.use(verifyUser);
 
-guestsRouter.post("/", validateBody(createGuesting), asyncHandler(addGuesting));
+guestsRouter.post("/", verifyUser, validate(createGuestingSchema), asyncHandler(addGuesting));
 
-guestsRouter.put("/:guestingId", validateBody(updateGuesting), asyncHandler(modifyGuesting));
+guestsRouter.put("/:guestingId", verifyUser, validate(updateGuestingSchema), asyncHandler(modifyGuesting));
 
-guestsRouter.get("/", asyncHandler(GuestingPreview));
+guestsRouter.get("/", validate(categoryParam), validate(dateParam), asyncHandler(GuestingPreview));
 
-guestsRouter.get("/level", asyncHandler(GuestingPreviewByLevel));
+guestsRouter.get(
+    "/level",
+    validate(categoryParam),
+    validate(dateParam),
+    validate(levelParam),
+    asyncHandler(GuestingPreviewByLevel),
+);
 
-guestsRouter.get("/gender", asyncHandler(GuestingPreviewByGender));
+guestsRouter.get(
+    "/gender",
+    validate(categoryParam),
+    validate(dateParam),
+    validate(genderParam),
+    asyncHandler(GuestingPreviewByGender),
+);
 
-guestsRouter.get("/region", asyncHandler(GuestingPreviewByRegion));
+guestsRouter.get(
+    "/region",
+    validate(categoryParam),
+    validate(dateParam),
+    validate(regionParam),
+    asyncHandler(GuestingPreviewByRegion),
+);
 
 guestsRouter.get("/:guestingId", asyncHandler(DetailedGuestingPreview));
 
-guestsRouter.post("/:guestingId/application", asyncHandler(applicationGuesting));
+guestsRouter.post("/application/:category/:guestingId", verifyUser, asyncHandler(applicationGuesting));
