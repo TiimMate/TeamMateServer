@@ -13,6 +13,7 @@ import {
 } from "../daos/team.dao";
 import { deleteMembers, findMemberToDelete } from "../daos/member.dao";
 import { getUserInfoByCategory } from "../daos/user.dao";
+import { updateOpposingTeam } from "../daos/games.dao";
 import { readTeamDetailResponseDTO } from "../dtos/teams.dto";
 
 export const readTeamPreviews = async (userId: number, query) => {
@@ -66,4 +67,12 @@ export const readMembersInfo = async (details, category: Category) => {
 
 export const readTeamAvailPreviewById = async (userId, query) => {
     return await findTeamPreviewByCategoryForLeader(userId, query.category);
+};
+
+export const addOpposingTeam = async (userId: number, params, body) => {
+    const gameId = params.gameId;
+    const opposingTeamId = body.teamId;
+
+    await updateOpposingTeam(gameId, opposingTeamId);
+    return;
 };

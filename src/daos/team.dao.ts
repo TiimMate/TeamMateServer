@@ -2,6 +2,7 @@ import db from "../models";
 import { defaultLevel } from "../constants/level.constant";
 import { CreateTeamBody, UpdateTeamBodyWithoutMemberIdsToDelete } from "../schemas/team.schema";
 import { Category } from "../types/category.enum";
+import { Op } from "sequelize";
 
 export const findTeamPreviewByCategory = async (userId: number, category: Category) => {
     const teamsAsLeader = await db.Team.findAll({
@@ -162,4 +163,25 @@ export const findTeamPreviewByCategoryForLeader = async (userId: number, categor
         },
         attributes: ["name"],
     });
+};
+
+export const findLeaderId = async (hostingTeamId: number, opposingTeamId: number) => {
+    return await db.Team.findAll({
+        raw: true,
+        where: {
+            [Op.or]: [{ id: hostingTeamId }, { id: opposingTeamId }],
+        },
+        attributes: ["id", "leaderId"],
+    });
+};
+
+export const getLeaderId = async (teamId: number) => {
+    const team = await db.Team.findOne({
+        raw: true,
+        where: {
+            id: teamId,
+        },
+        attributes: ["leaderId"],
+    });
+    return team.leaderId;
 };

@@ -52,6 +52,7 @@ class Game extends Model<InferAttributes<Game>, InferCreationAttributes<Game>> {
         db.Game.belongsToMany(db.Team, {
             through: "game_apply",
         });
+        db.Game.hasMany(db.TeamReview, { foreignKey: "team_match_id" });
     }
 }
 

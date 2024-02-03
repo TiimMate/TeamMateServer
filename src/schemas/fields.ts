@@ -117,3 +117,15 @@ export const regionParam = object({
         ...regionFieldInTeam,
     }),
 });
+
+export const skillScoreField = { skillScore: z.number().int().min(1).max(5) };
+
+export const mannerScoreField = { mannerScore: z.number().int().min(1).max(5) };
+
+export const guestMatchIdFieldInUserReview = { guestMatchId: z.number().int() };
+
+export const guestMatchIdFieldInTeamReview = { guestMatchId: z.optional(z.number().int()) };
+
+export const teamMatchIdField = { teamMatchId: z.optional(z.number().int()) };
+
+export const revieweeIdField = { revieweeId: z.number().int() };

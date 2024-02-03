@@ -79,6 +79,7 @@ class Team extends Model<InferAttributes<Team>, InferCreationAttributes<Team>> {
             through: "game_apply",
         });
         db.Team.hasMany(db.Guest, { foreignKey: "team_id" });
+        db.Team.hasMany(db.TeamReview, { foreignKey: "reviewed_team_id" });
     }
 }
 

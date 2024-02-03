@@ -1,6 +1,6 @@
-import { Sequelize } from "sequelize";
 import db from "../models";
 import { CreateGuestingBody, UpdateGuestingBody } from "../schemas/guest.schema";
+import { Sequelize } from "sequelize";
 import { getTeamIdByLeaderId } from "./team.dao";
 import { Category } from "../types/category.enum";
 import { Gender } from "../types/gender.enum";
@@ -117,5 +117,25 @@ export const getGuestingById = async (guestingId: number, userId: number) => {
             id: guestingId,
             teamId: teamId,
         },
+    });
+};
+
+export const getGuestingByAcceptedUserId = async (guestingId: number, userId: number) => {
+    return await db.Guest.findOne({
+        raw: true,
+        where: {
+            id: guestingId,
+        },
+        include: [
+            {
+                model: db.GuestUser,
+                where: {
+                    userId,
+                    status: 1,
+                },
+                attributes: [],
+            },
+        ],
+        attributes: ["teamId", "gameTime"],
     });
 };
