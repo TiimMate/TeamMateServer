@@ -53,15 +53,7 @@ export const kakaoLogin = async (body) => {
 const getKakaoAccessToken = async (code: string) => {
     const url = "https://kauth.kakao.com/oauth/token";
     const response = await redaxios.post(
-        url,
-        {
-            params: {
-                grant_type: "authorization_code",
-                client_id: process.env.KAKAO_CLIENT_ID,
-                redirect_uri: process.env.KAKAO_REDIRECT_URI,
-                code: code,
-            },
-        },
+        `${url}?grant_type=authorization_code&client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.KAKAO_REDIRECT_URI}&code=${code}`,
         {
             headers: {
                 "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
