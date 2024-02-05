@@ -1,10 +1,12 @@
+import { convertToKST } from "../utils/time-zone.util";
+
 export const readPostsResponseDTO = (result) => {
     return {
         posts: result.posts.map((post) => ({
             id: post.id,
             isBookmarked: Boolean(post["Bookmarks.id"]),
             title: post.title,
-            createdAt: post.createdAt,
+            createdAt: convertToKST(post.createdAt),
         })),
         hasNext: result.hasNext,
     };
@@ -30,7 +32,7 @@ export const readCommentsResonseDTO = (comments) => {
             id: comment.id,
             nickname: comment["User.nickname"],
             content: comment.content,
-            createdAt: comment.createdAt,
+            createdAt: convertToKST(comment.createdAt),
         })),
         commentHasNext: comments.hasNext,
     };
