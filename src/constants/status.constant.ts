@@ -9,6 +9,6 @@ const Statuss: { [key: number]: Status } = {
 
 export const defaultStatus = 0;
 
-export const getStatusById = (id: number): string | undefined => {
+export const getStatus = (id: number): string | undefined => {
     return Statuss[id].name;
 };

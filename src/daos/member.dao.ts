@@ -1,5 +1,7 @@
 import { Op } from "sequelize";
 import db from "../models";
+import { Category } from "../types/category.enum";
+import { userInfoAttributes } from "../daos/user.dao";
 
 export const findMemberInfoByTeamId = async (teamId, userInfoAttributes) => {
     throw new Error("더 이상 사용하지 않는 함수");
@@ -12,6 +14,37 @@ export const findMemberInfoByTeamId = async (teamId, userInfoAttributes) => {
             {
                 model: db.User,
                 attributes: userInfoAttributes(),
+            },
+        ],
+        attributes: [],
+    });
+};
+
+export const getMemberInfoByCategory = async (teamId: number, category: Category) => {
+    const team = await db.Team.findByPk(teamId);
+    if (!team) {
+        throw new Error("Team not found");
+    }
+
+    return await db.Member.findAll({
+        raw: true,
+        where: {
+            teamId: teamId,
+        },
+        include: [
+            {
+                model: db.User,
+                attributes: userInfoAttributes(),
+                include: [
+                    {
+                        model: db.Profile,
+                        where: {
+                            category: category,
+                        },
+                        required: false,
+                        attributes: ["position"],
+                    },
+                ],
             },
         ],
         attributes: [],

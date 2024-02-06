@@ -1,5 +1,3 @@
-import { application } from "express";
-import { Response } from "express";
 import { response } from "../config/response";
 import { status } from "../config/response.status";
 import {
