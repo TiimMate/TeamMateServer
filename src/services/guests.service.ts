@@ -17,6 +17,7 @@ import { getTeamByLeaderId, getTeamDetailforGuesting } from "../daos/team.dao";
 import { getUserInfoByCategory, getUserProfileByCategory } from "../daos/user.dao";
 import { readGuestingDetailResponseDTO, readGuestingResponseDTO } from "../dtos/guests.dto";
 import { CreateGuestingBody, UpdateGuestingBody } from "../schemas/guest.schema";
+import { checkForDuplicateGuestUser } from "../daos/guest-user.dao";
 
 export const createGuesting = async (userId, body: CreateGuestingBody) => {
     const teamId = body.teamId;
@@ -82,9 +83,22 @@ export const readDetailedGuesting = async (params) => {
 export const addGuestUser = async (userId, query, params) => {
     const guestingId = params.guestingId;
     const userProfile = await getUserProfileByCategory(userId, query.category);
+    const userProfileVerify: boolean =
+        userProfile.gender ||
+        userProfile.ageGroup ||
+        userProfile["Profile.region"] ||
+        userProfile["Profile.height"] ||
+        userProfile["Profile.position"] ||
+        userProfile["Profile.description"];
+    const checkGuestUser = await checkForDuplicateGuestUser(userId, guestingId);
     if (!userProfile) {
         throw new BaseError(status.GUESTUSER_NOT_FOUND);
+    } else if (!userProfileVerify) {
+        throw new BaseError(status.NOT_FILL_USER_PROFILE);
+    } else if (checkGuestUser) {
+        throw new BaseError(status.GUESTUSER_ALREADY_EXIST);
     }
+
     await InsertGuestUser(guestingId, userId);
     return;
 };

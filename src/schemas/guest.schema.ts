@@ -42,7 +42,6 @@ const readGuest = {
 export const readGuestSchema = object({
     query: object({
         ...readGuest,
-        ...dateField,
     }),
 });
 
