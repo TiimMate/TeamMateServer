@@ -13,7 +13,7 @@ import {
 } from "../daos/guest.dao";
 import { readMembersInfo } from "./teams.service";
 import { getMemberCountByTeamId } from "../daos/member.dao";
-import { findTeamPreviewByCategoryForLeader, getTeamByLeaderId, getTeamDetailforGuesting } from "../daos/team.dao";
+import { getTeamByLeaderId, getTeamDetailforGuesting } from "../daos/team.dao";
 import { getUserInfoByCategory, getUserProfileByCategory } from "../daos/user.dao";
 import { readGuestingDetailResponseDTO, readGuestingResponseDTO } from "../dtos/guests.dto";
 import { CreateGuestingBody, UpdateGuestingBody } from "../schemas/guest.schema";
@@ -21,11 +21,8 @@ import { CreateGuestingBody, UpdateGuestingBody } from "../schemas/guest.schema"
 export const createGuesting = async (userId, body: CreateGuestingBody) => {
     const teamId = body.teamId;
     const team = await getTeamByLeaderId(teamId, userId);
-    const teamInfo = await getTeamDetailforGuesting(teamId);
     if (!team) {
         throw new BaseError(status.TEAM_LEADER_NOT_FOUND);
-    } else if (!teamInfo) {
-        throw new BaseError(status.TEAM_INFO_NOT_FOUND);
     }
     await insertGuesting(teamId, body);
     return;
