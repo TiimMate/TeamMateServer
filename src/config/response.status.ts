@@ -116,8 +116,22 @@ export const status: { [key: string]: Status } = {
     GUESTUSER_NOT_FOUND: {
         status: StatusCodes.NOT_FOUND,
         isSuccess: false,
-        code: "GUESTER001",
+        code: "GUESTER002",
         message: "해당 게스트 신청 유저를 찾을 수 없습니다.",
+    },
+
+    TEAM_LEADER_NOT_FOUND: {
+        status: StatusCodes.NOT_FOUND,
+        isSuccess: false,
+        code: "GUESTER003",
+        message: "요청한 유저가 팀장인 팀을 찾을 수 없습니다.",
+    },
+
+    TEAM_INFO_NOT_FOUND: {
+        status: StatusCodes.NOT_FOUND,
+        isSuccess: false,
+        code: "GUESTER004",
+        message: "팀 정보 입력이 필요합니다.",
     },
 
     // game error

@@ -12,13 +12,13 @@ import {
 } from "./fields";
 
 const body = {
-    ...teamIdField,
     ...gameTimeField,
     ...descriptionField,
     ...recruitCountField,
 };
 
 const createGuestBody = object({
+    ...teamIdField,
     ...body,
 });
 
@@ -26,13 +26,8 @@ const updateGuestBody = object({
     ...body,
 });
 
-const createGuestQuery = object({
-    ...categoryField,
-});
-
 export const createGuestingSchema = object({
     body: createGuestBody,
-    query: createGuestQuery,
 });
 
 export const updateGuestingSchema = object({
