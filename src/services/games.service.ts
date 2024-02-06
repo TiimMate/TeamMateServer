@@ -9,16 +9,16 @@ import {
     insertGame,
     setGame,
     insertGameApplication,
-} from "../daos/games.dao";
+} from "../daos/game.dao";
 import {
     getTeamDetailforGuesting,
     getTeamIdByLeaderId,
     getTeamCategoryByLeaderId,
     getTeamByLeaderId,
 } from "../daos/team.dao";
-import { findMemberInfoWithoutLeaderByTeamId, getMemberCountByTeamId } from "../daos/member.dao";
-import { getUserInfoById, userInfoAttributes } from "../daos/user.dao";
-import { getGameByUserId } from "../daos/games.dao";
+import { getMemberCountByTeamId, findMemberInfoByCategory } from "../daos/member.dao";
+import { getUserInfoByCategory, userInfoAttributes } from "../daos/user.dao";
+import { getGameByUserId } from "../daos/game.dao";
 import { readGameResponseDTO, readGameDetailResponseDTO } from "../dtos/games.dto";
 import { CreateGameBody, UpdateGameBody } from "../schemas/game.schema";
 import { ApplyGameBody } from "../schemas/game-apply.schema";
@@ -58,9 +58,13 @@ export const readGamesByRegion = async (query) => {
 export const readGameDetail = async (params) => {
     const gameId = params.gameId;
     const gameDetail = await getGameDetail(gameId);
+    if (!gameDetail) {
+        throw new BaseError(status.GAME_NOT_FOUND);
+    }
+
     const teamDetail = await getTeamDetailforGuesting(gameDetail.hostTeamId);
-    const leaderInfo = await getUserInfoById(teamDetail.leaderId);
-    const memberInfo = await findMemberInfoWithoutLeaderByTeamId(gameDetail.hostTeamId, userInfoAttributes);
+    const leaderInfo = await getUserInfoByCategory(teamDetail.leaderId, teamDetail.category);
+    const memberInfo = await findMemberInfoByCategory(gameDetail.hostTeamId, teamDetail.category);
     return readGameDetailResponseDTO(gameDetail, teamDetail, leaderInfo, memberInfo);
 };
 

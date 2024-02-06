@@ -13,7 +13,7 @@ import {
 } from "../daos/team.dao";
 import { deleteMembers, findMemberToDelete } from "../daos/member.dao";
 import { getUserInfoByCategory } from "../daos/user.dao";
-import { updateOpposingTeam } from "../daos/games.dao";
+import { updateOpposingTeam } from "../daos/game.dao";
 import { readTeamDetailResponseDTO } from "../dtos/teams.dto";
 
 export const readTeamPreviews = async (userId: number, query) => {

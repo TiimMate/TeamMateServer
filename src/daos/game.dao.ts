@@ -1,12 +1,12 @@
 import db from "../models";
 import { Sequelize } from "sequelize";
-import { getStatusById } from "../constants/status.constant";
+import { getStatus } from "../constants/status.constant";
 import { CreateGameBody } from "../schemas/game.schema";
 import { ApplyGameBody } from "../schemas/game-apply.schema";
-import { getTeamIdByLeaderId } from "../daos/team.dao";
+import { getTeamIdByLeaderId } from "./team.dao";
 
 export const findGamesByDate = async (date, category) => {
-    const games = await db.Game.findAll({
+    return await db.Game.findAll({
         raw: true,
         where: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${date}', '%Y-%m-%d')`),
         include: [
@@ -22,15 +22,10 @@ export const findGamesByDate = async (date, category) => {
         attributes: ["gameTime", "status"],
         order: [["created_at", "DESC"]],
     });
-
-    return games.map((game) => ({
-        ...game,
-        status: getStatusById(game.status),
-    }));
 };
 
 export const findGamesByGender = async (date, category, gender) => {
-    const games = await db.Game.findAll({
+    return await db.Game.findAll({
         raw: true,
         where: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${date}', '%Y-%m-%d')`),
         include: [
@@ -47,15 +42,10 @@ export const findGamesByGender = async (date, category, gender) => {
         attributes: ["gameTime", "status"],
         order: [["created_at", "DESC"]],
     });
-
-    return games.map((game) => ({
-        ...game,
-        status: getStatusById(game.status),
-    }));
 };
 
 export const findGamesByLevel = async (date, category, skillLevel) => {
-    const games = await db.Game.findAll({
+    return await db.Game.findAll({
         raw: true,
         where: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${date}', '%Y-%m-%d')`),
         include: [
@@ -72,15 +62,10 @@ export const findGamesByLevel = async (date, category, skillLevel) => {
         attributes: ["gameTime", "status"],
         order: [["created_at", "DESC"]],
     });
-
-    return games.map((game) => ({
-        ...game,
-        status: getStatusById(game.status),
-    }));
 };
 
 export const findGamesByRegion = async (date, category, region) => {
-    const games = await db.Game.findAll({
+    return await db.Game.findAll({
         raw: true,
         where: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${date}', '%Y-%m-%d')`),
         include: [
@@ -97,11 +82,6 @@ export const findGamesByRegion = async (date, category, region) => {
         attributes: ["gameTime", "status"],
         order: [["created_at", "DESC"]],
     });
-
-    return games.map((game) => ({
-        ...game,
-        status: getStatusById(game.status),
-    }));
 };
 
 export const getGameDetail = async (gameId) => {

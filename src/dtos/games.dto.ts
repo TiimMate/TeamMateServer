@@ -1,26 +1,26 @@
 import { getLevelById } from "../constants/level.constant";
-
-//TODO: getGender, getAgeGroup 함수 사용
+import { getGender } from "../constants/gender.constant";
+import { getAgeGroup } from "../constants/age-group.constant";
+import { getStatus } from "../constants/status.constant";
 
 export const readGameResponseDTO = (games) => {
     return games.map((game) => ({
         gameTime: game.gameTime,
         teamName: game["HostTeam.name"],
         teamRegion: game["HostTeam.region"],
-        teamGender: game["HostTeam.gender"],
+        teamGender: getGender(game["HostTeam.gender"]),
         memberCount: game.memberCount,
-        teamAgeGroup: game["HostTeam.ageGroup"],
+        teamAgeGroup: getAgeGroup(game["HostTeam.ageGroup"]),
         teamSkillLevel: getLevelById(game["HostTeam.skillLevel"]),
-        status: game.status,
+        status: getStatus(game.status),
     }));
 };
 
 export const readGameDetailResponseDTO = (gameDetail, teamDetail, leaderInfo, memberInfo) => {
     const member = memberInfo.map((info) => ({
         nickname: info["User.nickname"],
-        // height: null,
-        // weight: null,
-        // position: null,
+        height: info["User.height"],
+        position: info["User.Profiles.position"],
     }));
     return {
         name: teamDetail.name,
@@ -30,9 +30,8 @@ export const readGameDetailResponseDTO = (gameDetail, teamDetail, leaderInfo, me
         game_info: {
             gymName: teamDetail.gymName,
             gameTime: gameDetail.gameTime,
-            gender: teamDetail.gender,
-            ageGroup: teamDetail.ageGroup,
-            skillLevel: teamDetail.skillLevel,
+            gender: getGender(teamDetail.gender),
+            ageGroup: getAgeGroup(teamDetail.ageGroup),
         },
         member_info: {
             leader: leaderInfo,

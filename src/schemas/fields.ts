@@ -102,3 +102,5 @@ export const teamIdField = { teamId: z.number().int() };
 export const recruitCountField = { recruitCount: z.number().int() };
 
 export const levelField = { level: z.number().int().optional() };
+
+export const revieweeIdField = { revieweeId: z.number().int() };
