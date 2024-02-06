@@ -102,14 +102,6 @@ export const getDetailedGuesting = async (guestingId: number) => {
     });
 };
 
-export const InsertGuestUser = async (guestingId: number, userId: number) => {
-    await db.GuestUser.create({
-        guestId: guestingId,
-        userId: userId,
-        status: 0,
-    });
-};
-
 export const getGuestingById = async (guestingId: number, userId: number) => {
     const teamId = await getTeamIdByLeaderId(userId);
     return await db.Guest.findOne({
