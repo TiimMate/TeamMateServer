@@ -3,8 +3,6 @@ import { getGender } from "../constants/gender.constant";
 import { getAgeGroup } from "../constants/age-group.constant";
 import { getStatus } from "../constants/status.constant";
 
-//TODO: getGender, getAgeGroup 함수 사용
-
 export const readGameResponseDTO = (games) => {
     return games.map((game) => ({
         gameTime: game.gameTime,
@@ -19,7 +17,6 @@ export const readGameResponseDTO = (games) => {
 };
 
 export const readGameDetailResponseDTO = (gameDetail, teamDetail, leaderInfo, memberInfo) => {
-    console.log(memberInfo);
     const member = memberInfo.map((info) => ({
         nickname: info["User.nickname"],
         height: info["User.height"],
