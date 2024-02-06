@@ -114,3 +114,9 @@ export const getMemberCountByTeamId = async (teamId) => {
     });
     return count;
 };
+
+export const addMemberCount = async (lists) => {
+    for (const list of lists) {
+        list.memberCount = (await getMemberCountByTeamId(list["Team.id"])) + 1;
+    }
+};
