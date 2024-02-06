@@ -147,6 +147,17 @@ export const getTeamNameByTeamId = async (teamId: number) => {
     return team?.name;
 };
 
+export const getTeamInfoById = async (teamId: number) => {
+    return await db.Team.findOne({
+        raw: true,
+        where: {
+            id: teamId,
+        },
+        attributes: ["name", "logo"],
+    });
+    // return team?.name;
+};
+
 export const setTeam = async (team, body: UpdateTeamBodyWithoutMemberIdsToDelete) => {
     Object.keys(body).forEach((field) => {
         team[field] = body[field];

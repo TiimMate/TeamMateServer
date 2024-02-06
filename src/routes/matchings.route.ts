@@ -1,6 +1,6 @@
 import express from "express";
 import asyncHandler from "express-async-handler";
-import { verifyUser } from "../middlewares/auth.middleware";
+// import { verifyUser } from "../middlewares/auth.middleware";
 import { validate } from "../middlewares/validate.middleware";
 import { dateParam } from "../schemas/fields";
 import {
@@ -14,18 +14,18 @@ import {
 
 export const matchingsRouter = express.Router();
 
-matchingsRouter.use(verifyUser);
+// matchingsRouter.use(verifyUser);
 
-matchingsRouter.get("/guesting", verifyUser, validate(dateParam), asyncHandler(matchingGuestingPreview));
+// matchingsRouter.get("/guesting", verifyUser, validate(dateParam), asyncHandler(matchingGuestingPreview));
 
-matchingsRouter.get("/hosting", verifyUser, validate(dateParam), asyncHandler(matchingHostingPreview));
+// matchingsRouter.get("/hosting", verifyUser, validate(dateParam), asyncHandler(matchingHostingPreview));
 
 matchingsRouter.get("/hosting/:guestingId", asyncHandler(ApplyGuestingUserPreview));
 
 matchingsRouter.put("/confirmGuest/:guestUserId", asyncHandler(modifyGuestStatus));
 
 // 호스팅 내역 > 신청팀 목록 조회
-matchingsRouter.get("/hosting/:gameId", asyncHandler(fetchHostingApplicantsTeamList));
+matchingsRouter.get("/hosting/team/:gameId", asyncHandler(fetchHostingApplicantsTeamList));
 
 // 호스팅 내역 > 신청 승인
-matchingsRouter.post("/hosting/:gameId", asyncHandler(gameApplicationApproval));
+matchingsRouter.post("/hosting/team/:gameId", asyncHandler(gameApplicationApproval));

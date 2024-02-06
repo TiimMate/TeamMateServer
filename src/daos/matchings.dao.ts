@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize";
 import db from "../models";
 import { UpdateGuestUserBody } from "../schemas/guest-user.schema";
-import { getTeamIdByLeaderId, getTeamNameByTeamId } from "./team.dao";
+import { getTeamIdByLeaderId, getTeamNameByTeamId, getTeamInfoById } from "./team.dao";
 import { getMemberCountByTeamId } from "./member.dao";
 
 const { Op } = require("sequelize");
@@ -39,7 +39,7 @@ export const findGuestsOfMatchingGuesting = async (userId: number, date: string)
 };
 
 export const findGamesOfMatchingGuesting = async (userId: number, date: string) => {
-    const team_id = await NaIdByLeaderId(userId);
+    const team_id = await getTeamIdByLeaderId(userId);
     const gameApplyResults = await db.sequelize.query("SELECT game_id FROM game_apply WHERE team_id = :team_id", {
         type: db.sequelize.QueryTypes.SELECT,
         replacements: { team_id: team_id },
@@ -133,7 +133,7 @@ export const getGuestUserById = async (guestUserId: number) => {
     });
 };
 
-export const getHostingApplicantsTeamList = async (gameId: number) => {
+export const getHostingApplicantsTeamInfo = async (gameId: number) => {
     const selectQuery = "SELECT team_id FROM game_apply WHERE game_id = :gameId;";
 
     const teamIdsResult = await db.sequelize.query(selectQuery, {
@@ -141,17 +141,18 @@ export const getHostingApplicantsTeamList = async (gameId: number) => {
         replacements: { gameId: gameId },
     });
 
-    const teamsWithNames = await Promise.all(
+    return await Promise.all(
         teamIdsResult.map(async (team) => {
-            const name = await getTeamNameByTeamId(team.team_id);
+            console.log(team);
+            // const name = await getTeamNameByTeamId(team.team_id);
             const memberCount = await getMemberCountByTeamId(team.team_id);
+            const teamInfo = await getTeamInfoById(team.team_id);
             return {
                 team_id: team.team_id,
-                name: name,
+                name: teamInfo.name,
                 memberCount: memberCount,
+                team_logo: teamInfo.logo,
             };
         }),
     );
-
-    return teamsWithNames;
 };
