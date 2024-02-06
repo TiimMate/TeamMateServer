@@ -10,7 +10,7 @@ import {
     createGuesting,
     addGuestUser,
     updateGuesting,
-} from "../services/guest.service";
+} from "../services/guests.service";
 import { createTeam } from "../services/teams.service";
 import { getTeamIdByLeaderId } from "../daos/team.dao";
 import { updateUserProfile } from "../services/users.service";

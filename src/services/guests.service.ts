@@ -1,7 +1,6 @@
 import { BaseError } from "../config/error";
 import { status } from "../config/response.status";
 import {
-    InsertGuestUser,
     findGuesting,
     findGuestingByGender,
     findGuestingByLevel,
@@ -12,11 +11,12 @@ import {
     setGuesting,
 } from "../daos/guest.dao";
 import { readMembersInfo } from "../services/teams.service";
-import { getMemberCountByTeamId } from "../daos/member.dao";
+import { addMemberCount } from "../daos/member.dao";
 import { getTeamDetailforGuesting, getTeamIdByLeaderId } from "../daos/team.dao";
 import { getUserInfoByCategory } from "../daos/user.dao";
 import { readGuestingDetailResponseDTO, readGuestingResponseDTO } from "../dtos/guests.dto";
 import { CreateGuestingBody, UpdateGuestingBody } from "../schemas/guest.schema";
+import { InsertGuestUser } from "../daos/guest-user.dao";
 
 export const createGuesting = async (userId, body: CreateGuestingBody) => {
     const teamId = await getTeamIdByLeaderId(userId);
@@ -36,33 +36,25 @@ export const updateGuesting = async (userId, params, body: UpdateGuestingBody) =
 
 export const readGuesting = async (query) => {
     const guestings = await findGuesting(query.date, query.category);
-    for (const guesting of guestings) {
-        guesting.memberCount = (await getMemberCountByTeamId(guesting["Team.id"])) + 1;
-    }
+    await addMemberCount(guestings);
     return readGuestingResponseDTO(guestings);
 };
 
 export const readGuestingByGender = async (query) => {
     const guestings = await findGuestingByGender(query.date, query.category, query.gender);
-    for (const guesting of guestings) {
-        guesting.memberCount = (await getMemberCountByTeamId(guesting["Team.id"])) + 1;
-    }
+    await addMemberCount(guestings);
     return readGuestingResponseDTO(guestings);
 };
 
 export const readGuestingByLevel = async (query) => {
     const guestings = await findGuestingByLevel(query.date, query.category, query.skillLevel);
-    for (const guesting of guestings) {
-        guesting.memberCount = (await getMemberCountByTeamId(guesting["Team.id"])) + 1;
-    }
+    await addMemberCount(guestings);
     return readGuestingResponseDTO(guestings);
 };
 
 export const readGuestingByRegion = async (query) => {
     const guestings = await findGuestingByRegion(query.date, query.category, query.region);
-    for (const guesting of guestings) {
-        guesting.memberCount = (await getMemberCountByTeamId(guesting["Team.id"])) + 1;
-    }
+    await addMemberCount(guestings);
     return readGuestingResponseDTO(guestings);
 };
 
