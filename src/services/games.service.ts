@@ -9,7 +9,7 @@ import {
     insertGame,
     setGame,
     insertGameApplication,
-} from "../daos/games.dao";
+} from "../daos/game.dao";
 import {
     getTeamDetailforGuesting,
     getTeamIdByLeaderId,
@@ -22,7 +22,7 @@ import {
     getMemberCountByTeamId,
 } from "../daos/member.dao";
 import { getUserInfoByCategory, userInfoAttributes } from "../daos/user.dao";
-import { getGameByUserId } from "../daos/games.dao";
+import { getGameByUserId } from "../daos/game.dao";
 import { readGameResponseDTO, readGameDetailResponseDTO } from "../dtos/games.dto";
 import { CreateGameBody, UpdateGameBody } from "../schemas/game.schema";
 import { ApplyGameBody } from "../schemas/game-apply.schema";

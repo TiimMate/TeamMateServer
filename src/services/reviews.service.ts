@@ -1,7 +1,7 @@
 import { BaseError } from "../config/error";
 import { status } from "../config/response.status";
 import { CreateTeamReviewBody } from "../schemas/team-review.schema";
-import { getGame } from "../daos/games.dao";
+import { getGame } from "../daos/game.dao";
 import { findLeaderId, getLeaderId } from "../daos/team.dao";
 import { getGuestingByAcceptedUserId } from "../daos/guest.dao";
 import { getExistingTeamReview, insertTeamReview } from "../daos/team-review.dao";
