@@ -1,4 +1,4 @@
-import { TypeOf, object, z } from "zod";
+import { TypeOf, object } from "zod";
 import {
     ageGroupFieldInTeam,
     categoryField,
@@ -50,6 +50,12 @@ export const updateTeamSchema = object({
 
 export const createMemberSchema = object({
     body: createMemberBody,
+});
+
+export const readTeamPreviewsSchema = object({
+    query: object({
+        ...categoryField,
+    }),
 });
 
 export type CreateTeamBody = TypeOf<typeof createTeamBody>;
