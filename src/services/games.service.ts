@@ -16,11 +16,7 @@ import {
     getTeamCategoryByLeaderId,
     getTeamByLeaderId,
 } from "../daos/team.dao";
-import {
-    findMemberInfoWithoutLeaderByTeamId,
-    getMemberInfoByCategory,
-    getMemberCountByTeamId,
-} from "../daos/member.dao";
+import { getMemberCountByTeamId, findMemberInfoByCategory } from "../daos/member.dao";
 import { getUserInfoByCategory, userInfoAttributes } from "../daos/user.dao";
 import { getGameByUserId } from "../daos/game.dao";
 import { readGameResponseDTO, readGameDetailResponseDTO } from "../dtos/games.dto";
@@ -62,9 +58,13 @@ export const readGamesByRegion = async (query) => {
 export const readGameDetail = async (params) => {
     const gameId = params.gameId;
     const gameDetail = await getGameDetail(gameId);
+    if (!gameDetail) {
+        throw new BaseError(status.GAME_NOT_FOUND);
+    }
+
     const teamDetail = await getTeamDetailforGuesting(gameDetail.hostTeamId);
     const leaderInfo = await getUserInfoByCategory(teamDetail.leaderId, teamDetail.category);
-    const memberInfo = await getMemberInfoByCategory(gameDetail.hostTeamId, teamDetail.category);
+    const memberInfo = await findMemberInfoByCategory(gameDetail.hostTeamId, teamDetail.category);
     return readGameDetailResponseDTO(gameDetail, teamDetail, leaderInfo, memberInfo);
 };
 

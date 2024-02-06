@@ -20,21 +20,16 @@ export const findMemberInfoByTeamId = async (teamId, userInfoAttributes) => {
     });
 };
 
-export const getMemberInfoByCategory = async (teamId: number, category: Category) => {
-    const team = await db.Team.findByPk(teamId);
-    if (!team) {
-        throw new Error("Team not found");
-    }
-
+export const findMemberInfoByCategory = async (teamId: number, category: Category) => {
     return await db.Member.findAll({
         raw: true,
         where: {
-            teamId: teamId,
+            teamId,
         },
         include: [
             {
                 model: db.User,
-                attributes: userInfoAttributes(),
+                attributes: ["nickname", "height"],
                 include: [
                     {
                         model: db.Profile,
