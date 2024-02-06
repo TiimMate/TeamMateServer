@@ -30,8 +30,8 @@ export const readGameDetailResponseDTO = (gameDetail, teamDetail, leaderInfo, me
         game_info: {
             gymName: teamDetail.gymName,
             gameTime: gameDetail.gameTime,
-            gender: teamDetail.gender,
-            ageGroup: teamDetail.ageGroup,
+            gender: getGender(teamDetail.gender),
+            ageGroup: getAgeGroup(teamDetail.ageGroup),
         },
         member_info: {
             leader: leaderInfo,
