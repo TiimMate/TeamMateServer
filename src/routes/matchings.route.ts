@@ -25,7 +25,7 @@ matchingsRouter.get("/hosting/:guestingId", asyncHandler(ApplyGuestingUserPrevie
 matchingsRouter.put("/confirmGuest/:guestUserId", asyncHandler(modifyGuestStatus));
 
 // 호스팅 내역 > 신청팀 목록 조회
-matchingsRouter.get("/hosting/:gameId", asyncHandler(fetchHostingApplicantsTeamList));
+matchingsRouter.get("/hosting/team/:gameId", asyncHandler(fetchHostingApplicantsTeamList));
 
 // 호스팅 내역 > 신청 승인
-matchingsRouter.post("/hosting/:gameId", asyncHandler(gameApplicationApproval));
+matchingsRouter.post("/hosting/team/:gameId", asyncHandler(gameApplicationApproval));
