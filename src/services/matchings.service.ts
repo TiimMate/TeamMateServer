@@ -7,10 +7,14 @@ import {
     getApplyGuestingUser,
     setGuestStatus,
     getGuestUserById,
-    getHostingApplicantsTeamList,
+    getTeamsAppliedById,
 } from "../daos/matchings.dao";
 import { getMemberCountByTeamId } from "../daos/member.dao";
-import { readApplyGuestingUserResponseDTO, readMatchingResponseDTO } from "../dtos/matchings.dto";
+import {
+    readApplyGuestingUserResponseDTO,
+    readMatchingResponseDTO,
+    readHostingApplicantsTeamResponseDTO,
+} from "../dtos/matchings.dto";
 import { status } from "../config/response.status";
 
 export const readMatchingGuesting = async (userId, query) => {
@@ -65,8 +69,12 @@ export const updateGuestStatus = async (params) => {
     return;
 };
 
-export const readHostingApplicantsList = async (userId, params) => {
+export const readHostingApplicantsTeamList = async (userId, params) => {
     const gameId = params.gameId;
+    const teamsApplied = await getTeamsAppliedById(gameId);
+    for (const team of teamsApplied) {
+        team.memberCount = await getMemberCountByTeamId(team);
+    }
 
-    return await getHostingApplicantsTeamList(gameId);
+    return readHostingApplicantsTeamResponseDTO(teamsApplied);
 };
