@@ -133,25 +133,15 @@ export const getGuestUserById = async (guestUserId: number) => {
     });
 };
 
-export const getHostingApplicantsTeamList = async (gameId: number) => {
-    const selectQuery = "SELECT team_id FROM game_apply WHERE game_id = :gameId;";
-
-    const teamIdsResult = await db.sequelize.query(selectQuery, {
-        type: db.sequelize.QueryTypes.SELECT,
-        replacements: { gameId: gameId },
+export const getTeamsAppliedById = async (gameId: number) => {
+    return await db.GameApply.findAll({
+        raw: true,
+        where: { gameId: gameId },
+        include: [
+            {
+                model: db.Team,
+                attributes: ["id", "name", "logo"],
+            },
+        ],
     });
-
-    const teamsWithNames = await Promise.all(
-        teamIdsResult.map(async (team) => {
-            const name = await getTeamNameByTeamId(team.team_id);
-            const memberCount = await getMemberCountByTeamId(team.team_id);
-            return {
-                team_id: team.team_id,
-                name: name,
-                memberCount: memberCount,
-            };
-        }),
-    );
-
-    return teamsWithNames;
 };
