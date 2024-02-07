@@ -39,7 +39,7 @@ export const findGuestsOfMatchingGuesting = async (userId: number, date: string)
 };
 
 export const findGamesOfMatchingGuesting = async (userId: number, date: string) => {
-    const team_id = await getTeamNameByTeamId(userId);
+    const team_id = await getTeamIdByLeaderId(userId);
     const gameApplyResults = await db.sequelize.query("SELECT game_id FROM game_apply WHERE team_id = :team_id", {
         type: db.sequelize.QueryTypes.SELECT,
         replacements: { team_id: team_id },

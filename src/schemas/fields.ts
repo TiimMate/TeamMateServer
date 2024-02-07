@@ -129,3 +129,12 @@ export const guestMatchIdFieldInTeamReview = { guestMatchId: z.optional(z.number
 export const teamMatchIdField = { teamMatchId: z.optional(z.number().int()) };
 
 export const revieweeIdField = { revieweeId: z.number().int() };
+
+export const dateField = {
+    date: z.preprocess((arg) => {
+        if (typeof arg == "string") {
+            return new Date(arg);
+        }
+        return arg;
+    }, z.date()),
+};

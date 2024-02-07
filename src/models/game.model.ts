@@ -8,10 +8,6 @@ class Game extends Model<InferAttributes<Game>, InferCreationAttributes<Game>> {
                     type: new DataTypes.INTEGER(),
                     allowNull: false,
                 },
-                applyTeamId: {
-                    type: new DataTypes.INTEGER(),
-                    allowNull: true,
-                },
                 opposingTeamId: {
                     type: new DataTypes.INTEGER(),
                     allowNull: true,

@@ -4,6 +4,8 @@ import { Sequelize } from "sequelize";
 import { getTeamIdByLeaderId } from "./team.dao";
 import { Category } from "../types/category.enum";
 import { Gender } from "../types/gender.enum";
+import { BaseError } from "../config/error";
+import { status } from "../config/response.status";
 
 export const insertGuesting = async (teamId: number, data: CreateGuestingBody) => {
     await db.Guest.create({
@@ -138,4 +140,24 @@ export const getGuestingByAcceptedUserId = async (guestingId: number, userId: nu
         ],
         attributes: ["teamId", "gameTime"],
     });
+};
+
+export const getCategoryThroughTeamJoin = async (guestingId: number) => {
+    const guest = await db.Guest.findOne({
+        raw: true,
+        where: {
+            id: guestingId,
+        },
+        include: [
+            {
+                model: db.Team,
+                attributes: ["category"],
+            },
+        ],
+        attributes: [],
+    });
+    if (!guest) {
+        throw new BaseError(status.GUEST_NOT_FOUND);
+    }
+    return guest["Team.category"];
 };
