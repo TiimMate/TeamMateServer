@@ -11,7 +11,7 @@ export const findTeamPreviewByCategory = async (userId: number, category: Catego
             category,
             leaderId: userId,
         },
-        attributes: ["name", "logo"],
+        attributes: teamPreviewAttributes(),
     });
     const teamsAsMember = await db.Team.findAll({
         raw: true,
@@ -27,10 +27,14 @@ export const findTeamPreviewByCategory = async (userId: number, category: Catego
                 attributes: [],
             },
         ],
-        attributes: ["name", "logo"],
+        attributes: teamPreviewAttributes(),
     });
     const previews = [...teamsAsLeader, ...teamsAsMember].sort((a, b) => a.name.localeCompare(b.name));
     return previews;
+};
+
+const teamPreviewAttributes = () => {
+    return ["id", "name", "logo"];
 };
 
 export const insertTeam = async (data: CreateTeamBody, userId: number, inviteCode: string) => {
