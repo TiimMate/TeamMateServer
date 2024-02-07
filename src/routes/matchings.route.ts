@@ -28,4 +28,4 @@ matchingsRouter.put("/confirmGuest/:guestUserId", asyncHandler(modifyGuestStatus
 matchingsRouter.get("/hosting/team/:gameId", asyncHandler(fetchHostingApplicantsTeamList));
 
 // 호스팅 내역 > 신청 승인
-matchingsRouter.post("/hosting/team/:gameId", asyncHandler(gameApplicationApproval));
+matchingsRouter.patch("/hosting/team/:gameId", asyncHandler(gameApplicationApproval));
