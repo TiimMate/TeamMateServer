@@ -41,5 +41,5 @@ export const DetailedGuestingPreview = async (req, res: Response, next) => {
 };
 
 export const applicationGuesting = async (req, res: Response, next) => {
-    res.send(response(status.SUCCESS, await addGuestUser(req.user.id, req.query, req.params)));
+    res.send(response(status.SUCCESS, await addGuestUser(req.user.id, req.params)));
 };

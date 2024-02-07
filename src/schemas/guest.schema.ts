@@ -66,11 +66,5 @@ export const readGuestFilterRegionSchema = object({
     }),
 });
 
-export const addGuestUserSchema = object({
-    query: object({
-        ...categoryField,
-    }),
-});
-
 export type CreateGuestingBody = TypeOf<typeof createGuestBody>;
 export type UpdateGuestingBody = TypeOf<typeof updateGuestBody>;

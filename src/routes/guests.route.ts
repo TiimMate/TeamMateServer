@@ -3,7 +3,6 @@ import asyncHandler from "express-async-handler";
 import { verifyUser } from "../middlewares/auth.middleware";
 import { validate } from "../middlewares/validate.middleware";
 import {
-    addGuestUserSchema,
     createGuestingSchema,
     readGuestFilterGenderSchema,
     readGuestFilterLevelSchema,
@@ -40,10 +39,5 @@ guestsRouter.get("/region", validate(readGuestFilterRegionSchema), asyncHandler(
 
 guestsRouter.get("/:guestingId", asyncHandler(DetailedGuestingPreview));
 
-guestsRouter.post(
-    "/:guestingId/application",
-    verifyUser,
-    validate(addGuestUserSchema),
-    asyncHandler(applicationGuesting),
-);
+guestsRouter.post("/:guestingId/application", verifyUser, asyncHandler(applicationGuesting));
 // guestsRouter.put("/:guestingId", validate(updateGuestingSchema), asyncHandler(applicationGuesting));

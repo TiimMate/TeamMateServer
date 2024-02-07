@@ -6,6 +6,7 @@ import {
     findGuestingByGender,
     findGuestingByLevel,
     findGuestingByRegion,
+    getCategoryThroughTeamJoin,
     getDetailedGuesting,
     getGuestingById,
     insertGuesting,
@@ -80,15 +81,16 @@ export const readDetailedGuesting = async (params) => {
     return readGuestingDetailResponseDTO(guestingDetail, TeamDetail, leaderInfo, memberInfo);
 };
 
-export const addGuestUser = async (userId: number, query, params) => {
+export const addGuestUser = async (userId: number, params) => {
     const guestingId = params.guestingId;
+    const category = await getCategoryThroughTeamJoin(guestingId);
 
     const existingGuestUser = await checkForDuplicateGuestUser(userId, guestingId);
     if (existingGuestUser) {
         throw new BaseError(status.GUESTUSER_ALREADY_EXIST);
     }
 
-    const userProfile = await getUserProfileByCategory(userId, query.category);
+    const userProfile = await getUserProfileByCategory(userId, category);
     if (!isUserProfileValid(userProfile)) {
         throw new BaseError(status.NOT_FILL_USER_PROFILE);
     }
@@ -99,11 +101,8 @@ export const addGuestUser = async (userId: number, query, params) => {
 
 const isUserProfileValid = (userProfile): boolean => {
     return (
-        userProfile &&
         // userProfile["Profiles.description"] &&
-        userProfile.gender &&
-        userProfile.ageGroup &&
-        userProfile["Profiles.region"]
+        userProfile.gender && userProfile.ageGroup && userProfile["Profiles.region"]
         // userProfile.height &&
         // userProfile["Profiles.position"]
     );
