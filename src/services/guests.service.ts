@@ -80,25 +80,31 @@ export const readDetailedGuesting = async (params) => {
     return readGuestingDetailResponseDTO(guestingDetail, TeamDetail, leaderInfo, memberInfo);
 };
 
-export const addGuestUser = async (userId, query, params) => {
+export const addGuestUser = async (userId: number, query, params) => {
     const guestingId = params.guestingId;
-    const userProfile = await getUserProfileByCategory(userId, query.category);
-    const userProfileVerify: boolean =
-        userProfile.gender ||
-        userProfile.ageGroup ||
-        userProfile["Profile.region"] ||
-        userProfile["Profile.height"] ||
-        userProfile["Profile.position"] ||
-        userProfile["Profile.description"];
-    const checkGuestUser = await checkForDuplicateGuestUser(userId, guestingId);
-    if (!userProfile) {
-        throw new BaseError(status.GUESTUSER_NOT_FOUND);
-    } else if (!userProfileVerify) {
-        throw new BaseError(status.NOT_FILL_USER_PROFILE);
-    } else if (checkGuestUser) {
+
+    const existingGuestUser = await checkForDuplicateGuestUser(userId, guestingId);
+    if (existingGuestUser) {
         throw new BaseError(status.GUESTUSER_ALREADY_EXIST);
+    }
+
+    const userProfile = await getUserProfileByCategory(userId, query.category);
+    if (!isUserProfileValid(userProfile)) {
+        throw new BaseError(status.NOT_FILL_USER_PROFILE);
     }
 
     await InsertGuestUser(guestingId, userId);
     return;
+};
+
+const isUserProfileValid = (userProfile): boolean => {
+    return (
+        userProfile &&
+        // userProfile["Profiles.description"] &&
+        userProfile.gender &&
+        userProfile.ageGroup &&
+        userProfile["Profiles.region"]
+        // userProfile.height &&
+        // userProfile["Profiles.position"]
+    );
 };
