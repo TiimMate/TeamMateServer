@@ -121,14 +121,11 @@ export const getGameByUserId = async (gameId, userId) => {
 };
 
 export const insertGameApplication = async (gameId: number, body: ApplyGameBody) => {
-    const teamId = body.teamId; // ApplyGameBody 내의 teamId를 추출
+    const teamId = body.teamId;
 
-    const insertQuery =
-        "INSERT INTO game_apply (game_id, team_id, created_at, updated_at) VALUES (:gameId, :teamId, NOW(), NOW())";
-
-    await db.sequelize.query(insertQuery, {
-        replacements: { gameId: gameId, teamId: teamId },
-        type: db.sequelize.QueryTypes.INSERT,
+    await db.GameApply.create({
+        gameId: gameId,
+        teamId: teamId,
     });
 };
 
