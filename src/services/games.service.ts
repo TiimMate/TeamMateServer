@@ -74,7 +74,7 @@ export const createGame = async (userId, body: CreateGameBody) => {
 
     const team = await getTeamByLeaderId(hostTeamId, userId);
     if (!team) {
-        // team 메뉴로 이동
+        throw new BaseError(status.TEAM_LEADER_NOT_FOUND);
     }
 
     await insertGame(hostTeamId, body, category);
@@ -91,8 +91,13 @@ export const updateGame = async (userId, params, body: UpdateGameBody) => {
     return;
 };
 
-export const addGameApplication = async (params, body: ApplyGameBody) => {
+export const addGameApplication = async (userId: number, params, body: ApplyGameBody) => {
     const gameId = params.gameId;
+    const teamId = await getTeamIdByLeaderId(userId);
+    const team = await getTeamByLeaderId(teamId, userId);
+    if (!team) {
+        throw new BaseError(status.TEAM_LEADER_NOT_FOUND);
+    }
 
     await insertGameApplication(gameId, body);
     return;
