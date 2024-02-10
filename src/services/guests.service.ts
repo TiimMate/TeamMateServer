@@ -16,7 +16,7 @@ import { getTeamByLeaderId, getTeamDetailForGuesting } from "../daos/team.dao";
 import { getUserInfoByCategory, getUserProfileByCategory } from "../daos/user.dao";
 import { readGuestingDetailResponseDTO, readGuestingResponseDTO } from "../dtos/guests.dto";
 import { CreateGuestingBody, UpdateGuestingBody } from "../schemas/guest.schema";
-import { InsertGuestUser, checkForDuplicateGuestUser } from "../daos/guest-user.dao";
+import { insertGuestUser, checkForDuplicateGuestUser } from "../daos/guest-user.dao";
 
 export const createGuesting = async (userId, body: CreateGuestingBody) => {
     const teamId = body.teamId;
@@ -93,7 +93,7 @@ export const addGuestUser = async (userId: number, params) => {
         throw new BaseError(status.NOT_FILL_USER_PROFILE);
     }
 
-    await InsertGuestUser(guestingId, userId);
+    await insertGuestUser(guestingId, userId);
     return;
 };
 
