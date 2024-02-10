@@ -71,19 +71,12 @@ export const getTeamDetail = async (teamId: number) => {
     });
 };
 
-export const getTeamDetailforGuesting = async (teamId: number) => {
-    return await db.Team.findAll({
+export const getTeamDetailForGuesting = async (teamId: number) => {
+    return await db.Team.findOne({
         raw: true,
         where: {
             id: teamId,
         },
-        include: [
-            {
-                model: db.Member,
-                attributes: ["userId"],
-                required: false,
-            },
-        ],
         attributes: [
             "name",
             "description",

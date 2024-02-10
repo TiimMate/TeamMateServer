@@ -13,7 +13,7 @@ import {
 } from "../daos/guest.dao";
 import { readMembersInfo } from "../services/teams.service";
 import { addMemberCount } from "../daos/member.dao";
-import { getTeamByLeaderId, getTeamDetailforGuesting } from "../daos/team.dao";
+import { getTeamByLeaderId, getTeamDetailForGuesting } from "../daos/team.dao";
 import { getUserInfoByCategory, getUserProfileByCategory } from "../daos/user.dao";
 import { readGuestingDetailResponseDTO, readGuestingResponseDTO } from "../dtos/guests.dto";
 import { CreateGuestingBody, UpdateGuestingBody } from "../schemas/guest.schema";
@@ -70,12 +70,15 @@ export const readGuestingByRegion = async (query) => {
 export const readDetailedGuesting = async (params) => {
     const guestingId = params.guestingId;
     const guestingDetail = await getDetailedGuesting(guestingId);
-    const TeamDetails = await getTeamDetailforGuesting(guestingDetail.teamId);
-    const TeamDetail = TeamDetails[0];
-    const leaderInfo = await getUserInfoByCategory(TeamDetail.leaderId, TeamDetail.category);
-    const membersInfo = await readMembersInfo(TeamDetails, TeamDetail.category);
+    if (!guestingDetail) {
+        throw new BaseError(status.GUEST_NOT_FOUND);
+    }
 
-    return readGuestingDetailResponseDTO(guestingDetail, TeamDetail, leaderInfo, membersInfo);
+    const teamDetails = await getTeamDetailForGuesting(guestingDetail.teamId);
+    // const leaderInfo = await getUserInfoByCategory(TeamDetail.leaderId, TeamDetail.category);
+    // const membersInfo = await readMembersInfo(TeamDetails, TeamDetail.category);
+
+    // return readGuestingDetailResponseDTO(guestingDetail, TeamDetail, leaderInfo, membersInfo);
 };
 
 export const addGuestUser = async (userId: number, params) => {
