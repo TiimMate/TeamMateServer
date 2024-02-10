@@ -13,13 +13,11 @@ import {
 } from "../services/guests.service";
 
 export const addGuesting = async (req, res: Response, next) => {
-    // res.send(response(status.SUCCESS, await createGuesting(req.user.id, req.body)));
-    res.send(response(status.SUCCESS, await createGuesting(1, req.body)));
+    res.send(response(status.SUCCESS, await createGuesting(req.user.id, req.body)));
 };
 
 export const modifyGuesting = async (req, res: Response, next) => {
-    // res.send(response(status.SUCCESS, await updateGuesting(req.user.id, req.params, req.body)));
-    res.send(response(status.SUCCESS, await updateGuesting(1, req.params, req.body)));
+    res.send(response(status.SUCCESS, await updateGuesting(req.user.id, req.params, req.body)));
 };
 
 export const GuestingPreview = async (req, res: Response, next) => {
@@ -43,6 +41,5 @@ export const DetailedGuestingPreview = async (req, res: Response, next) => {
 };
 
 export const applicationGuesting = async (req, res: Response, next) => {
-    // res.send(response(status.SUCCESS, await addGuestUser(req.user.id, req.params)));
-    res.send(response(status.SUCCESS, await addGuestUser(1, req.params)));
+    res.send(response(status.SUCCESS, await addGuestUser(req.user.id, req.params)));
 };
