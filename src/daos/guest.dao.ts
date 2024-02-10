@@ -29,28 +29,28 @@ export const setGuesting = async (guesting, body: UpdateGuestingBody) => {
 export const findGuestAll = (date: string, category: Category, cursorId: number | undefined) => {
     const guestsBeforeCursor = generateCursorCondition(cursorId);
     const TeamFilter = { category };
-    return findGuests(date, category, guestsBeforeCursor, TeamFilter);
+    return findGuests(date, guestsBeforeCursor, TeamFilter);
 };
 
 export const findGuestByGender = (date: string, category: Category, gender: Gender, cursorId: number | undefined) => {
     const guestsBeforeCursor = generateCursorCondition(cursorId);
     const TeamFilter = { gender, category };
-    return findGuests(date, category, guestsBeforeCursor, TeamFilter);
+    return findGuests(date, guestsBeforeCursor, TeamFilter);
 };
 
 export const findGuestByLevel = (date: string, category: Category, level: number, cursorId: number | undefined) => {
     const guestsBeforeCursor = generateCursorCondition(cursorId);
     const TeamFilter = { skillLevel: level, category };
-    return findGuests(date, category, guestsBeforeCursor, TeamFilter);
+    return findGuests(date, guestsBeforeCursor, TeamFilter);
 };
 
 export const findGuestByRegion = (date: string, category: Category, region: string, cursorId: number | undefined) => {
     const guestsBeforeCursor = generateCursorCondition(cursorId);
     const TeamFilter = { region, category };
-    return findGuests(date, category, guestsBeforeCursor, TeamFilter);
+    return findGuests(date, guestsBeforeCursor, TeamFilter);
 };
 
-export const findGuests = async (date: string, category: Category, guestFilter: object, TeamFilter: object) => {
+export const findGuests = async (date: string, guestFilter: object, TeamFilter: object) => {
     const guests = await db.Guest.findAll({
         raw: true,
         where: {
