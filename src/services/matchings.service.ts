@@ -9,7 +9,7 @@ import {
     getTeamsAppliedById,
 } from "../daos/matching.dao";
 import { getMemberCountByTeamId, addMemberCount } from "../daos/member.dao";
-import { getTeamIdByLeaderId } from "../daos/team.dao";
+import { getTeamIdsByLeaderId } from "../daos/team.dao";
 import {
     readApplyGuestingUserResponseDTO,
     readMatchingResponseDTO,
@@ -17,10 +17,12 @@ import {
 } from "../dtos/matchings.dto";
 
 export const readMatchingGuesting = async (userId, query) => {
-    const teamId = await getTeamIdByLeaderId(userId);
-    const matchingGuestings = await findGuestsOfMatchingGuesting(teamId, query.date);
+    const teamIdResults = await getTeamIdsByLeaderId(userId);
+    const teamIds = teamIdResults.map((team) => team.id);
+
+    const matchingGuestings = await findGuestsOfMatchingGuesting(userId, query.date);
     await addMemberCount(matchingGuestings);
-    const matchingGames = await findGamesOfMatchingGuesting(teamId, query.date);
+    const matchingGames = await findGamesOfMatchingGuesting(teamIds, query.date);
     await addMemberCount(matchingGames);
 
     const guestingResponseDTO = readMatchingResponseDTO(matchingGuestings);
@@ -34,11 +36,13 @@ export const readMatchingGuesting = async (userId, query) => {
 };
 
 export const readMatchingHosting = async (userId, query) => {
-    const teamId = await getTeamIdByLeaderId(userId);
-    const matchingGuestings = await findGuestsOfMatchingHosting(teamId, query.date);
+    const teamIdResults = await getTeamIdsByLeaderId(userId);
+    const teamIds = teamIdResults.map((team) => team.id);
+
+    const matchingGuestings = await findGuestsOfMatchingHosting(teamIds, query.date);
     await addMemberCount(matchingGuestings);
 
-    const matchingGames = await findGamesOfMatchingHosting(teamId, query.date);
+    const matchingGames = await findGamesOfMatchingHosting(teamIds, query.date);
     await addMemberCount(matchingGames);
 
     const guestingResponseDTO = readMatchingResponseDTO(matchingGuestings);

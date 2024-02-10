@@ -36,23 +36,11 @@ export const findGuestsOfMatchingGuesting = async (userId: number, date: string)
     return guestResults;
 };
 
-export const findGamesOfMatchingGuesting = async (teamId: number, date: string) => {
-    const gameApplyResults = await db.GameApply.findAll({
-        raw: true,
-        where: {
-            teamId: teamId,
-        },
-        attributes: ["gameId"],
-    });
-
-    const gameIds = gameApplyResults.map((gameApply) => gameApply.gameId);
+export const findGamesOfMatchingGuesting = async (teamIds, date: string) => {
     const gameResults = await db.Game.findAll({
         raw: true,
         where: {
-            id: {
-                [Op.in]: gameIds,
-            },
-            opposingTeamId: teamId,
+            opposingTeamId: { [Op.in]: teamIds },
             [Op.and]: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${date}', '%Y-%m-%d')`),
         },
         include: [
@@ -70,11 +58,11 @@ export const findGamesOfMatchingGuesting = async (teamId: number, date: string) 
     return gameResults;
 };
 
-export const findGuestsOfMatchingHosting = async (teamId: number, date: string) => {
+export const findGuestsOfMatchingHosting = async (teamIds, date: string) => {
     const guestResults = await db.Guest.findAll({
         raw: true,
         where: {
-            teamId: teamId,
+            teamId: { [Op.in]: teamIds },
             [Op.and]: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${date}', '%Y-%m-%d')`),
         },
         include: [
@@ -92,11 +80,11 @@ export const findGuestsOfMatchingHosting = async (teamId: number, date: string) 
     return guestResults;
 };
 
-export const findGamesOfMatchingHosting = async (teamId: number, date: string) => {
+export const findGamesOfMatchingHosting = async (teamIds, date: string) => {
     const gameResults = await db.Game.findAll({
         raw: true,
         where: {
-            hostTeamId: teamId,
+            hostTeamId: { [Op.in]: teamIds },
             [Op.and]: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${date}', '%Y-%m-%d')`),
         },
         include: [
