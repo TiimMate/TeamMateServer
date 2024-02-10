@@ -1,16 +1,20 @@
 import { BaseError } from "../config/error";
 import { status } from "../config/response.status";
+import { getApplyGuestingUser, getGuestUserById, setGuestUserStatus } from "../daos/guest-user.dao";
 import {
     findGamesOfMatchingGuesting,
     findGuestsOfMatchingHosting,
     findGuestsOfMatchingGuesting,
     findGamesOfMatchingHosting,
-    getHostingApplicantsTeamList,
+    getTeamsAppliedById,
 } from "../daos/matching.dao";
-import { addMemberCount } from "../daos/member.dao";
-import { readApplyGuestingUserResponseDTO, readMatchingResponseDTO } from "../dtos/matchings.dto";
-import { getApplyGuestingUser, getGuestUserById, setGuestUserStatus } from "../daos/guest-user.dao";
+import { getMemberCountByTeamId, addMemberCount } from "../daos/member.dao";
 import { getTeamIdByLeaderId } from "../daos/team.dao";
+import {
+    readApplyGuestingUserResponseDTO,
+    readMatchingResponseDTO,
+    readHostingApplicantsTeamResponseDTO,
+} from "../dtos/matchings.dto";
 
 export const readMatchingGuesting = async (userId, query) => {
     const teamId = await getTeamIdByLeaderId(userId);
@@ -61,8 +65,12 @@ export const updateGuestStatus = async (params) => {
     return;
 };
 
-export const readHostingApplicantsList = async (userId, params) => {
+export const readHostingApplicantsTeamList = async (userId, params) => {
     const gameId = params.gameId;
+    const teamsApplied = await getTeamsAppliedById(gameId);
+    for (const team of teamsApplied) {
+        team.memberCount = await getMemberCountByTeamId(team);
+    }
 
-    return await getHostingApplicantsTeamList(gameId);
+    return readHostingApplicantsTeamResponseDTO(teamsApplied);
 };

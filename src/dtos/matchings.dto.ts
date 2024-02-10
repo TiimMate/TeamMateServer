@@ -46,3 +46,12 @@ export const readApplyGuestingUserResponseDTO = (guestingUsers: ReadGuestingUser
         status: getGuestStatus(guestingUsers.status),
     };
 };
+
+export const readHostingApplicantsTeamResponseDTO = (teams) => {
+    return teams.map((team) => ({
+        teamId: team["Team.id"],
+        teamLogo: team["Team.logo"],
+        teamName: team["Team.name"],
+        memberCount: team.memberCount,
+    }));
+};

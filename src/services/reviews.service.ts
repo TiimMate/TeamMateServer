@@ -76,8 +76,10 @@ const retrieveRevieweeIdAndGameTime = async (userId: number, guestMatchId: numbe
     };
 };
 
-const validateReviewableTime = (gameTime: Date, currentTime: Date) => {
-    if (gameTime > currentTime) {
+export const validateReviewableTime = (gameTime: Date, currentTime: Date) => {
+    const timeDifference = currentTime.getTime() - gameTime.getTime();
+    const oneMonthInMilliseconds = 30 * 24 * 60 * 60 * 1000;
+    if (timeDifference < 0 && timeDifference > oneMonthInMilliseconds) {
         throw new BaseError(status.REVIEW_NOT_CURRENTLY_WRITABLE);
     }
 };
