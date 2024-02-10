@@ -98,6 +98,7 @@ export const getMemberCountByTeamId = async (teamId) => {
 };
 
 export const addMemberCount = async (lists) => {
+    console.log("addMemberCount 함수는 제거될 함수입니다");
     for (const list of lists) {
         list.memberCount = (await getMemberCountByTeamId(list["Team.id"])) + 1;
     }
