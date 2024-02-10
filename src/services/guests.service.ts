@@ -8,6 +8,7 @@ import {
     getCategoryThroughTeamJoin,
     getDetailedGuesting,
     getGuestingById,
+    getTeamByGuestingId,
     insertGuesting,
     setGuesting,
 } from "../daos/guest.dao";
@@ -30,7 +31,8 @@ export const createGuesting = async (userId, body: CreateGuestingBody) => {
 
 export const updateGuesting = async (userId, params, body: UpdateGuestingBody) => {
     const guestingId = params.guestingId;
-    const guesting = await getGuestingById(guestingId, userId);
+    const teamId = await getTeamByGuestingId(guestingId, userId);
+    const guesting = await getGuestingById(guestingId, teamId.teamId);
     if (!guesting) {
         throw new BaseError(status.GUEST_NOT_FOUND);
     }
