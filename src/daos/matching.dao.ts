@@ -29,25 +29,30 @@ export const findGuestsOfMatchingGuesting = async (userId: number, date: string)
         ],
         attributes: ["gameTime"],
     });
-    guestResults.type = "guest";
+    for (const guestResult of guestResults) {
+        guestResult.type = "guest";
+    }
 
     return guestResults;
 };
 
-export const findGamesOfMatchingGuesting = async (team_id: number, date: string) => {
-    const gameApplyResults = await db.sequelize.query("SELECT game_id FROM game_apply WHERE team_id = :team_id", {
-        type: db.sequelize.QueryTypes.SELECT,
-        replacements: { team_id: team_id },
+export const findGamesOfMatchingGuesting = async (teamId: number, date: string) => {
+    const gameApplyResults = await db.GameApply.findAll({
+        raw: true,
+        where: {
+            teamId: teamId,
+        },
+        attributes: ["gameId"],
     });
 
-    const gameIds = gameApplyResults.map((gameApply) => gameApply.game_id);
+    const gameIds = gameApplyResults.map((gameApply) => gameApply.gameId);
     const gameResults = await db.Game.findAll({
         raw: true,
         where: {
             id: {
                 [Op.in]: gameIds,
             },
-            opposing_team_id: team_id,
+            opposingTeamId: teamId,
             [Op.and]: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${date}', '%Y-%m-%d')`),
         },
         include: [
@@ -58,7 +63,9 @@ export const findGamesOfMatchingGuesting = async (team_id: number, date: string)
         ],
         attributes: ["gameTime"],
     });
-    gameResults.type = "game";
+    for (const gameResult of gameResults) {
+        gameResult.type = "game";
+    }
 
     return gameResults;
 };
@@ -78,7 +85,9 @@ export const findGuestsOfMatchingHosting = async (teamId: number, date: string) 
         ],
         attributes: ["gameTime"],
     });
-    guestResults.type = "guest";
+    for (const guestResult of guestResults) {
+        guestResult.type = "guest";
+    }
 
     return guestResults;
 };
@@ -98,7 +107,9 @@ export const findGamesOfMatchingHosting = async (teamId: number, date: string) =
         ],
         attributes: ["gameTime"],
     });
-    gameResults.type = "game";
+    for (const gameResult of gameResults) {
+        gameResult.type = "game";
+    }
 
     return gameResults;
 };

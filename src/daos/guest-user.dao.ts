@@ -17,6 +17,12 @@ export const getApplyGuestingUser = async (guestingId: number) => {
         include: [
             {
                 model: db.User,
+                include: [
+                    {
+                        model: db.Profile,
+                        attributes: ["position"],
+                    },
+                ],
                 attributes: ["nickname", "height"],
             },
         ],

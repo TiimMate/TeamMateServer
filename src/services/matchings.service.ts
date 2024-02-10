@@ -20,16 +20,16 @@ export const readMatchingGuesting = async (userId, query) => {
     const teamId = await getTeamIdByLeaderId(userId);
     const matchingGuestings = await findGuestsOfMatchingGuesting(teamId, query.date);
     await addMemberCount(matchingGuestings);
-
-    const matchingGames = await findGamesOfMatchingGuesting(userId, query.date);
+    const matchingGames = await findGamesOfMatchingGuesting(teamId, query.date);
     await addMemberCount(matchingGames);
 
     const guestingResponseDTO = readMatchingResponseDTO(matchingGuestings);
     const gameResponseDTO = readMatchingResponseDTO(matchingGames);
 
-    const matchingGuesting = [guestingResponseDTO, gameResponseDTO].sort((a, b) =>
-        a.gameTime.localeCompare(b.gameTime),
+    const matchingGuesting = [...guestingResponseDTO.matchings, ...gameResponseDTO.matchings].sort(
+        (a, b) => new Date(a.gameTime).getTime() - new Date(b.gameTime).getTime(),
     );
+
     return matchingGuesting;
 };
 
@@ -44,14 +44,16 @@ export const readMatchingHosting = async (userId, query) => {
     const guestingResponseDTO = readMatchingResponseDTO(matchingGuestings);
     const gameResponseDTO = readMatchingResponseDTO(matchingGames);
 
-    const matchingHosting = [guestingResponseDTO, gameResponseDTO].sort((a, b) => a.gameTime.localeCompare(b.gameTime));
+    const matchingHosting = [...guestingResponseDTO.matchings, ...gameResponseDTO.matchings].sort(
+        (a, b) => new Date(a.gameTime).getTime() - new Date(b.gameTime).getTime(),
+    );
+
     return matchingHosting;
 };
 
 export const readApplyGuestingUser = async (params) => {
     const guestingId = params.guestingId;
     const applyGuestingUser = await getApplyGuestingUser(guestingId);
-
     return readApplyGuestingUserResponseDTO(applyGuestingUser);
 };
 

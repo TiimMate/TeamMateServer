@@ -116,7 +116,7 @@ export const dateField = {
 };
 
 export const dateQuery = object({
-    params: object({
+    query: object({
         ...dateField,
     }),
 });
