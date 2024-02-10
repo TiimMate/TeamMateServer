@@ -14,11 +14,11 @@ import { dateQuery } from "../schemas/fields";
 
 export const matchingsRouter = express.Router();
 
-matchingsRouter.get("/guesting", verifyUser, validate(dateQuery), asyncHandler(matchingGuestingPreview));
-// matchingsRouter.get("/guesting", validate(dateQuery), asyncHandler(matchingGuestingPreview));
+matchingsRouter.use(verifyUser);
 
-matchingsRouter.get("/hosting", verifyUser, validate(dateQuery), asyncHandler(matchingHostingPreview));
-// matchingsRouter.get("/hosting", validate(dateQuery), asyncHandler(matchingHostingPreview));
+matchingsRouter.get("/guesting", validate(dateQuery), asyncHandler(matchingGuestingPreview));
+
+matchingsRouter.get("/hosting", validate(dateQuery), asyncHandler(matchingHostingPreview));
 
 matchingsRouter.get("/hosting/user/:guestingId", asyncHandler(ApplyGuestingUserPreview));
 
