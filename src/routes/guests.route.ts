@@ -23,11 +23,11 @@ import {
 
 export const guestsRouter = express.Router();
 
-guestsRouter.post("/", verifyUser, validate(createGuestingSchema), asyncHandler(addGuesting));
-// guestsRouter.post("/", validate(createGuestingSchema), asyncHandler(addGuesting));
+// guestsRouter.post("/", verifyUser, validate(createGuestingSchema), asyncHandler(addGuesting));
+guestsRouter.post("/", validate(createGuestingSchema), asyncHandler(addGuesting));
 
-guestsRouter.put("/:guestingId", verifyUser, validate(updateGuestingSchema), asyncHandler(modifyGuesting));
-// guestsRouter.put("/:guestingId", validate(updateGuestingSchema), asyncHandler(modifyGuesting));
+// guestsRouter.put("/:guestingId", verifyUser, validate(updateGuestingSchema), asyncHandler(modifyGuesting));
+guestsRouter.put("/:guestingId", validate(updateGuestingSchema), asyncHandler(modifyGuesting));
 
 guestsRouter.get("/", validate(readGuestSchema), asyncHandler(GuestingPreview));
 
@@ -39,5 +39,5 @@ guestsRouter.get("/region", validate(readGuestFilterRegionSchema), asyncHandler(
 
 guestsRouter.get("/:guestingId", asyncHandler(DetailedGuestingPreview));
 
-guestsRouter.post("/:guestingId/application", verifyUser, asyncHandler(applicationGuesting));
-// guestsRouter.put("/:guestingId", validate(updateGuestingSchema), asyncHandler(applicationGuesting));
+// guestsRouter.post("/:guestingId/application", verifyUser, asyncHandler(applicationGuesting));
+guestsRouter.post("/:guestingId/application", asyncHandler(applicationGuesting));

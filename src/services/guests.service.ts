@@ -52,6 +52,10 @@ export const readGuestingByGender = async (query) => {
 };
 
 export const readGuestingByLevel = async (query) => {
+    const levelAsNumber = parseInt(query.level);
+    if (isNaN(levelAsNumber)) {
+        throw new BaseError(status.REQUEST_VALIDATION_ERROR);
+    }
     const guestings = await findGuestingByLevel(query.date, query.category, query.level);
     await addMemberCount(guestings);
     return readGuestingResponseDTO(guestings);
@@ -66,10 +70,12 @@ export const readGuestingByRegion = async (query) => {
 export const readDetailedGuesting = async (params) => {
     const guestingId = params.guestingId;
     const guestingDetail = await getDetailedGuesting(guestingId);
-    const TeamDetail = await getTeamDetailforGuesting(guestingDetail.teamId);
+    const TeamDetails = await getTeamDetailforGuesting(guestingDetail.teamId);
+    const TeamDetail = TeamDetails[0];
     const leaderInfo = await getUserInfoByCategory(TeamDetail.leaderId, TeamDetail.category);
-    const memberInfo = await readMembersInfo(TeamDetail, TeamDetail.category);
-    return readGuestingDetailResponseDTO(guestingDetail, TeamDetail, leaderInfo, memberInfo);
+    const membersInfo = await readMembersInfo(TeamDetails, TeamDetail.category);
+
+    return readGuestingDetailResponseDTO(guestingDetail, TeamDetail, leaderInfo, membersInfo);
 };
 
 export const addGuestUser = async (userId: number, params) => {

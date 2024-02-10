@@ -92,7 +92,7 @@ export const statusField = { status: z.number().int() };
 
 export const recruitCountField = { recruitCount: z.number().int() };
 
-export const levelField = { level: z.number().int().optional() };
+export const levelField = { level: z.string() };
 
 export const skillScoreField = { skillScore: z.number().int().min(1).max(5) };
 

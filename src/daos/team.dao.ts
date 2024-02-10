@@ -68,7 +68,7 @@ export const getTeamDetail = async (teamId: number) => {
 };
 
 export const getTeamDetailforGuesting = async (teamId: number) => {
-    return await db.Team.findOne({
+    return await db.Team.findAll({
         raw: true,
         where: {
             id: teamId,
