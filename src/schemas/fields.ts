@@ -94,30 +94,6 @@ export const recruitCountField = { recruitCount: z.number().int() };
 
 export const levelField = { level: z.number().int().optional() };
 
-export const dateParam = object({
-    params: object({
-        ...gameTimeField,
-    }),
-});
-
-export const levelParam = object({
-    params: object({
-        ...levelField,
-    }),
-});
-
-export const genderParam = object({
-    params: object({
-        ...genderFieldInTeam,
-    }),
-});
-
-export const regionParam = object({
-    params: object({
-        ...regionFieldInTeam,
-    }),
-});
-
 export const skillScoreField = { skillScore: z.number().int().min(1).max(5) };
 
 export const mannerScoreField = { mannerScore: z.number().int().min(1).max(5) };
@@ -129,3 +105,18 @@ export const guestMatchIdFieldInTeamReview = { guestMatchId: z.optional(z.number
 export const teamMatchIdField = { teamMatchId: z.optional(z.number().int()) };
 
 export const revieweeIdField = { revieweeId: z.number().int() };
+
+export const dateField = {
+    date: z.preprocess((arg) => {
+        if (typeof arg == "string") {
+            return new Date(arg);
+        }
+        return arg;
+    }, z.date()),
+};
+
+export const dateQuery = object({
+    params: object({
+        ...dateField,
+    }),
+});

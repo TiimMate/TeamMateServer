@@ -5,6 +5,7 @@ import {
     findGuestingByGender,
     findGuestingByLevel,
     findGuestingByRegion,
+    getCategoryThroughTeamJoin,
     getDetailedGuesting,
     getGuestingById,
     insertGuesting,
@@ -12,14 +13,18 @@ import {
 } from "../daos/guest.dao";
 import { readMembersInfo } from "../services/teams.service";
 import { addMemberCount } from "../daos/member.dao";
-import { getTeamDetailforGuesting, getTeamIdByLeaderId } from "../daos/team.dao";
-import { getUserInfoByCategory } from "../daos/user.dao";
+import { getTeamByLeaderId, getTeamDetailforGuesting } from "../daos/team.dao";
+import { getUserInfoByCategory, getUserProfileByCategory } from "../daos/user.dao";
 import { readGuestingDetailResponseDTO, readGuestingResponseDTO } from "../dtos/guests.dto";
 import { CreateGuestingBody, UpdateGuestingBody } from "../schemas/guest.schema";
-import { InsertGuestUser } from "../daos/guest-user.dao";
+import { InsertGuestUser, checkForDuplicateGuestUser } from "../daos/guest-user.dao";
 
 export const createGuesting = async (userId, body: CreateGuestingBody) => {
-    const teamId = await getTeamIdByLeaderId(userId);
+    const teamId = body.teamId;
+    const team = await getTeamByLeaderId(teamId, userId);
+    if (!team) {
+        throw new BaseError(status.TEAM_LEADER_NOT_FOUND);
+    }
     await insertGuesting(teamId, body);
     return;
 };
@@ -47,7 +52,7 @@ export const readGuestingByGender = async (query) => {
 };
 
 export const readGuestingByLevel = async (query) => {
-    const guestings = await findGuestingByLevel(query.date, query.category, query.skillLevel);
+    const guestings = await findGuestingByLevel(query.date, query.category, query.level);
     await addMemberCount(guestings);
     return readGuestingResponseDTO(guestings);
 };
@@ -67,8 +72,29 @@ export const readDetailedGuesting = async (params) => {
     return readGuestingDetailResponseDTO(guestingDetail, TeamDetail, leaderInfo, memberInfo);
 };
 
-export const addGuestUser = async (userId, params) => {
+export const addGuestUser = async (userId: number, params) => {
     const guestingId = params.guestingId;
+    const category = await getCategoryThroughTeamJoin(guestingId);
+
+    const existingGuestUser = await checkForDuplicateGuestUser(userId, guestingId);
+    if (existingGuestUser) {
+        throw new BaseError(status.GUESTUSER_ALREADY_EXIST);
+    }
+
+    const userProfile = await getUserProfileByCategory(userId, category);
+    if (!isUserProfileValid(userProfile)) {
+        throw new BaseError(status.NOT_FILL_USER_PROFILE);
+    }
+
     await InsertGuestUser(guestingId, userId);
     return;
+};
+
+const isUserProfileValid = (userProfile): boolean => {
+    return (
+        // userProfile["Profiles.description"] &&
+        userProfile.gender && userProfile.ageGroup && userProfile["Profiles.region"]
+        // userProfile.height &&
+        // userProfile["Profiles.position"]
+    );
 };

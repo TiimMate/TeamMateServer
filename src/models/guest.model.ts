@@ -8,7 +8,7 @@ class Guest extends Model<InferAttributes<Guest>, InferCreationAttributes<Guest>
                     type: new DataTypes.INTEGER(),
                     allowNull: false,
                     primaryKey: true,
-                    autoIncrement: true, // 이 부분을 추가
+                    autoIncrement: true,
                 },
                 teamId: {
                     type: new DataTypes.INTEGER(),

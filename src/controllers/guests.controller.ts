@@ -11,16 +11,8 @@ import {
     addGuestUser,
     updateGuesting,
 } from "../services/guests.service";
-import { createTeam } from "../services/teams.service";
-import { getTeamIdByLeaderId } from "../daos/team.dao";
-import { updateUserProfile } from "../services/users.service";
-import { getUser } from "../daos/user.dao";
 
 export const addGuesting = async (req, res: Response, next) => {
-    const teamId = await getTeamIdByLeaderId(req.user.id);
-    if (!teamId) {
-        res.send(response(status.SUCCESS, await createTeam(req.user.id, req.body)));
-    }
     res.send(response(status.SUCCESS, await createGuesting(req.user.id, req.body)));
 };
 
@@ -49,9 +41,5 @@ export const DetailedGuestingPreview = async (req, res: Response, next) => {
 };
 
 export const applicationGuesting = async (req, res: Response, next) => {
-    const user = await getUser(req.user.id);
-    if (!user) {
-        res.send(response(status.SUCCESS, await updateUserProfile(req.user.id, req.params, req.body)));
-    }
     res.send(response(status.SUCCESS, await addGuestUser(req.user.id, req.params)));
 };

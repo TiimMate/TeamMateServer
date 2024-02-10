@@ -100,7 +100,7 @@ export const findGamesOfMatchingHosting = async (teamId: number, date: string) =
         ],
         attributes: ["gameTime"],
     });
-    gameResults.type = "guest";
+    gameResults.type = "game";
 
     return gameResults;
 };
