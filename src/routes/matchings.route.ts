@@ -14,11 +14,11 @@ import { dateQuery } from "../schemas/fields";
 
 export const matchingsRouter = express.Router();
 
-matchingsRouter.get("/guesting", verifyUser, validate(dateQuery), asyncHandler(matchingGuestingPreview));
-// matchingsRouter.get("/guesting", validate(dateQuery), asyncHandler(matchingGuestingPreview));
+matchingsRouter.use(verifyUser);
 
-matchingsRouter.get("/hosting", verifyUser, validate(dateQuery), asyncHandler(matchingHostingPreview));
-// matchingsRouter.get("/hosting", validate(dateQuery), asyncHandler(matchingHostingPreview));
+matchingsRouter.get("/guesting", validate(dateQuery), asyncHandler(matchingGuestingPreview));
+
+matchingsRouter.get("/hosting", validate(dateQuery), asyncHandler(matchingHostingPreview));
 
 matchingsRouter.get("/hosting/user/:guestingId", asyncHandler(ApplyGuestingUserPreview));
 
@@ -28,4 +28,4 @@ matchingsRouter.patch("/hosting/guest/:guestUserId", asyncHandler(modifyGuestSta
 matchingsRouter.get("/hosting/team/:gameId", asyncHandler(fetchHostingApplicantsTeamList));
 
 // 호스팅 내역 > 신청 승인
-matchingsRouter.post("/hosting/team/:gameId", asyncHandler(gameApplicationApproval));
+matchingsRouter.patch("/hosting/team/:gameId", asyncHandler(gameApplicationApproval));

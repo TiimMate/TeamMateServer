@@ -11,7 +11,7 @@ import {
     insertGameApplication,
 } from "../daos/game.dao";
 import {
-    getTeamDetailforGuesting,
+    getTeamDetailForGuesting,
     getTeamIdByLeaderId,
     getTeamCategoryByLeaderId,
     getTeamByLeaderId,
@@ -62,7 +62,7 @@ export const readGameDetail = async (params) => {
         throw new BaseError(status.GAME_NOT_FOUND);
     }
 
-    const teamDetail = await getTeamDetailforGuesting(gameDetail.hostTeamId);
+    const teamDetail = await getTeamDetailForGuesting(gameDetail.hostTeamId);
     const leaderInfo = await getUserInfoByCategory(teamDetail.leaderId, teamDetail.category);
     const memberInfo = await findMemberInfoByCategory(gameDetail.hostTeamId, teamDetail.category);
     return readGameDetailResponseDTO(gameDetail, teamDetail, leaderInfo, memberInfo);

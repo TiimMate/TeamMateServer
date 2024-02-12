@@ -6,6 +6,7 @@ import { Category } from "../types/category.enum";
 import { Gender } from "../types/gender.enum";
 import { BaseError } from "../config/error";
 import { status } from "../config/response.status";
+import { MatchType } from "../types/match-type.enum";
 import { calculateHasNext, generateCursorCondition } from "../utils/paging.util";
 
 const defaultLimit = 20;
@@ -81,8 +82,23 @@ export const getDetailedGuesting = async (guestingId: number) => {
     });
 };
 
-export const getGuestingById = async (guestingId: number, userId: number) => {
-    const teamId = await getTeamIdByLeaderId(userId);
+export const getTeamByGuestingId = async (guestingId: number, userId: number) => {
+    return await db.Guest.findOne({
+        where: {
+            id: guestingId,
+        },
+        include: {
+            model: db.Team,
+            where: {
+                leaderId: userId,
+            },
+            attributes: [],
+        },
+        attributes: ["teamId"],
+    });
+};
+
+export const getGuestingById = async (guestingId: number, teamId: number) => {
     return await db.Guest.findOne({
         where: {
             id: guestingId,
@@ -129,4 +145,55 @@ export const getCategoryThroughTeamJoin = async (guestingId: number) => {
         throw new BaseError(status.GUEST_NOT_FOUND);
     }
     return guest["Team.category"];
+};
+
+export const findGuestingByTeamsAndGameTime = async (teamIds: number[], gameTime: string) => {
+    const guestResults = await db.Guest.findAll({
+        raw: true,
+        where: {
+            teamId: {
+                [Op.in]: teamIds,
+            },
+            [Op.and]: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${gameTime}', '%Y-%m-%d')`),
+        },
+        include: [
+            {
+                model: db.Team,
+                attributes: ["id", "name", "region", "gender", "ageGroup", "skillLevel"],
+            },
+        ],
+        attributes: ["id", "gameTime"],
+    });
+    for (const guestResult of guestResults) {
+        guestResult.type = MatchType.guest;
+    }
+    return guestResults;
+};
+
+export const findGuestingByUserAndGameTime = async (userId: number, date: string) => {
+    const guestResults = await db.Guest.findAll({
+        raw: true,
+        where: {
+            [Op.and]: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${date}', '%Y-%m-%d')`),
+        },
+        include: [
+            {
+                model: db.Team,
+                attributes: ["id", "name", "region", "gender", "ageGroup", "skillLevel"],
+            },
+            {
+                model: db.GuestUser,
+                where: {
+                    userId,
+                    status: 1,
+                },
+                attributes: [],
+            },
+        ],
+        attributes: ["id", "gameTime"],
+    });
+    for (const guestResult of guestResults) {
+        guestResult.type = MatchType.guest;
+    }
+    return guestResults;
 };
