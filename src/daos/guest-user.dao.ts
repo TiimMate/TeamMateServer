@@ -61,17 +61,18 @@ export const checkClosedGuest = async (guestId: number) => {
         },
         attributes: ["recruitCount"],
     });
+    console.log(count, recruitCount.recruitCount, count >= recruitCount.recruitCount);
     return count >= recruitCount.recruitCount;
 };
 
 export const setGuestUserStatus = async (guestUser, guest) => {
     guestUser.status = 1;
+    await guestUser.save();
     const check: boolean = await checkClosedGuest(guest.id);
     if (check) {
         guest.status = 1;
         await guest.save();
     }
-    await guestUser.save();
 };
 
 export const checkForDuplicateGuestUser = async (userId, guestId) => {
