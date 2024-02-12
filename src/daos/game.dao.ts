@@ -1,9 +1,9 @@
 import db from "../models";
-import { Sequelize } from "sequelize";
-import { getStatus } from "../constants/status.constant";
+import { Op, Sequelize } from "sequelize";
 import { CreateGameBody } from "../schemas/game.schema";
 import { ApplyGameBody } from "../schemas/game-apply.schema";
 import { getTeamIdByLeaderId } from "./team.dao";
+import { MatchType } from "../types/match-type.enum";
 
 export const findGamesByDate = async (date, category) => {
     return await db.Game.findAll({
@@ -144,4 +144,28 @@ export const getGame = async (gameId: number) => {
 
 export const updateOpposingTeam = async (gameId: number, opposingTeamId: number) => {
     await db.Game.update({ opposingTeamId: opposingTeamId, status: 1 }, { where: { id: gameId } });
+};
+
+export const findGameByTeamsAndGameTime = async (teamIds: number[], gameTime: string) => {
+    const gameResults = await db.Game.findAll({
+        raw: true,
+        where: {
+            hostTeamId: {
+                [Op.in]: teamIds,
+            },
+            [Op.and]: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${gameTime}', '%Y-%m-%d')`),
+        },
+        include: [
+            {
+                model: db.Team,
+                as: "HostTeam",
+                attributes: ["id", "name", "region", "gender", "ageGroup", "skillLevel"],
+            },
+        ],
+        attributes: ["id", "gameTime"],
+    });
+    for (const gameResult of gameResults) {
+        gameResult.type = MatchType.game;
+    }
+    return gameResults;
 };

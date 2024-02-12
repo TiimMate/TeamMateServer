@@ -1,11 +1,12 @@
 import db from "../models";
 import { CreateGuestingBody, UpdateGuestingBody } from "../schemas/guest.schema";
-import { Sequelize } from "sequelize";
+import { Op, Sequelize } from "sequelize";
 import { getTeamIdByLeaderId } from "./team.dao";
 import { Category } from "../types/category.enum";
 import { Gender } from "../types/gender.enum";
 import { BaseError } from "../config/error";
 import { status } from "../config/response.status";
+import { MatchType } from "../types/match-type.enum";
 
 export const insertGuesting = async (teamId: number, data: CreateGuestingBody) => {
     await db.Guest.create({
@@ -152,4 +153,27 @@ export const getCategoryThroughTeamJoin = async (guestingId: number) => {
         throw new BaseError(status.GUEST_NOT_FOUND);
     }
     return guest["Team.category"];
+};
+
+export const findGuestingByTeamsAndGameTime = async (teamIds: number[], gameTime: string) => {
+    const guestResults = await db.Guest.findAll({
+        raw: true,
+        where: {
+            teamId: {
+                [Op.in]: teamIds,
+            },
+            [Op.and]: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${gameTime}', '%Y-%m-%d')`),
+        },
+        include: [
+            {
+                model: db.Team,
+                attributes: ["id", "name", "region", "gender", "ageGroup", "skillLevel"],
+            },
+        ],
+        attributes: ["id", "gameTime"],
+    });
+    for (const guestResult of guestResults) {
+        guestResult.type = MatchType.guest;
+    }
+    return guestResults;
 };

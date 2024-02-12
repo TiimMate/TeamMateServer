@@ -35,3 +35,32 @@ export const readHostingApplicantsTeamResponseDTO = (teams) => {
         memberCount: team.memberCount,
     }));
 };
+
+export const readMatchingHostingResponseDTO = (guestings, games) => {
+    const sortedMatch = [...guestings, ...games].sort((a, b) => a.gameTime.getTime() - b.gameTime.getTime());
+    return sortedMatch.map((match) => {
+        if (match.type === "guest") {
+            return {
+                type: match.type,
+                matchId: match.id,
+                gameTime: match.gameTime,
+                name: match["Team.name"],
+                region: match["Team.region"],
+                gender: getTeamGender(match["Team.gender"]),
+                ageGroup: getAgeGroup(match["Team.ageGroup"]),
+                skillLevel: getLevelById(match["Team.skillLevel"]),
+            };
+        } else {
+            return {
+                type: match.type,
+                matchId: match.id,
+                gameTime: match.gameTime,
+                name: match["HostTeam.name"],
+                region: match["HostTeam.region"],
+                gender: getTeamGender(match["HostTeam.gender"]),
+                ageGroup: getAgeGroup(match["HostTeam.ageGroup"]),
+                skillLevel: getLevelById(match["HostTeam.skillLevel"]),
+            };
+        }
+    });
+};

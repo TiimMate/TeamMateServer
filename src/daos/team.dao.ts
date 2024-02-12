@@ -122,6 +122,17 @@ export const getTeamIdByLeaderId = async (userId: number) => {
     return team?.id;
 };
 
+export const findTeamIdByLeaderId = async (userId: number) => {
+    const teams = await db.Team.findAll({
+        raw: true,
+        where: {
+            leaderId: userId,
+        },
+        attributes: ["id"],
+    });
+    return teams.map((team) => team.id);
+};
+
 export const getTeamCategoryByLeaderId = async (userId: number) => {
     const team = await db.Team.findOne({
         raw: true,
