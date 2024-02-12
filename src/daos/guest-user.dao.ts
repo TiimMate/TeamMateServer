@@ -1,6 +1,6 @@
 import db from "../models";
 
-export const InsertGuestUser = async (guestingId: number, userId: number) => {
+export const insertGuestUser = async (guestingId: number, userId: number) => {
     await db.GuestUser.create({
         guestId: guestingId,
         userId: userId,
@@ -17,6 +17,12 @@ export const getApplyGuestingUser = async (guestingId: number) => {
         include: [
             {
                 model: db.User,
+                include: [
+                    {
+                        model: db.Profile,
+                        attributes: ["position"],
+                    },
+                ],
                 attributes: ["nickname", "height"],
             },
         ],

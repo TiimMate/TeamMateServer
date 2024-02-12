@@ -1,7 +1,6 @@
 import { BaseError } from "../config/error";
 import { status } from "../config/response.status";
 import {
-    InsertGuestUser,
     findGuesting,
     findGuestingByGender,
     findGuestingByLevel,
@@ -9,16 +8,16 @@ import {
     getCategoryThroughTeamJoin,
     getDetailedGuesting,
     getGuestingById,
+    getTeamByGuestingId,
     insertGuesting,
     setGuesting,
 } from "../daos/guest.dao";
-import { readMembersInfo } from "./teams.service";
-import { getMemberCountByTeamId } from "../daos/member.dao";
-import { getTeamByLeaderId, getTeamDetailforGuesting } from "../daos/team.dao";
+import { addMemberCount, findMemberInfoByCategory } from "../daos/member.dao";
+import { getTeamByLeaderId, getTeamDetailForGuesting } from "../daos/team.dao";
 import { getUserInfoByCategory, getUserProfileByCategory } from "../daos/user.dao";
 import { readGuestingDetailResponseDTO, readGuestingResponseDTO } from "../dtos/guests.dto";
 import { CreateGuestingBody, UpdateGuestingBody } from "../schemas/guest.schema";
-import { checkForDuplicateGuestUser } from "../daos/guest-user.dao";
+import { insertGuestUser, checkForDuplicateGuestUser } from "../daos/guest-user.dao";
 
 export const createGuesting = async (userId, body: CreateGuestingBody) => {
     const teamId = body.teamId;
@@ -32,7 +31,8 @@ export const createGuesting = async (userId, body: CreateGuestingBody) => {
 
 export const updateGuesting = async (userId, params, body: UpdateGuestingBody) => {
     const guestingId = params.guestingId;
-    const guesting = await getGuestingById(guestingId, userId);
+    const teamId = await getTeamByGuestingId(guestingId, userId);
+    const guesting = await getGuestingById(guestingId, teamId.teamId);
     if (!guesting) {
         throw new BaseError(status.GUEST_NOT_FOUND);
     }
@@ -42,43 +42,43 @@ export const updateGuesting = async (userId, params, body: UpdateGuestingBody) =
 
 export const readGuesting = async (query) => {
     const guestings = await findGuesting(query.date, query.category);
-    for (const guesting of guestings) {
-        guesting.memberCount = (await getMemberCountByTeamId(guesting["Team.id"])) + 1;
-    }
+    await addMemberCount(guestings);
     return readGuestingResponseDTO(guestings);
 };
 
 export const readGuestingByGender = async (query) => {
     const guestings = await findGuestingByGender(query.date, query.category, query.gender);
-    for (const guesting of guestings) {
-        guesting.memberCount = (await getMemberCountByTeamId(guesting["Team.id"])) + 1;
-    }
+    await addMemberCount(guestings);
     return readGuestingResponseDTO(guestings);
 };
 
 export const readGuestingByLevel = async (query) => {
-    const guestings = await findGuestingByLevel(query.date, query.category, query.skillLevel);
-    for (const guesting of guestings) {
-        guesting.memberCount = (await getMemberCountByTeamId(guesting["Team.id"])) + 1;
+    const levelAsNumber = parseInt(query.level);
+    if (isNaN(levelAsNumber)) {
+        throw new BaseError(status.REQUEST_VALIDATION_ERROR);
     }
+    const guestings = await findGuestingByLevel(query.date, query.category, query.level);
+    await addMemberCount(guestings);
     return readGuestingResponseDTO(guestings);
 };
 
 export const readGuestingByRegion = async (query) => {
     const guestings = await findGuestingByRegion(query.date, query.category, query.region);
-    for (const guesting of guestings) {
-        guesting.memberCount = (await getMemberCountByTeamId(guesting["Team.id"])) + 1;
-    }
+    await addMemberCount(guestings);
     return readGuestingResponseDTO(guestings);
 };
 
 export const readDetailedGuesting = async (params) => {
     const guestingId = params.guestingId;
     const guestingDetail = await getDetailedGuesting(guestingId);
-    const TeamDetail = await getTeamDetailforGuesting(guestingDetail.teamId);
-    const leaderInfo = await getUserInfoByCategory(TeamDetail.leaderId, TeamDetail.category);
-    const memberInfo = await readMembersInfo(TeamDetail, TeamDetail.category);
-    return readGuestingDetailResponseDTO(guestingDetail, TeamDetail, leaderInfo, memberInfo);
+    if (!guestingDetail) {
+        throw new BaseError(status.GUEST_NOT_FOUND);
+    }
+
+    const teamDetail = await getTeamDetailForGuesting(guestingDetail.teamId);
+    const leaderInfo = await getUserInfoByCategory(teamDetail.leaderId, teamDetail.category);
+    const memberInfo = await findMemberInfoByCategory(guestingDetail.teamId, teamDetail.category);
+    return readGuestingDetailResponseDTO(guestingDetail, teamDetail, leaderInfo, memberInfo);
 };
 
 export const addGuestUser = async (userId: number, params) => {
@@ -95,7 +95,7 @@ export const addGuestUser = async (userId: number, params) => {
         throw new BaseError(status.NOT_FILL_USER_PROFILE);
     }
 
-    await InsertGuestUser(guestingId, userId);
+    await insertGuestUser(guestingId, userId);
     return;
 };
 

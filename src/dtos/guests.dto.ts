@@ -4,19 +4,6 @@ import { getLevelById } from "../constants/level.constant";
 import { AgeGroup } from "../types/age-group.enum";
 import { Gender } from "../types/gender.enum";
 
-interface ReadGuest {
-    gameTime: string;
-    memberCount: number | null;
-    recruitCount: number | null;
-    Team: {
-        name: string;
-        region: string | null;
-        gender: Gender;
-        ageGroup: AgeGroup;
-        skillLevel: number;
-    };
-}
-
 interface GuestDetail {
     gameTime: string;
     description: string | null;
@@ -43,16 +30,18 @@ interface UserInfo {
     };
 }
 
-export const readGuestingResponseDTO = (guesting: ReadGuest) => {
+export const readGuestingResponseDTO = (result) => {
     return {
-        gameTime: guesting.gameTime,
-        teamName: guesting["Team.name"],
-        teamRegion: guesting["Team.region"],
-        teamGender: getTeamGender(guesting["Team.gender"]),
-        memberCount: guesting.memberCount,
-        teamAgeGroup: getAgeGroup(guesting["Team.ageGroup"]),
-        teamSkillLevel: getLevelById(guesting["Team.skillLevel"]),
-        recruitCount: guesting.recruitCount,
+        guestings: result.map((guesting) => ({
+            gameTime: guesting.gameTime,
+            teamName: guesting["Team.name"],
+            teamRegion: guesting["Team.region"],
+            teamGender: getTeamGender(guesting["Team.gender"]),
+            memberCount: guesting.memberCount,
+            teamAgeGroup: getAgeGroup(guesting["Team.ageGroup"]),
+            teamSkillLevel: getLevelById(guesting["Team.skillLevel"]),
+            recruitCount: guesting.recruitCount,
+        })),
     };
 };
 

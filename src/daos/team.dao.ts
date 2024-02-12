@@ -71,19 +71,12 @@ export const getTeamDetail = async (teamId: number) => {
     });
 };
 
-export const getTeamDetailforGuesting = async (teamId: number) => {
+export const getTeamDetailForGuesting = async (teamId: number) => {
     return await db.Team.findOne({
         raw: true,
         where: {
             id: teamId,
         },
-        include: [
-            {
-                model: db.Member,
-                attributes: ["userId"],
-                required: false,
-            },
-        ],
         attributes: [
             "name",
             "description",
@@ -127,6 +120,27 @@ export const getTeamIdByLeaderId = async (userId: number) => {
         attributes: ["id"],
     });
     return team?.id;
+};
+
+export const getTeamIdsByLeaderId = async (userId: number) => {
+    return await db.Team.findAll({
+        raw: true,
+        where: {
+            leaderId: userId,
+        },
+        attributes: ["id"],
+    });
+};
+
+export const findTeamIdByLeaderId = async (userId: number) => {
+    const teams = await db.Team.findAll({
+        raw: true,
+        where: {
+            leaderId: userId,
+        },
+        attributes: ["id"],
+    });
+    return teams.map((team) => team.id);
 };
 
 export const getTeamCategoryByLeaderId = async (userId: number) => {

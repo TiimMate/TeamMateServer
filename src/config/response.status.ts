@@ -133,8 +133,14 @@ export const status: { [key: string]: Status } = {
     GUESTUSER_ALREADY_EXIST: {
         status: StatusCodes.NOT_FOUND,
         isSuccess: false,
-        code: "GUESTER002",
+        code: "GUESTER003",
         message: "이미 신청한 게스트 모집글입니다.",
+    },
+    ACCESS_DENIED_FOR_GUEST: {
+        status: StatusCodes.NOT_FOUND,
+        isSuccess: false,
+        code: "GUESTER004",
+        message: "게스트 수정 권한이 없습니다.",
     },
 
     // game error

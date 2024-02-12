@@ -1,60 +1,40 @@
 import { BaseError } from "../config/error";
-import {
-    findGamesOfMatchingGuesting,
-    findGuestsOfMatchingHosting,
-    findGuestsOfMatchingGuesting,
-    findGamesOfMatchingHosting,
-    getApplyGuestingUser,
-    setGuestStatus,
-    getGuestUserById,
-    getTeamsAppliedById,
-} from "../daos/matchings.dao";
-import { getMemberCountByTeamId } from "../daos/member.dao";
+import { status } from "../config/response.status";
+import { findGameByHostTeamsAndGameTime, findGameByOpposingTeamsAndGameTime } from "../daos/game.dao";
+import { getApplyGuestingUser, getGuestUserById, setGuestUserStatus } from "../daos/guest-user.dao";
+import { findGuestingByTeamsAndGameTime, findGuestingByUserAndGameTime } from "../daos/guest.dao";
+import { getTeamsAppliedById } from "../daos/matching.dao";
+import { getMemberCountByTeamId, addMemberCount } from "../daos/member.dao";
+import { findTeamIdByLeaderId } from "../daos/team.dao";
 import {
     readApplyGuestingUserResponseDTO,
-    readMatchingResponseDTO,
     readHostingApplicantsTeamResponseDTO,
+    readMatchingResponseDTO,
 } from "../dtos/matchings.dto";
-import { status } from "../config/response.status";
 
 export const readMatchingGuesting = async (userId, query) => {
-    const matchingGuestings = await findGuestsOfMatchingGuesting(userId, query.date);
-    for (const matchingGuesting of matchingGuestings) {
-        matchingGuesting.memberCount = (await getMemberCountByTeamId(matchingGuesting["Team.id"])) + 1;
-    }
-
-    const matchingGames = await findGamesOfMatchingGuesting(userId, query.date);
-    for (const matchingGame of matchingGames) {
-        matchingGame.memberCount = (await getMemberCountByTeamId(matchingGame["Team.id"])) + 1;
-    }
-
-    const guestingResponseDTO = readMatchingResponseDTO(matchingGuestings);
-    const gameResponseDTO = readMatchingResponseDTO(matchingGames);
-
-    return { guesting: guestingResponseDTO, game: gameResponseDTO };
+    const gameTime = query.date;
+    const matchingGuestings = await findGuestingByUserAndGameTime(userId, query.date);
+    const teamIds = await findTeamIdByLeaderId(userId);
+    const matchingGames = await findGameByOpposingTeamsAndGameTime(teamIds, gameTime);
+    await addMemberCount(matchingGuestings);
+    await addMemberCount(matchingGames);
+    return readMatchingResponseDTO(matchingGuestings, matchingGames);
 };
 
-export const readMatchingHosting = async (userId, query) => {
-    const matchingGuestings = await findGuestsOfMatchingHosting(userId, query.date);
-    for (const matchingGuesting of matchingGuestings) {
-        matchingGuesting.memberCount = (await getMemberCountByTeamId(matchingGuesting["Team.id"])) + 1;
-    }
-
-    const matchingGames = await findGamesOfMatchingHosting(userId, query.date);
-    for (const matchingGame of matchingGames) {
-        matchingGame.memberCount = (await getMemberCountByTeamId(matchingGame["Team.id"])) + 1;
-    }
-
-    const guestingResponseDTO = readMatchingResponseDTO(matchingGuestings);
-    const gameResponseDTO = readMatchingResponseDTO(matchingGames);
-
-    return { guesting: guestingResponseDTO, game: gameResponseDTO };
+export const readMatchingHosting = async (userId: number, query) => {
+    const gameTime = query.date;
+    const teamIds = await findTeamIdByLeaderId(userId);
+    const matchingGuestings = await findGuestingByTeamsAndGameTime(teamIds, gameTime);
+    const matchingGames = await findGameByHostTeamsAndGameTime(teamIds, gameTime);
+    await addMemberCount(matchingGuestings);
+    await addMemberCount(matchingGames);
+    return readMatchingResponseDTO(matchingGuestings, matchingGames);
 };
 
 export const readApplyGuestingUser = async (params) => {
     const guestingId = params.guestingId;
     const applyGuestingUser = await getApplyGuestingUser(guestingId);
-
     return readApplyGuestingUserResponseDTO(applyGuestingUser);
 };
 
@@ -64,8 +44,7 @@ export const updateGuestStatus = async (params) => {
     if (!guestUser) {
         throw new BaseError(status.GUESTUSER_NOT_FOUND);
     }
-
-    await setGuestStatus(guestUser);
+    await setGuestUserStatus(guestUser);
     return;
 };
 
