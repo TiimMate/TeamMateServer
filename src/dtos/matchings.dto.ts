@@ -1,6 +1,6 @@
 import { getAgeGroup } from "../constants/age-group.constant";
 import { getTeamGender } from "../constants/gender.constant";
-import { getGuestStatus } from "../constants/guest-status.constant";
+import { getGuestUserStatus } from "../constants/guest-status.constant";
 import { getLevelById } from "../constants/level.constant";
 
 export const readApplyGuestingUserResponseDTO = (result) => {
@@ -8,7 +8,7 @@ export const readApplyGuestingUserResponseDTO = (result) => {
         nickname: guestingUser["User.nickname"],
         height: guestingUser["User.height"],
         position: guestingUser["User.Profiles.position"],
-        status: getGuestStatus(guestingUser.status),
+        status: getGuestUserStatus(guestingUser.status),
     }));
 };
 

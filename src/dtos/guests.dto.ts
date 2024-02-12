@@ -1,6 +1,7 @@
 import { getAgeGroup } from "../constants/age-group.constant";
 import { getTeamGender } from "../constants/gender.constant";
 import { getLevelById } from "../constants/level.constant";
+import { getStatus } from "../constants/status.constant";
 import { AgeGroup } from "../types/age-group.enum";
 import { Gender } from "../types/gender.enum";
 
@@ -9,6 +10,7 @@ interface GuestDetail {
     description: string | null;
     memberCount: number | null;
     recruitCount: number | null;
+    status: number;
 }
 
 interface TeamDetail {
@@ -41,6 +43,7 @@ export const readGuestingResponseDTO = (result) => {
             teamAgeGroup: getAgeGroup(guesting["Team.ageGroup"]),
             teamSkillLevel: getLevelById(guesting["Team.skillLevel"]),
             recruitCount: guesting.recruitCount,
+            status: getStatus(guesting.status),
         })),
     };
 };
@@ -61,6 +64,7 @@ export const readGuestingDetailResponseDTO = (
         skillLevel: TeamDetail.skillLevel,
         mannerLevel: TeamDetail.mannerLevel,
         description: TeamDetail.description,
+        status: getStatus(guestingDetail.status),
         gusting_info: {
             gameTime: guestingDetail.gameTime,
             gender: getTeamGender(TeamDetail.gender),
