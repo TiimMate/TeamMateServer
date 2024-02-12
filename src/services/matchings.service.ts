@@ -1,46 +1,35 @@
 import { BaseError } from "../config/error";
 import { status } from "../config/response.status";
-import { findGameByTeamsAndGameTime } from "../daos/game.dao";
+import { findGameByHostTeamsAndGameTime, findGameByOpposingTeamsAndGameTime } from "../daos/game.dao";
 import { getApplyGuestingUser, getGuestUserById, setGuestUserStatus } from "../daos/guest-user.dao";
-import { findGuestingByTeamsAndGameTime } from "../daos/guest.dao";
-import { findGamesOfMatchingGuesting, findGuestsOfMatchingGuesting, getTeamsAppliedById } from "../daos/matching.dao";
+import { findGuestingByTeamsAndGameTime, findGuestingByUserAndGameTime } from "../daos/guest.dao";
+import { getTeamsAppliedById } from "../daos/matching.dao";
 import { getMemberCountByTeamId, addMemberCount } from "../daos/member.dao";
-import { findTeamIdByLeaderId, getTeamIdsByLeaderId } from "../daos/team.dao";
+import { findTeamIdByLeaderId } from "../daos/team.dao";
 import {
     readApplyGuestingUserResponseDTO,
-    readMatchingResponseDTO,
     readHostingApplicantsTeamResponseDTO,
-    readMatchingHostingResponseDTO,
+    readMatchingResponseDTO,
 } from "../dtos/matchings.dto";
 
 export const readMatchingGuesting = async (userId, query) => {
-    const teamIdResults = await getTeamIdsByLeaderId(userId);
-    const teamIds = teamIdResults.map((team) => team.id);
-
-    const matchingGuestings = await findGuestsOfMatchingGuesting(userId, query.date);
+    const gameTime = query.date;
+    const matchingGuestings = await findGuestingByUserAndGameTime(userId, query.date);
+    const teamIds = await findTeamIdByLeaderId(userId);
+    const matchingGames = await findGameByOpposingTeamsAndGameTime(teamIds, gameTime);
     await addMemberCount(matchingGuestings);
-    const matchingGames = await findGamesOfMatchingGuesting(teamIds, query.date);
     await addMemberCount(matchingGames);
-
-    const guestingResponseDTO = readMatchingResponseDTO(matchingGuestings);
-    const gameResponseDTO = readMatchingResponseDTO(matchingGames);
-
-    const matchingGuesting = [...guestingResponseDTO.matchings, ...gameResponseDTO.matchings].sort(
-        (a, b) => new Date(a.gameTime).getTime() - new Date(b.gameTime).getTime(),
-    );
-
-    return matchingGuesting;
+    return readMatchingResponseDTO(matchingGuestings, matchingGames);
 };
 
 export const readMatchingHosting = async (userId: number, query) => {
     const gameTime = query.date;
     const teamIds = await findTeamIdByLeaderId(userId);
-
     const matchingGuestings = await findGuestingByTeamsAndGameTime(teamIds, gameTime);
-    const matchingGames = await findGameByTeamsAndGameTime(teamIds, gameTime);
+    const matchingGames = await findGameByHostTeamsAndGameTime(teamIds, gameTime);
     await addMemberCount(matchingGuestings);
     await addMemberCount(matchingGames);
-    return readMatchingHostingResponseDTO(matchingGuestings, matchingGames);
+    return readMatchingResponseDTO(matchingGuestings, matchingGames);
 };
 
 export const readApplyGuestingUser = async (params) => {

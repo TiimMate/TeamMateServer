@@ -146,13 +146,29 @@ export const updateOpposingTeam = async (gameId: number, opposingTeamId: number)
     await db.Game.update({ opposingTeamId: opposingTeamId, status: 1 }, { where: { id: gameId } });
 };
 
-export const findGameByTeamsAndGameTime = async (teamIds: number[], gameTime: string) => {
+export const findGameByHostTeamsAndGameTime = async (teamIds: number[], gameTime) => {
+    const hostTeamFilter = {
+        hostTeamId: {
+            [Op.in]: teamIds,
+        },
+    };
+    return findGameByTeamsAndGameTime(hostTeamFilter, gameTime);
+};
+
+export const findGameByOpposingTeamsAndGameTime = async (teamIds: number[], gameTime) => {
+    const opposingTeamFilter = {
+        opposingTeamId: {
+            [Op.in]: teamIds,
+        },
+    };
+    return findGameByTeamsAndGameTime(opposingTeamFilter, gameTime);
+};
+
+const findGameByTeamsAndGameTime = async (teamFilter, gameTime: string) => {
     const gameResults = await db.Game.findAll({
         raw: true,
         where: {
-            hostTeamId: {
-                [Op.in]: teamIds,
-            },
+            ...teamFilter,
             [Op.and]: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${gameTime}', '%Y-%m-%d')`),
         },
         include: [
