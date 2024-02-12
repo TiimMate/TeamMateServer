@@ -56,8 +56,7 @@ export const readGuestingByGender = async (query) => {
 
 export const readGuestingByLevel = async (query) => {
     const cursorId = query.cursorId ? parseInt(query.cursorId) : undefined;
-    const level = parseInt(query.level);
-    const guestings = await findGuestByLevel(query.date, query.category, level, cursorId);
+    const guestings = await findGuestByLevel(query.date, query.category, query.level, cursorId);
     await addMemberCount(guestings.guests);
     return readGuestingResponseDTO(guestings);
 };
