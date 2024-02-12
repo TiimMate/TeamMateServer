@@ -32,8 +32,8 @@ export const createGuesting = async (userId, body: CreateGuestingBody) => {
 export const updateGuesting = async (userId, params, body: UpdateGuestingBody) => {
     const guestingId = params.guestingId;
     const teamId = await getTeamByGuestingId(guestingId, userId);
-    const guesting = await getGuestingById(guestingId, teamId.teamId);
-    if (!guesting) {
+    const guesting = await getGuestingById(guestingId);
+    if (!guesting || !teamId) {
         throw new BaseError(status.GUEST_NOT_FOUND);
     }
     await setGuesting(guesting, body);

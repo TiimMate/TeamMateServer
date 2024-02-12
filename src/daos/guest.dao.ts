@@ -121,11 +121,10 @@ export const getTeamByGuestingId = async (guestingId: number, userId: number) =>
     });
 };
 
-export const getGuestingById = async (guestingId: number, teamId: number) => {
+export const getGuestingById = async (guestingId: number) => {
     return await db.Guest.findOne({
         where: {
             id: guestingId,
-            teamId: teamId,
         },
     });
 };
