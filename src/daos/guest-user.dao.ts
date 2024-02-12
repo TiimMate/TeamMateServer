@@ -38,8 +38,39 @@ export const getGuestUserById = async (guestUserId: number) => {
     });
 };
 
-export const setGuestUserStatus = async (guestUser) => {
+export const getGuestIdById = async (guestUserId: number) => {
+    const guest = await db.GuestUser.findOne({
+        where: {
+            id: guestUserId,
+        },
+        attributes: ["guestId"],
+    });
+    return guest?.guestId;
+};
+
+export const checkClosedGuest = async (guestId: number) => {
+    const count = await db.GuestUser.count({
+        where: {
+            guestId: guestId,
+            status: 1,
+        },
+    });
+    const recruitCount = await db.Guest.findOne({
+        where: {
+            id: guestId,
+        },
+        attributes: ["recruitCount"],
+    });
+    return count >= recruitCount.recruitCount;
+};
+
+export const setGuestUserStatus = async (guestUser, guest) => {
     guestUser.status = 1;
+    const check: boolean = await checkClosedGuest(guest.id);
+    if (check) {
+        guest.status = 1;
+        await guest.save();
+    }
     await guestUser.save();
 };
 
