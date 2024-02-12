@@ -47,6 +47,7 @@ export const readMatchingHostingResponseDTO = (guestings, games) => {
                 name: match["Team.name"],
                 region: match["Team.region"],
                 gender: getTeamGender(match["Team.gender"]),
+                memberCount: match.memberCount,
                 ageGroup: getAgeGroup(match["Team.ageGroup"]),
                 skillLevel: getLevelById(match["Team.skillLevel"]),
             };
@@ -58,6 +59,7 @@ export const readMatchingHostingResponseDTO = (guestings, games) => {
                 name: match["HostTeam.name"],
                 region: match["HostTeam.region"],
                 gender: getTeamGender(match["HostTeam.gender"]),
+                memberCount: match.memberCount,
                 ageGroup: getAgeGroup(match["HostTeam.ageGroup"]),
                 skillLevel: getLevelById(match["HostTeam.skillLevel"]),
             };
