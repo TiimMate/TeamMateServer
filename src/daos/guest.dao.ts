@@ -1,7 +1,6 @@
 import db from "../models";
 import { CreateGuestingBody, UpdateGuestingBody } from "../schemas/guest.schema";
 import { Op, Sequelize } from "sequelize";
-import { getTeamIdByLeaderId } from "./team.dao";
 import { Category } from "../types/category.enum";
 import { Gender } from "../types/gender.enum";
 import { BaseError } from "../config/error";
@@ -14,6 +13,7 @@ export const insertGuesting = async (teamId: number, data: CreateGuestingBody) =
         gameTime: data.gameTime,
         description: data.description,
         recruitCount: data.recruitCount,
+        status: 0,
     });
 };
 
@@ -37,7 +37,7 @@ export const findGuesting = async (date: string, category: Category) => {
                 attributes: ["id", "name", "region", "gender", "ageGroup", "skillLevel"],
             },
         ],
-        attributes: ["gameTime", "recruitCount"],
+        attributes: ["gameTime", "recruitCount", "status"],
     });
 };
 
@@ -55,7 +55,7 @@ export const findGuestingByGender = async (date: string, category: Category, gen
                 attributes: ["id", "name", "region", "gender", "ageGroup", "skillLevel"],
             },
         ],
-        attributes: ["gameTime", "recruitCount"],
+        attributes: ["gameTime", "recruitCount", "status"],
     });
 };
 
@@ -73,7 +73,7 @@ export const findGuestingByLevel = async (date: string, category: Category, skil
                 attributes: ["id", "name", "region", "gender", "ageGroup", "skillLevel"],
             },
         ],
-        attributes: ["gameTime", "recruitCount"],
+        attributes: ["gameTime", "recruitCount", "status"],
     });
 };
 
@@ -91,7 +91,7 @@ export const findGuestingByRegion = async (date: string, category: Category, reg
                 attributes: ["id", "name", "region", "gender", "ageGroup", "skillLevel"],
             },
         ],
-        attributes: ["gameTime", "recruitCount"],
+        attributes: ["gameTime", "recruitCount", "status"],
     });
 };
 
@@ -101,7 +101,7 @@ export const getDetailedGuesting = async (guestingId: number) => {
         where: {
             id: guestingId,
         },
-        attributes: ["teamId", "gameTime", "description", "recruitCount"],
+        attributes: ["teamId", "gameTime", "description", "recruitCount", "status"],
     });
 };
 
@@ -121,11 +121,10 @@ export const getTeamByGuestingId = async (guestingId: number, userId: number) =>
     });
 };
 
-export const getGuestingById = async (guestingId: number, teamId: number) => {
+export const getGuestingById = async (guestingId: number) => {
     return await db.Guest.findOne({
         where: {
             id: guestingId,
-            teamId: teamId,
         },
     });
 };

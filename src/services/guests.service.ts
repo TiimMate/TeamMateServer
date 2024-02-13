@@ -17,7 +17,13 @@ import { getTeamByLeaderId, getTeamDetailForGuesting } from "../daos/team.dao";
 import { getUserInfoByCategory, getUserProfileByCategory } from "../daos/user.dao";
 import { readGuestingDetailResponseDTO, readGuestingResponseDTO } from "../dtos/guests.dto";
 import { CreateGuestingBody, UpdateGuestingBody } from "../schemas/guest.schema";
-import { insertGuestUser, checkForDuplicateGuestUser } from "../daos/guest-user.dao";
+import {
+    insertGuestUser,
+    checkForDuplicateGuestUser,
+    getGuestUserById,
+    getGuestIdById,
+    setGuestUserStatus,
+} from "../daos/guest-user.dao";
 
 export const createGuesting = async (userId, body: CreateGuestingBody) => {
     const teamId = body.teamId;
@@ -32,8 +38,8 @@ export const createGuesting = async (userId, body: CreateGuestingBody) => {
 export const updateGuesting = async (userId, params, body: UpdateGuestingBody) => {
     const guestingId = params.guestingId;
     const teamId = await getTeamByGuestingId(guestingId, userId);
-    const guesting = await getGuestingById(guestingId, teamId.teamId);
-    if (!guesting) {
+    const guesting = await getGuestingById(guestingId);
+    if (!guesting || !teamId) {
         throw new BaseError(status.GUEST_NOT_FOUND);
     }
     await setGuesting(guesting, body);
@@ -106,4 +112,21 @@ const isUserProfileValid = (userProfile): boolean => {
         // userProfile.height &&
         // userProfile["Profiles.position"]
     );
+};
+
+export const updateGuestUserStatus = async (params) => {
+    const guestUserId = params.guestUserId;
+    const guestUser = await getGuestUserById(guestUserId);
+    if (!guestUser) {
+        throw new BaseError(status.GUESTUSER_NOT_FOUND);
+    }
+
+    const guestId = await getGuestIdById(guestUserId);
+    const guest = await getGuestingById(guestId);
+    if (guest.status) {
+        throw new BaseError(status.CLOSED_GUEST);
+    }
+
+    await setGuestUserStatus(guestUser, guest);
+    return;
 };

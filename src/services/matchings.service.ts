@@ -1,7 +1,5 @@
-import { BaseError } from "../config/error";
-import { status } from "../config/response.status";
 import { findGameByHostTeamsAndGameTime, findGameByOpposingTeamsAndGameTime } from "../daos/game.dao";
-import { getApplyGuestingUser, getGuestUserById, setGuestUserStatus } from "../daos/guest-user.dao";
+import { getApplyGuestingUser } from "../daos/guest-user.dao";
 import { findGuestingByTeamsAndGameTime, findGuestingByUserAndGameTime } from "../daos/guest.dao";
 import { getTeamsAppliedById } from "../daos/matching.dao";
 import { getMemberCountByTeamId, addMemberCount } from "../daos/member.dao";
@@ -36,16 +34,6 @@ export const readApplyGuestingUser = async (params) => {
     const guestingId = params.guestingId;
     const applyGuestingUser = await getApplyGuestingUser(guestingId);
     return readApplyGuestingUserResponseDTO(applyGuestingUser);
-};
-
-export const updateGuestStatus = async (params) => {
-    const guestUserId = params.guestUserId;
-    const guestUser = await getGuestUserById(guestUserId);
-    if (!guestUser) {
-        throw new BaseError(status.GUESTUSER_NOT_FOUND);
-    }
-    await setGuestUserStatus(guestUser);
-    return;
 };
 
 export const readHostingApplicantsTeamList = async (userId, params) => {
