@@ -1,8 +1,9 @@
 import db from "../models";
-import { defaultLevel } from "../constants/level.constant";
 import { CreateTeamBody, UpdateTeamBodyWithoutMemberIdsToDelete } from "../schemas/team.schema";
 import { Category } from "../types/category.enum";
 import { Op } from "sequelize";
+
+const defaultLevel = 0;
 
 export const findTeamPreviewByCategory = async (userId: number, category: Category) => {
     const teamsAsLeader = await db.Team.findAll({
