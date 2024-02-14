@@ -10,6 +10,7 @@ interface GuestDetail {
     description: string | null;
     memberCount: number | null;
     recruitCount: number | null;
+    gameDuration: string;
     status: number;
 }
 
@@ -36,6 +37,7 @@ export const readGuestingResponseDTO = (result) => {
     return {
         guests: result.guests.map((guesting) => ({
             gameTime: guesting.gameTime,
+            gameDuration: guesting.gameDuration,
             teamName: guesting["Team.name"],
             teamRegion: guesting["Team.region"],
             teamGender: getTeamGender(guesting["Team.gender"]),
@@ -68,6 +70,7 @@ export const readGuestingDetailResponseDTO = (
         status: getStatus(guestingDetail.status),
         gusting_info: {
             gameTime: guestingDetail.gameTime,
+            gameDuration: guestingDetail.gameDuration,
             gender: getTeamGender(TeamDetail.gender),
             ageGroup: getAgeGroup(TeamDetail.ageGroup),
             gymName: TeamDetail.gymName,

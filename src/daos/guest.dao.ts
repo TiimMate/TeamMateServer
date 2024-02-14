@@ -16,6 +16,7 @@ export const insertGuesting = async (teamId: number, data: CreateGuestingBody) =
         gameTime: data.gameTime,
         description: data.description,
         recruitCount: data.recruitCount,
+        gameDuration: data.gameDuration,
         status: 0,
     });
 };
@@ -67,7 +68,7 @@ export const findGuests = async (date: string, guestFilter: object, TeamFilter: 
                 attributes: ["id", "name", "region", "gender", "ageGroup", "skillLevel"],
             },
         ],
-        attributes: ["gameTime", "recruitCount", "status"],
+        attributes: ["gameTime", "recruitCount", "gameDuration", "status"],
     });
     return { guests, hasNext: calculateHasNext(guests, defaultLimit) };
 };
@@ -78,7 +79,7 @@ export const getDetailedGuesting = async (guestingId: number) => {
         where: {
             id: guestingId,
         },
-        attributes: ["teamId", "gameTime", "description", "recruitCount", "status"],
+        attributes: ["teamId", "gameTime", "description", "recruitCount", "gameDuration", "status"],
     });
 };
 
@@ -161,7 +162,7 @@ export const findGuestingByTeamsAndGameTime = async (teamIds: number[], gameTime
                 attributes: ["id", "name", "region", "gender", "ageGroup", "skillLevel"],
             },
         ],
-        attributes: ["id", "gameTime"],
+        attributes: ["id", "gameTime", "gameDuration"],
     });
     for (const guestResult of guestResults) {
         guestResult.type = MatchType.guest;
@@ -189,7 +190,7 @@ export const findGuestingByUserAndGameTime = async (userId: number, date: string
                 attributes: [],
             },
         ],
-        attributes: ["id", "gameTime"],
+        attributes: ["id", "gameTime", "gameDuration"],
     });
     for (const guestResult of guestResults) {
         guestResult.type = MatchType.guest;
