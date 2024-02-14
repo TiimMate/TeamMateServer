@@ -5,6 +5,6 @@ const guestStatus: Record<number, string> = {
 
 export const defaultStatus = 0;
 
-export const getGuestStatus = (key: number): string | undefined => {
+export const getGuestUserStatus = (key: number): string | undefined => {
     return guestStatus[key];
 };

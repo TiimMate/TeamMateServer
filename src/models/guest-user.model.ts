@@ -15,6 +15,7 @@ class GuestUser extends Model<InferAttributes<GuestUser>, InferCreationAttribute
                 status: {
                     type: new DataTypes.INTEGER(),
                     allowNull: false,
+                    defaultValue: 0,
                 },
             },
             {
