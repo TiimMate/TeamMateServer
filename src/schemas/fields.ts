@@ -120,3 +120,5 @@ export const dateQuery = object({
         ...dateField,
     }),
 });
+
+export const gameDurationField = { gameDuration: z.string() };
