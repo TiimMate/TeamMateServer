@@ -120,3 +120,18 @@ export const dateQuery = object({
         ...dateField,
     }),
 });
+
+export const rentDateField = {
+    rentDate: z.optional(
+        z.preprocess((arg) => {
+            if (typeof arg == "string") {
+                return new Date(arg);
+            }
+            return arg;
+        }, z.date()),
+    ),
+};
+
+export const rentPlaceField = { rentPlace: z.optional(z.string().max(100)) };
+
+export const rentStatusField = { status: z.optional(z.number().int()) };
