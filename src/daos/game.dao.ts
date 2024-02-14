@@ -55,7 +55,9 @@ export const findGamesByLevel = async (date, category, skillLevel) => {
                 attributes: ["id", "name", "region", "gender", "ageGroup", "skillLevel"],
                 where: {
                     category,
-                    skillLevel,
+                    skillLevel: {
+                        [Op.between]: [Math.floor(skillLevel / 10) * 10, Math.floor(skillLevel / 10) * 10 + 9],
+                    },
                 },
             },
         ],
