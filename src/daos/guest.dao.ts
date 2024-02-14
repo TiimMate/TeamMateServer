@@ -39,9 +39,10 @@ export const findGuestByGender = (date: string, category: Category, gender: Gend
     return findGuests(date, guestsBeforeCursor, TeamFilter);
 };
 
-export const findGuestByLevel = (date: string, category: Category, level: number, cursorId: number | undefined) => {
+export const findGuestByLevel = (date: string, category: Category, level: string, cursorId: number | undefined) => {
     const guestsBeforeCursor = generateCursorCondition(cursorId);
-    const TeamFilter = { skillLevel: level, category };
+    const minLevel = Math.floor(parseInt(level) / 10) * 10;
+    const TeamFilter = { skillLevel: { [Op.between]: [minLevel, minLevel + 9] }, category };
     return findGuests(date, guestsBeforeCursor, TeamFilter);
 };
 

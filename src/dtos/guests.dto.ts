@@ -1,6 +1,5 @@
 import { getAgeGroup } from "../constants/age-group.constant";
 import { getTeamGender } from "../constants/gender.constant";
-import { getLevelById } from "../constants/level.constant";
 import { getStatus } from "../constants/status.constant";
 import { AgeGroup } from "../types/age-group.enum";
 import { Gender } from "../types/gender.enum";
@@ -41,7 +40,7 @@ export const readGuestingResponseDTO = (result) => {
             teamGender: getTeamGender(guesting["Team.gender"]),
             memberCount: guesting.memberCount,
             teamAgeGroup: getAgeGroup(guesting["Team.ageGroup"]),
-            teamSkillLevel: getLevelById(guesting["Team.skillLevel"]),
+            teamSkillLevel: guesting["Team.skillLevel"],
             recruitCount: guesting.recruitCount,
             status: getStatus(guesting.status),
         })),
@@ -71,7 +70,7 @@ export const readGuestingDetailResponseDTO = (
             gender: getTeamGender(TeamDetail.gender),
             ageGroup: getAgeGroup(TeamDetail.ageGroup),
             gymName: TeamDetail.gymName,
-            skillLevel: getLevelById(TeamDetail.skillLevel),
+            skillLevel: TeamDetail.skillLevel,
         },
         member_info: {
             leader: {

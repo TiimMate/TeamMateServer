@@ -1,7 +1,6 @@
 import { getAgeGroup } from "../constants/age-group.constant";
 import { getTeamGender } from "../constants/gender.constant";
 import { getGuestUserStatus } from "../constants/guest-status.constant";
-import { getLevelById } from "../constants/level.constant";
 
 export const readApplyGuestingUserResponseDTO = (result) => {
     return result.map((guestingUser) => ({
@@ -34,7 +33,7 @@ export const readMatchingResponseDTO = (guestings, games) => {
                 gender: getTeamGender(match["Team.gender"]),
                 memberCount: match.memberCount,
                 ageGroup: getAgeGroup(match["Team.ageGroup"]),
-                skillLevel: getLevelById(match["Team.skillLevel"]),
+                skillLevel: match["Team.skillLevel"],
             };
         } else {
             return {
@@ -46,7 +45,7 @@ export const readMatchingResponseDTO = (guestings, games) => {
                 gender: getTeamGender(match["HostTeam.gender"]),
                 memberCount: match.memberCount,
                 ageGroup: getAgeGroup(match["HostTeam.ageGroup"]),
-                skillLevel: getLevelById(match["HostTeam.skillLevel"]),
+                skillLevel: match["HostTeam.skillLevel"],
             };
         }
     });
