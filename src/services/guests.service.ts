@@ -1,10 +1,10 @@
 import { BaseError } from "../config/error";
 import { status } from "../config/response.status";
 import {
-    findGuesting,
-    findGuestingByGender,
-    findGuestingByLevel,
-    findGuestingByRegion,
+    findGuestAll,
+    findGuestByGender,
+    findGuestByLevel,
+    findGuestByRegion,
     getCategoryThroughTeamJoin,
     getDetailedGuesting,
     getGuestingById,
@@ -25,7 +25,7 @@ import {
     setGuestUserStatus,
 } from "../daos/guest-user.dao";
 
-export const createGuesting = async (userId, body: CreateGuestingBody) => {
+export const createGuesting = async (userId: number, body: CreateGuestingBody) => {
     const teamId = body.teamId;
     const team = await getTeamByLeaderId(teamId, userId);
     if (!team) {
@@ -35,7 +35,7 @@ export const createGuesting = async (userId, body: CreateGuestingBody) => {
     return;
 };
 
-export const updateGuesting = async (userId, params, body: UpdateGuestingBody) => {
+export const updateGuesting = async (userId: number, params, body: UpdateGuestingBody) => {
     const guestingId = params.guestingId;
     const teamId = await getTeamByGuestingId(guestingId, userId);
     const guesting = await getGuestingById(guestingId);
@@ -47,30 +47,30 @@ export const updateGuesting = async (userId, params, body: UpdateGuestingBody) =
 };
 
 export const readGuesting = async (query) => {
-    const guestings = await findGuesting(query.date, query.category);
-    await addMemberCount(guestings);
+    const cursorId = query.cursorId ? parseInt(query.cursorId) : undefined;
+    const guestings = await findGuestAll(query.date, query.category, cursorId);
+    await addMemberCount(guestings.guests);
     return readGuestingResponseDTO(guestings);
 };
 
 export const readGuestingByGender = async (query) => {
-    const guestings = await findGuestingByGender(query.date, query.category, query.gender);
-    await addMemberCount(guestings);
+    const cursorId = query.cursorId ? parseInt(query.cursorId) : undefined;
+    const guestings = await findGuestByGender(query.date, query.category, query.gender, cursorId);
+    await addMemberCount(guestings.guests);
     return readGuestingResponseDTO(guestings);
 };
 
 export const readGuestingByLevel = async (query) => {
-    const levelAsNumber = parseInt(query.level);
-    if (isNaN(levelAsNumber)) {
-        throw new BaseError(status.REQUEST_VALIDATION_ERROR);
-    }
-    const guestings = await findGuestingByLevel(query.date, query.category, query.level);
-    await addMemberCount(guestings);
+    const cursorId = query.cursorId ? parseInt(query.cursorId) : undefined;
+    const guestings = await findGuestByLevel(query.date, query.category, query.level, cursorId);
+    await addMemberCount(guestings.guests);
     return readGuestingResponseDTO(guestings);
 };
 
 export const readGuestingByRegion = async (query) => {
-    const guestings = await findGuestingByRegion(query.date, query.category, query.region);
-    await addMemberCount(guestings);
+    const cursorId = query.cursorId ? parseInt(query.cursorId) : undefined;
+    const guestings = await findGuestByRegion(query.date, query.category, query.region, cursorId);
+    await addMemberCount(guestings.guests);
     return readGuestingResponseDTO(guestings);
 };
 

@@ -4,12 +4,6 @@ class Guest extends Model<InferAttributes<Guest>, InferCreationAttributes<Guest>
     static initiate(sequelize: Sequelize) {
         Guest.init(
             {
-                id: {
-                    type: new DataTypes.INTEGER(),
-                    allowNull: false,
-                    primaryKey: true,
-                    autoIncrement: true,
-                },
                 teamId: {
                     type: new DataTypes.INTEGER(),
                     allowNull: false,
