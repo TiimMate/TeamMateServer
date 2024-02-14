@@ -1,6 +1,5 @@
 import { getAgeGroup } from "../constants/age-group.constant";
 import { getGender } from "../constants/gender.constant";
-import { getLevelById } from "../constants/level.constant";
 import { AgeGroup } from "../types/age-group.enum";
 import { Gender } from "../types/gender.enum";
 
@@ -20,8 +19,8 @@ interface ReadUserProfile {
 export const readUserProfileResponseDTO = (profile: ReadUserProfile) => {
     return {
         nickname: profile.nickname,
-        skillLevel: !profile["Profiles.skillLevel"] ? null : getLevelById(profile["Profiles.skillLevel"]),
-        mannerLevel: !profile["Profiles.mannerLevel"] ? null : getLevelById(profile["Profiles.mannerLevel"]),
+        skillLevel: !profile["Profiles.skillLevel"] ? null : profile["Profiles.skillLevel"],
+        mannerLevel: !profile["Profiles.mannerLevel"] ? null : profile["Profiles.mannerLevel"],
         gender: !profile.gender ? null : getGender(profile.gender),
         ageGroup: !profile.ageGroup ? null : getAgeGroup(profile.ageGroup),
         region: profile["Profiles.region"],
