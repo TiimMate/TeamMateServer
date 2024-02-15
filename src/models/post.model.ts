@@ -24,6 +24,18 @@ class Post extends Model<InferAttributes<Post>, InferCreationAttributes<Post>> {
                     type: new DataTypes.INTEGER(),
                     allowNull: false,
                 },
+                rentDate: {
+                    type: new DataTypes.DATE(),
+                    allowNull: true,
+                },
+                rentPlace: {
+                    type: new DataTypes.STRING(100),
+                    allowNull: true,
+                },
+                rentStatus: {
+                    type: new DataTypes.INTEGER(),
+                    allowNull: true,
+                },
             },
             {
                 sequelize,

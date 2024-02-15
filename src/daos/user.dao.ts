@@ -103,7 +103,7 @@ export const getUserProfileByCategory = async (userId: number, category: Categor
                 attributes: ["skillLevel", "mannerLevel", "region", "position", "description"],
             },
         ],
-        attributes: ["nickname", "gender", "ageGroup"],
+        attributes: ["nickname", "gender", "ageGroup", "avatarUrl"],
     });
 };
 

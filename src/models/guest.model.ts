@@ -20,6 +20,10 @@ class Guest extends Model<InferAttributes<Guest>, InferCreationAttributes<Guest>
                     type: new DataTypes.INTEGER(),
                     allowNull: false,
                 },
+                gameDuration: {
+                    type: new DataTypes.TIME(),
+                    allowNull: false,
+                },
                 status: {
                     type: new DataTypes.INTEGER(),
                     allowNull: false,
