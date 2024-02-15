@@ -4,6 +4,7 @@ import { AgeGroup } from "../types/age-group.enum";
 import { Gender } from "../types/gender.enum";
 
 interface ReadUserProfile {
+    avatarUrl: string | null;
     nickname: string;
     gender: Exclude<Gender, Gender.Mixed> | null;
     ageGroup: AgeGroup | null;
@@ -18,6 +19,7 @@ interface ReadUserProfile {
 
 export const readUserProfileResponseDTO = (profile: ReadUserProfile) => {
     return {
+        avatarUrl: profile.avatarUrl,
         nickname: profile.nickname,
         skillLevel: !profile["Profiles.skillLevel"] ? null : profile["Profiles.skillLevel"],
         mannerLevel: !profile["Profiles.mannerLevel"] ? null : profile["Profiles.mannerLevel"],

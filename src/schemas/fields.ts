@@ -122,3 +122,5 @@ export const dateQuery = object({
 });
 
 export const gameDurationField = { gameDuration: z.string() };
+
+export const avatarUrlField = { avatarUrl: z.optional(z.string().max(200)) };
