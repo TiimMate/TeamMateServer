@@ -66,8 +66,6 @@ const findPostByFilter = async (userId: number | undefined, postFilter: object) 
 };
 
 const findRentPostByDate = async (userId: number | undefined, date, postFilter: object) => {
-    console.log(postFilter);
-
     const posts = await db.Post.findAll({
         raw: true,
         where: {
