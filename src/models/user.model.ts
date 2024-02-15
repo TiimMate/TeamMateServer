@@ -32,6 +32,10 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
                     type: new DataTypes.INTEGER(),
                     allowNull: true,
                 },
+                avatarUrl: {
+                    type: new DataTypes.STRING(1000),
+                    allowNull: true,
+                },
             },
             {
                 sequelize,
