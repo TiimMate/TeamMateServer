@@ -121,6 +121,21 @@ export const dateQuery = object({
     }),
 });
 
+export const rentDateField = {
+    rentDate: z.optional(
+        z.preprocess((arg) => {
+            if (typeof arg == "string") {
+                return new Date(arg);
+            }
+            return arg;
+        }, z.date()),
+    ),
+};
+
+export const rentPlaceField = { rentPlace: z.optional(z.string().max(100)) };
+
+export const rentStatusField = { status: z.optional(z.number().int()) };
+
 export const gameDurationField = { gameDuration: z.string() };
 
 export const avatarUrlField = { avatarUrl: z.optional(z.string().max(200)) };
