@@ -9,12 +9,14 @@ import {
     levelField,
     regionFieldInTeam,
     genderFieldInTeam,
+    gameDurationField,
 } from "./fields";
 
 const body = {
     ...gameTimeField,
     ...descriptionField,
     ...recruitCountField,
+    ...gameDurationField,
 };
 
 const createGuestBody = object({

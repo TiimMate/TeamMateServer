@@ -92,7 +92,7 @@ export const statusField = { status: z.number().int() };
 
 export const recruitCountField = { recruitCount: z.number().int() };
 
-export const levelField = { level: z.number().int() };
+export const levelField = { level: z.string().max(5) };
 
 export const skillScoreField = { skillScore: z.number().int().min(1).max(5) };
 
@@ -135,3 +135,7 @@ export const rentDateField = {
 export const rentPlaceField = { rentPlace: z.optional(z.string().max(100)) };
 
 export const rentStatusField = { status: z.optional(z.number().int()) };
+
+export const gameDurationField = { gameDuration: z.string() };
+
+export const avatarUrlField = { avatarUrl: z.optional(z.string().max(200)) };
