@@ -8,9 +8,11 @@ import {
     positionField,
     regionFieldInProfile,
     heightField,
+    avatarUrlField,
 } from "./fields";
 
 const commonFields = {
+    ...avatarUrlField,
     ...nicknameField,
     ...genderFieldInUser,
     ...ageGroupFieldInUser,
