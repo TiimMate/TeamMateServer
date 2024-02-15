@@ -128,13 +128,25 @@ export const status: { [key: string]: Status } = {
         status: StatusCodes.NOT_FOUND,
         isSuccess: false,
         code: "GUESTER002",
-        message: "해당 게스트 신청 유저를 찾을 수 없습니다.",
+        message: "게스트 신청 유저를 찾을 수 없습니다.",
     },
     GUESTUSER_ALREADY_EXIST: {
         status: StatusCodes.NOT_FOUND,
         isSuccess: false,
-        code: "GUESTER002",
+        code: "GUESTER003",
         message: "이미 신청한 게스트 모집글입니다.",
+    },
+    ACCESS_DENIED_FOR_GUEST: {
+        status: StatusCodes.NOT_FOUND,
+        isSuccess: false,
+        code: "GUESTER004",
+        message: "게스트 수정 권한이 없습니다.",
+    },
+    CLOSED_GUEST: {
+        status: StatusCodes.NOT_FOUND,
+        isSuccess: false,
+        code: "GUESTER005",
+        message: "마감된 게스트 모집글입니다.",
     },
 
     // game error

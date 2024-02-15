@@ -56,7 +56,7 @@ export const readTeamDetail = async (userId: number, params) => {
     return readTeamDetailResponseDTO(detail, leaderInfo, membersInfo, userId == detail.leaderId);
 };
 
-export const readMembersInfo = async (details, category: Category) => {
+const readMembersInfo = async (details, category: Category) => {
     const membersInfoPromises = details
         .filter((detail) => detail["Members.userId"] !== null)
         .map(async (detail) => {

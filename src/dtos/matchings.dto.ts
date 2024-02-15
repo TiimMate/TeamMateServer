@@ -1,47 +1,14 @@
 import { getAgeGroup } from "../constants/age-group.constant";
 import { getTeamGender } from "../constants/gender.constant";
-import { getLevelById } from "../constants/level.constant";
-import { AgeGroup } from "../types/age-group.enum";
-import { Gender } from "../types/gender.enum";
+import { getGuestUserStatus } from "../constants/guest-status.constant";
 
-interface ReadMatching {
-    gameTime: string;
-    memberCount: number | null;
-    Team: {
-        name: string;
-        region: string | null;
-        gender: Gender;
-        ageGroup: AgeGroup;
-        skillLevel: number;
-    };
-}
-
-interface ReadGuestingUser {
-    status: number;
-    User: {
-        nickname: string;
-        height: number | null;
-    };
-}
-
-export const readMatchingResponseDTO = (matching: ReadMatching) => {
-    return {
-        gameTime: matching.gameTime,
-        teamName: matching["Team.name"],
-        teamRegion: matching["Team.region"],
-        teamGender: getTeamGender(matching["Team.gender"]),
-        memberCount: matching.memberCount,
-        teamAgeGroup: getAgeGroup(matching["Team.ageGroup"]),
-        teamSkillLevel: getLevelById(matching["Team.skillLevel"]),
-    };
-};
-
-export const readApplyGuestingUserResponseDTO = (guestingUsers: ReadGuestingUser) => {
-    return {
-        nickname: guestingUsers["User.nickname"],
-        height: guestingUsers["User.height"],
-        status: guestingUsers.status,
-    };
+export const readApplyGuestingUserResponseDTO = (result) => {
+    return result.map((guestingUser) => ({
+        nickname: guestingUser["User.nickname"],
+        height: guestingUser["User.height"],
+        position: guestingUser["User.Profiles.position"],
+        status: getGuestUserStatus(guestingUser.status),
+    }));
 };
 
 export const readHostingApplicantsTeamResponseDTO = (teams) => {
@@ -51,4 +18,37 @@ export const readHostingApplicantsTeamResponseDTO = (teams) => {
         teamName: team["Team.name"],
         memberCount: team.memberCount,
     }));
+};
+
+export const readMatchingResponseDTO = (guestings, games) => {
+    const sortedMatch = [...guestings, ...games].sort((a, b) => a.gameTime.getTime() - b.gameTime.getTime());
+    return sortedMatch.map((match) => {
+        if (match.type === "guest") {
+            return {
+                type: match.type,
+                matchId: match.id,
+                gameTime: match.gameTime,
+                gameDuration: match.gameDuration,
+                name: match["Team.name"],
+                region: match["Team.region"],
+                gender: getTeamGender(match["Team.gender"]),
+                memberCount: match.memberCount,
+                ageGroup: getAgeGroup(match["Team.ageGroup"]),
+                skillLevel: match["Team.skillLevel"],
+            };
+        } else {
+            return {
+                type: match.type,
+                matchId: match.id,
+                gameTime: match.gameTime,
+                gameDuration: match.gameDuration,
+                name: match["HostTeam.name"],
+                region: match["HostTeam.region"],
+                gender: getTeamGender(match["HostTeam.gender"]),
+                memberCount: match.memberCount,
+                ageGroup: getAgeGroup(match["HostTeam.ageGroup"]),
+                skillLevel: match["HostTeam.skillLevel"],
+            };
+        }
+    });
 };

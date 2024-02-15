@@ -1,26 +1,31 @@
 import { BaseError } from "../config/error";
 import { status } from "../config/response.status";
 import {
-    InsertGuestUser,
-    findGuesting,
-    findGuestingByGender,
-    findGuestingByLevel,
-    findGuestingByRegion,
+    findGuestAll,
+    findGuestByGender,
+    findGuestByLevel,
+    findGuestByRegion,
     getCategoryThroughTeamJoin,
     getDetailedGuesting,
     getGuestingById,
+    getTeamByGuestingId,
     insertGuesting,
     setGuesting,
 } from "../daos/guest.dao";
-import { readMembersInfo } from "./teams.service";
-import { getMemberCountByTeamId } from "../daos/member.dao";
-import { getTeamByLeaderId, getTeamDetailforGuesting } from "../daos/team.dao";
+import { addMemberCount, findMemberInfoByCategory } from "../daos/member.dao";
+import { getTeamByLeaderId, getTeamDetailForGuesting } from "../daos/team.dao";
 import { getUserInfoByCategory, getUserProfileByCategory } from "../daos/user.dao";
 import { readGuestingDetailResponseDTO, readGuestingResponseDTO } from "../dtos/guests.dto";
 import { CreateGuestingBody, UpdateGuestingBody } from "../schemas/guest.schema";
-import { checkForDuplicateGuestUser } from "../daos/guest-user.dao";
+import {
+    insertGuestUser,
+    checkForDuplicateGuestUser,
+    getGuestUserById,
+    getGuestIdById,
+    setGuestUserStatus,
+} from "../daos/guest-user.dao";
 
-export const createGuesting = async (userId, body: CreateGuestingBody) => {
+export const createGuesting = async (userId: number, body: CreateGuestingBody) => {
     const teamId = body.teamId;
     const team = await getTeamByLeaderId(teamId, userId);
     if (!team) {
@@ -30,10 +35,11 @@ export const createGuesting = async (userId, body: CreateGuestingBody) => {
     return;
 };
 
-export const updateGuesting = async (userId, params, body: UpdateGuestingBody) => {
+export const updateGuesting = async (userId: number, params, body: UpdateGuestingBody) => {
     const guestingId = params.guestingId;
-    const guesting = await getGuestingById(guestingId, userId);
-    if (!guesting) {
+    const teamId = await getTeamByGuestingId(guestingId, userId);
+    const guesting = await getGuestingById(guestingId);
+    if (!guesting || !teamId) {
         throw new BaseError(status.GUEST_NOT_FOUND);
     }
     await setGuesting(guesting, body);
@@ -41,44 +47,44 @@ export const updateGuesting = async (userId, params, body: UpdateGuestingBody) =
 };
 
 export const readGuesting = async (query) => {
-    const guestings = await findGuesting(query.date, query.category);
-    for (const guesting of guestings) {
-        guesting.memberCount = (await getMemberCountByTeamId(guesting["Team.id"])) + 1;
-    }
+    const cursorId = query.cursorId ? parseInt(query.cursorId) : undefined;
+    const guestings = await findGuestAll(query.date, query.category, cursorId);
+    await addMemberCount(guestings.guests);
     return readGuestingResponseDTO(guestings);
 };
 
 export const readGuestingByGender = async (query) => {
-    const guestings = await findGuestingByGender(query.date, query.category, query.gender);
-    for (const guesting of guestings) {
-        guesting.memberCount = (await getMemberCountByTeamId(guesting["Team.id"])) + 1;
-    }
+    const cursorId = query.cursorId ? parseInt(query.cursorId) : undefined;
+    const guestings = await findGuestByGender(query.date, query.category, query.gender, cursorId);
+    await addMemberCount(guestings.guests);
     return readGuestingResponseDTO(guestings);
 };
 
 export const readGuestingByLevel = async (query) => {
-    const guestings = await findGuestingByLevel(query.date, query.category, query.skillLevel);
-    for (const guesting of guestings) {
-        guesting.memberCount = (await getMemberCountByTeamId(guesting["Team.id"])) + 1;
-    }
+    const cursorId = query.cursorId ? parseInt(query.cursorId) : undefined;
+    const guestings = await findGuestByLevel(query.date, query.category, query.level, cursorId);
+    await addMemberCount(guestings.guests);
     return readGuestingResponseDTO(guestings);
 };
 
 export const readGuestingByRegion = async (query) => {
-    const guestings = await findGuestingByRegion(query.date, query.category, query.region);
-    for (const guesting of guestings) {
-        guesting.memberCount = (await getMemberCountByTeamId(guesting["Team.id"])) + 1;
-    }
+    const cursorId = query.cursorId ? parseInt(query.cursorId) : undefined;
+    const guestings = await findGuestByRegion(query.date, query.category, query.region, cursorId);
+    await addMemberCount(guestings.guests);
     return readGuestingResponseDTO(guestings);
 };
 
 export const readDetailedGuesting = async (params) => {
     const guestingId = params.guestingId;
     const guestingDetail = await getDetailedGuesting(guestingId);
-    const TeamDetail = await getTeamDetailforGuesting(guestingDetail.teamId);
-    const leaderInfo = await getUserInfoByCategory(TeamDetail.leaderId, TeamDetail.category);
-    const memberInfo = await readMembersInfo(TeamDetail, TeamDetail.category);
-    return readGuestingDetailResponseDTO(guestingDetail, TeamDetail, leaderInfo, memberInfo);
+    if (!guestingDetail) {
+        throw new BaseError(status.GUEST_NOT_FOUND);
+    }
+
+    const teamDetail = await getTeamDetailForGuesting(guestingDetail.teamId);
+    const leaderInfo = await getUserInfoByCategory(teamDetail.leaderId, teamDetail.category);
+    const memberInfo = await findMemberInfoByCategory(guestingDetail.teamId, teamDetail.category);
+    return readGuestingDetailResponseDTO(guestingDetail, teamDetail, leaderInfo, memberInfo);
 };
 
 export const addGuestUser = async (userId: number, params) => {
@@ -95,7 +101,7 @@ export const addGuestUser = async (userId: number, params) => {
         throw new BaseError(status.NOT_FILL_USER_PROFILE);
     }
 
-    await InsertGuestUser(guestingId, userId);
+    await insertGuestUser(guestingId, userId);
     return;
 };
 
@@ -106,4 +112,21 @@ const isUserProfileValid = (userProfile): boolean => {
         // userProfile.height &&
         // userProfile["Profiles.position"]
     );
+};
+
+export const updateGuestUserStatus = async (params) => {
+    const guestUserId = params.guestUserId;
+    const guestUser = await getGuestUserById(guestUserId);
+    if (!guestUser) {
+        throw new BaseError(status.GUESTUSER_NOT_FOUND);
+    }
+
+    const guestId = await getGuestIdById(guestUserId);
+    const guest = await getGuestingById(guestId);
+    if (guest.status) {
+        throw new BaseError(status.CLOSED_GUEST);
+    }
+
+    await setGuestUserStatus(guestUser, guest);
+    return;
 };

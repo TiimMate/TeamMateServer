@@ -4,12 +4,6 @@ class Guest extends Model<InferAttributes<Guest>, InferCreationAttributes<Guest>
     static initiate(sequelize: Sequelize) {
         Guest.init(
             {
-                id: {
-                    type: new DataTypes.INTEGER(),
-                    allowNull: false,
-                    primaryKey: true,
-                    autoIncrement: true,
-                },
                 teamId: {
                     type: new DataTypes.INTEGER(),
                     allowNull: false,
@@ -25,6 +19,15 @@ class Guest extends Model<InferAttributes<Guest>, InferCreationAttributes<Guest>
                 recruitCount: {
                     type: new DataTypes.INTEGER(),
                     allowNull: false,
+                },
+                gameDuration: {
+                    type: new DataTypes.TIME(),
+                    allowNull: false,
+                },
+                status: {
+                    type: new DataTypes.INTEGER(),
+                    allowNull: false,
+                    defaultValue: 0,
                 },
             },
             {

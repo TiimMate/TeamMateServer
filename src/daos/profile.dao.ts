@@ -1,7 +1,8 @@
 import db from "../models";
-import { defaultLevel } from "../constants/level.constant";
 import { CategoryProfile } from "../schemas/user-profile.schema";
 import { Category } from "../types/category.enum";
+
+const defaultLevel = 0;
 
 export const getUserProfile = async (userId: number, category: Category) => {
     return await db.Profile.findOne({
