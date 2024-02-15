@@ -33,7 +33,7 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
                     allowNull: true,
                 },
                 avatarUrl: {
-                    type: new DataTypes.STRING(1000),
+                    type: new DataTypes.STRING(200),
                     allowNull: true,
                 },
             },
