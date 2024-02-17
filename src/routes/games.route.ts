@@ -7,7 +7,6 @@ import {
     fetchGamesByGender,
     fetchGamesByLevel,
     fetchGamesByRegion,
-    fetchTeamsAvailById,
     fetchGameDetail,
     addGame,
     modifyGame,
@@ -31,9 +30,6 @@ gamesRouter.get("/", validate(readGameSchema), asyncHandler(fetchGamesByDate));
 gamesRouter.get("/by-gender", validate(readGameFilterGenderSchema), asyncHandler(fetchGamesByGender));
 gamesRouter.get("/by-level", validate(readGameFilterLevelSchema), asyncHandler(fetchGamesByLevel));
 gamesRouter.get("/by-region", validate(readGameFilterRegionSchema), asyncHandler(fetchGamesByRegion));
-
-// 연습경기 신청 가능 팀 목록 조회
-gamesRouter.get("/apply-avail", verifyUser, asyncHandler(fetchTeamsAvailById));
 
 // 연습경기 신청
 gamesRouter.post("/:gameId/application", verifyUser, asyncHandler(applyGame));

@@ -28,10 +28,6 @@ export const fetchGamesByRegion = async (req, res, next) => {
     res.send(response(status.SUCCESS, await readGamesByRegion(req.query)));
 };
 
-export const fetchTeamsAvailById = async (req, res, next) => {
-    res.send(response(status.SUCCESS, await readTeamAvailPreviewById(req.user.id, req.query)));
-};
-
 export const fetchGameDetail = async (req, res, next) => {
     res.send(response(status.SUCCESS, await readGameDetail(req.params)));
 };
