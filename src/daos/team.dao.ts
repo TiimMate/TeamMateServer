@@ -56,18 +56,11 @@ export const insertTeam = async (data: CreateTeamBody, userId: number, inviteCod
 };
 
 export const getTeamDetail = async (teamId: number) => {
-    return await db.Team.findAll({
+    return await db.Team.findOne({
         raw: true,
         where: {
             id: teamId,
         },
-        include: [
-            {
-                model: db.Member,
-                attributes: ["userId"],
-                required: false,
-            },
-        ],
         attributes: ["name", "logo", "skillLevel", "mannerLevel", "description", "leaderId", "category"],
     });
 };
