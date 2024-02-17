@@ -94,6 +94,12 @@ export const recruitCountField = { recruitCount: z.number().int() };
 
 export const levelField = { level: z.string().max(5) };
 
+export const levelFieldInTeam = {
+    skillLevel: z.string().refine((val) => !Number.isNaN(parseInt(val, 10)), {
+        message: "Expected number, received a string",
+    }),
+};
+
 export const skillScoreField = { skillScore: z.number().int().min(1).max(5) };
 
 export const mannerScoreField = { mannerScore: z.number().int().min(1).max(5) };

@@ -5,25 +5,16 @@ import {
     descriptionFieldInGame,
     categoryField,
     dateField,
-    levelField,
+    levelFieldInTeam,
     regionFieldInTeam,
     genderFieldInTeam,
+    gameDurationField,
 } from "./fields";
-
-const fields = {
-    hostTeamId: z.number().int().optional(),
-    gameTime: z.preprocess((arg) => {
-        if (typeof arg == "string") {
-            return new Date(arg);
-        }
-        return arg;
-    }, z.date()),
-    description: z.string(),
-};
 
 const body = object({
     ...hostTeamIdField,
     ...gameTimeField,
+    ...gameDurationField,
     ...descriptionFieldInGame,
 });
 
@@ -60,7 +51,7 @@ export const readGameFilterGenderSchema = object({
 export const readGameFilterLevelSchema = object({
     query: object({
         ...readGame,
-        ...levelField,
+        ...levelFieldInTeam,
     }),
 });
 
