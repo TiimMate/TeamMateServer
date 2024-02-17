@@ -12,7 +12,6 @@ import {
 
 const fields = {
     hostTeamId: z.number().int().optional(),
-    // 본인이 리더인 팀이 하나인 경우는 바로 들어가겠지만, 여러 개이면 선택하여 들어갈 듯..?
     gameTime: z.preprocess((arg) => {
         if (typeof arg == "string") {
             return new Date(arg);
@@ -28,19 +27,11 @@ const body = object({
     ...descriptionFieldInGame,
 });
 
-export const createGame = object({
-    ...fields,
-});
-
 export const createGameSchema = object({
     body: body,
 });
 
 export type CreateGameBody = TypeOf<typeof body>;
-
-export const updateGame = object({
-    ...fields,
-});
 
 export const updateGameSchema = object({
     body: body,
