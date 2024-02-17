@@ -66,9 +66,10 @@ export const readGuestingDetailResponseDTO = (
         name: TeamDetail.name,
         skillLevel: TeamDetail.skillLevel,
         mannerLevel: TeamDetail.mannerLevel,
-        description: TeamDetail.description,
+        teamDescription: TeamDetail.description,
         status: getStatus(guestingDetail.status),
         gusting_info: {
+            guestDescription: guestingDetail.description,
             gameTime: guestingDetail.gameTime,
             gameDuration: guestingDetail.gameDuration,
             gender: getTeamGender(TeamDetail.gender),
