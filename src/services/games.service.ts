@@ -11,6 +11,7 @@ import {
     insertGameApplication,
 } from "../daos/game.dao";
 import {
+    getTeam,
     getTeamDetailForGuesting,
     getTeamIdByLeaderId,
     getTeamCategoryByLeaderId,
@@ -19,6 +20,7 @@ import {
 import { getMemberCountByTeamId, findMemberInfoByCategory } from "../daos/member.dao";
 import { getUserInfoByCategory, userInfoAttributes } from "../daos/user.dao";
 import { getGameByUserId } from "../daos/game.dao";
+import { checkApplicationExisting } from "../daos/game-apply.dao";
 import { readGameResponseDTO, readGameDetailResponseDTO } from "../dtos/games.dto";
 import { CreateGameBody, UpdateGameBody } from "../schemas/game.schema";
 import { ApplyGameBody } from "../schemas/game-apply.schema";
@@ -93,10 +95,25 @@ export const updateGame = async (userId, params, body: UpdateGameBody) => {
 
 export const addGameApplication = async (userId: number, params, body: ApplyGameBody) => {
     const gameId = params.gameId;
-    const teamId = await getTeamIdByLeaderId(userId);
-    const team = await getTeamByLeaderId(teamId, userId);
+    const teamId = body.teamId;
+
+    // team does not exist
+    const team = await getTeam(teamId);
+    console.log(team);
     if (!team) {
+        throw new BaseError(status.TEAM_NOT_FOUND);
+    }
+
+    // no team of which the user is a leader
+    const myTeam = await getTeamByLeaderId(teamId, userId);
+    if (!myTeam) {
         throw new BaseError(status.TEAM_LEADER_NOT_FOUND);
+    }
+
+    // application already exists
+    const applicationExisting = await checkApplicationExisting(gameId, teamId);
+    if (applicationExisting) {
+        throw new BaseError(status.GAME_APPLICATION_ALREADY_EXIST);
     }
 
     await insertGameApplication(gameId, body);
