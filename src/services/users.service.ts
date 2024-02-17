@@ -27,8 +27,8 @@ export const updateRefreshToken = async (refreshToken: string, userId: number) =
     await setRefreshToken(refreshToken, userId);
 };
 
-export const readUserProfile = async (userId: number, params) => {
-    const profile = await getUserProfileByCategory(userId, params.category);
+export const readUserProfile = async (params) => {
+    const profile = await getUserProfileByCategory(params.userId, params.category);
     if (!profile) {
         throw new BaseError(status.USER_NOT_FOUND);
     }
