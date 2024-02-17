@@ -61,7 +61,20 @@ export const getTeamDetail = async (teamId: number) => {
         where: {
             id: teamId,
         },
-        attributes: ["name", "logo", "skillLevel", "mannerLevel", "description", "leaderId", "category"],
+        attributes: [
+            "name",
+            "logo",
+            "skillLevel",
+            "mannerLevel",
+            "description",
+            "inviteCode",
+            "gender",
+            "ageGroup",
+            "region",
+            "gymName",
+            "leaderId",
+            "category",
+        ],
     });
 };
 
