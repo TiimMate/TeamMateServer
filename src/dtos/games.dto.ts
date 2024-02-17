@@ -18,6 +18,7 @@ export const readGameResponseDTO = (games) => {
 
 export const readGameDetailResponseDTO = (gameDetail, teamDetail, leaderInfo, memberInfo) => {
     const member = memberInfo.map((info) => ({
+        avatarUrl: info["User.avatarUrl"],
         nickname: info["User.nickname"],
         height: info["User.height"],
         position: info["User.Profiles.position"],
