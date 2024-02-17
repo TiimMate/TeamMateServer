@@ -1,7 +1,6 @@
 import { BaseError } from "../config/error";
 import { status } from "../config/response.status";
 import { v4 as uuidv4 } from "uuid";
-import { Category } from "../types/category.enum";
 import { CreateTeamBody, UpdateTeamBody } from "../schemas/team.schema";
 import {
     findTeamPreviewByCategory,
@@ -54,15 +53,6 @@ export const readTeamDetail = async (userId: number, params) => {
     const membersInfo = await findMemberInfoByCategory(teamId, detail.category);
     return readTeamDetailResponseDTO(detail, leaderInfo, membersInfo, userId == detail.leaderId);
 };
-
-// const readMembersInfo = async (details, category: Category) => {
-//     const membersInfoPromises = details
-//         .filter((detail) => detail["Members.userId"] !== null)
-//         .map(async (detail) => {
-//             return await getUserInfoByCategory(detail["Members.userId"], category);
-//         });
-//     return await Promise.all(membersInfoPromises);
-// };
 
 export const readTeamAvailPreviewById = async (userId, query) => {
     return await findTeamPreviewByCategoryForLeader(userId, query.category);
