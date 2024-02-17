@@ -55,6 +55,16 @@ export const insertTeam = async (data: CreateTeamBody, userId: number, inviteCod
     });
 };
 
+export const getTeam = async (teamId: number) => {
+    return await db.Team.findOne({
+        raw: true,
+        where: {
+            id: teamId,
+        },
+        attributes: ["id"],
+    });
+};
+
 export const getTeamDetail = async (teamId: number) => {
     return await db.Team.findOne({
         raw: true,

@@ -205,4 +205,12 @@ export const status: { [key: string]: Status } = {
         code: "REVIEW004",
         message: "이미 리뷰를 작성했습니다.",
     },
+
+    // game-apply err
+    GAME_APPLICATION_ALREADY_EXIST: {
+        status: StatusCodes.CONFLICT,
+        isSuccess: false,
+        code: "GAMEAPPLY001",
+        message: "이미 신청한 연습경기 모집글입니다.",
+    },
 };
