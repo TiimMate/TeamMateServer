@@ -4,10 +4,12 @@ import { AgeGroup } from "../types/age-group.enum";
 import { Gender } from "../types/gender.enum";
 
 interface ReadUserProfile {
+    id: number;
     avatarUrl: string | null;
     nickname: string;
     gender: Exclude<Gender, Gender.Mixed> | null;
     ageGroup: AgeGroup | null;
+    height: number | null;
     Profiles: {
         skillLevel: number;
         mannerLevel: number;
@@ -19,13 +21,15 @@ interface ReadUserProfile {
 
 export const readUserProfileResponseDTO = (profile: ReadUserProfile) => {
     return {
+        id: profile.id,
         avatarUrl: profile.avatarUrl,
         nickname: profile.nickname,
-        skillLevel: !profile["Profiles.skillLevel"] ? null : profile["Profiles.skillLevel"],
-        mannerLevel: !profile["Profiles.mannerLevel"] ? null : profile["Profiles.mannerLevel"],
-        gender: !profile.gender ? null : getGender(profile.gender),
-        ageGroup: !profile.ageGroup ? null : getAgeGroup(profile.ageGroup),
+        skillLevel: profile["Profiles.skillLevel"],
+        mannerLevel: profile["Profiles.mannerLevel"],
+        gender: profile.gender,
+        ageGroup: profile.ageGroup,
         region: profile["Profiles.region"],
+        height: profile.height,
         position: profile["Profiles.position"],
         description: profile["Profiles.description"],
     };
