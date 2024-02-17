@@ -34,7 +34,6 @@ export const readTeamDetailResponseDTO = (
     membersInfo: MemberInfo[],
     isTeamLeader: boolean,
 ) => {
-    console.log(membersInfo);
     const member = membersInfo.map((memberInfo: MemberInfo) => ({
         id: memberInfo["User.id"],
         avatarUrl: memberInfo["User.avatarUrl"],
