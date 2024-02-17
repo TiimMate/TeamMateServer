@@ -11,7 +11,7 @@ import {
     setTeam,
     findTeamPreviewByCategoryForLeader,
 } from "../daos/team.dao";
-import { deleteMembers, findMemberToDelete } from "../daos/member.dao";
+import { deleteMembers, findMemberInfoByCategory, findMemberToDelete } from "../daos/member.dao";
 import { getUserInfoByCategory } from "../daos/user.dao";
 import { updateOpposingTeam } from "../daos/game.dao";
 import { readTeamDetailResponseDTO } from "../dtos/teams.dto";
@@ -46,24 +46,23 @@ export const updateTeam = async (userId: number, params, body: UpdateTeamBody) =
 
 export const readTeamDetail = async (userId: number, params) => {
     const teamId = params.teamId;
-    const details = await getTeamDetail(teamId);
-    const detail = details[0];
+    const detail = await getTeamDetail(teamId);
     if (!detail) {
         throw new BaseError(status.TEAM_NOT_FOUND);
     }
     const leaderInfo = await getUserInfoByCategory(detail.leaderId, detail.category);
-    const membersInfo = await readMembersInfo(details, detail.category);
+    const membersInfo = await findMemberInfoByCategory(teamId, detail.category);
     return readTeamDetailResponseDTO(detail, leaderInfo, membersInfo, userId == detail.leaderId);
 };
 
-const readMembersInfo = async (details, category: Category) => {
-    const membersInfoPromises = details
-        .filter((detail) => detail["Members.userId"] !== null)
-        .map(async (detail) => {
-            return await getUserInfoByCategory(detail["Members.userId"], category);
-        });
-    return await Promise.all(membersInfoPromises);
-};
+// const readMembersInfo = async (details, category: Category) => {
+//     const membersInfoPromises = details
+//         .filter((detail) => detail["Members.userId"] !== null)
+//         .map(async (detail) => {
+//             return await getUserInfoByCategory(detail["Members.userId"], category);
+//         });
+//     return await Promise.all(membersInfoPromises);
+// };
 
 export const readTeamAvailPreviewById = async (userId, query) => {
     return await findTeamPreviewByCategoryForLeader(userId, query.category);
