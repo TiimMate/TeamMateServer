@@ -4,87 +4,61 @@ import { CreateGameBody } from "../schemas/game.schema";
 import { ApplyGameBody } from "../schemas/game-apply.schema";
 import { getTeamIdByLeaderId } from "./team.dao";
 import { MatchType } from "../types/match-type.enum";
+import { Category } from "../types/category.enum";
+import { Gender } from "../types/gender.enum";
+import { calculateHasNext, generateCursorCondition } from "../utils/paging.util";
 
-export const findGamesByDate = async (date, category) => {
-    return await db.Game.findAll({
-        raw: true,
-        where: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${date}', '%Y-%m-%d')`),
-        include: [
-            {
-                model: db.Team,
-                as: "HostTeam",
-                attributes: ["id", "name", "region", "gender", "ageGroup", "skillLevel"],
-                where: {
-                    category,
-                },
-            },
-        ],
-        attributes: ["id", "gameTime", "status"],
-        order: [["created_at", "DESC"]],
-    });
+const defaultLimit = 20;
+
+export const findGamesByDate = async (date: string, category: Category, cursorId: number | undefined) => {
+    const gamesBeforeCursor = generateCursorCondition(cursorId);
+    const teamFilter = { category };
+    return findGames(date, gamesBeforeCursor, teamFilter);
 };
 
-export const findGamesByGender = async (date, category, gender) => {
-    return await db.Game.findAll({
-        raw: true,
-        where: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${date}', '%Y-%m-%d')`),
-        include: [
-            {
-                model: db.Team,
-                as: "HostTeam",
-                attributes: ["id", "name", "region", "gender", "ageGroup", "skillLevel"],
-                where: {
-                    category,
-                    gender,
-                },
-            },
-        ],
-        attributes: ["id", "gameTime", "status"],
-        order: [["created_at", "DESC"]],
-    });
+export const findGamesByGender = async (
+    date: string,
+    category: Category,
+    gender: Gender,
+    cursorId: number | undefined,
+) => {
+    const gamesBeforeCursor = generateCursorCondition(cursorId);
+    const teamFilter = { category, gender };
+    return findGames(date, gamesBeforeCursor, teamFilter);
 };
 
-export const findGamesByLevel = async (date, category, skillLevel) => {
-    return await db.Game.findAll({
-        raw: true,
-        where: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${date}', '%Y-%m-%d')`),
-        include: [
-            {
-                model: db.Team,
-                as: "HostTeam",
-                attributes: ["id", "name", "region", "gender", "ageGroup", "skillLevel"],
-                where: {
-                    category,
-                    skillLevel,
-                    // skillLevel: {
-                    //     [Op.between]: [Math.floor(skillLevel / 10) * 10, Math.floor(skillLevel / 10) * 10 + 9],
-                    // },
-                },
-            },
-        ],
-        attributes: ["id", "gameTime", "status"],
-        order: [["created_at", "DESC"]],
-    });
+export const findGamesByLevel = async (date: string, category: Category, skillLevel, cursorId: number | undefined) => {
+    const gamesBeforeCursor = generateCursorCondition(cursorId);
+    const teamFilter = { category, skillLevel };
+    return findGames(date, gamesBeforeCursor, teamFilter);
 };
 
-export const findGamesByRegion = async (date, category, region) => {
-    return await db.Game.findAll({
+export const findGamesByRegion = async (date: string, category: Category, region, cursorId: number | undefined) => {
+    const gamesBeforeCursor = generateCursorCondition(cursorId);
+    const teamFilter = { category, region };
+    return findGames(date, gamesBeforeCursor, teamFilter);
+};
+
+export const findGames = async (date: string, gameFilter: object, teamFilter: object) => {
+    const games = await db.Game.findAll({
         raw: true,
-        where: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${date}', '%Y-%m-%d')`),
+        where: {
+            ...gameFilter,
+            [Op.and]: Sequelize.literal(`DATE_FORMAT(game_time, '%Y-%m-%d') = DATE_FORMAT('${date}', '%Y-%m-%d')`),
+        },
         include: [
             {
                 model: db.Team,
                 as: "HostTeam",
                 attributes: ["id", "name", "region", "gender", "ageGroup", "skillLevel"],
-                where: {
-                    category,
-                    region,
-                },
+                where: teamFilter,
             },
         ],
         attributes: ["id", "gameTime", "status"],
         order: [["created_at", "DESC"]],
+        limit: defaultLimit,
     });
+    return { games, hasNext: calculateHasNext(games, defaultLimit) };
 };
 
 export const getGameDetail = async (gameId) => {
