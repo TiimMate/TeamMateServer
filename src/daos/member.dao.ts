@@ -11,7 +11,7 @@ export const findMemberInfoByCategory = async (teamId: number, category: Categor
         include: [
             {
                 model: db.User,
-                attributes: ["nickname", "height"],
+                attributes: ["id", "nickname", "height", "avatarUrl"],
                 include: [
                     {
                         model: db.Profile,

@@ -58,7 +58,7 @@ export const getUserInfoByCategory = async (userId: number, category: Category) 
         where: {
             id: userId,
         },
-        attributes: ["nickname", "height"],
+        attributes: ["id", "nickname", "height", "avatarUrl"],
         include: [
             {
                 model: db.Profile,
