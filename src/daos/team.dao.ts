@@ -180,7 +180,7 @@ export const findTeamPreviewByCategoryForLeader = async (userId: number, categor
             category,
             leaderId: userId,
         },
-        attributes: ["name"],
+        attributes: ["id", "name"],
     });
 };
 
