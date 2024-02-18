@@ -23,7 +23,7 @@ export const getApplyGuestingUser = async (guestingId: number) => {
                         attributes: ["position"],
                     },
                 ],
-                attributes: ["nickname", "height"],
+                attributes: ["nickname", "height", "avatarUrl"],
             },
         ],
         attributes: ["status"],
