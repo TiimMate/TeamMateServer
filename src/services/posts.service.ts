@@ -7,7 +7,12 @@ import { getBookmark, insertOrDeleteBookmark } from "../daos/bookmark.dao";
 import { findComment, getCommentCount, insertComment } from "../daos/comment.dao";
 import { findImage } from "../daos/image.dao";
 import { findPostByType, findPostByAuthorId, findBookmarkedPost, getPost, insertPost } from "../daos/post.dao";
-import { readCommentsResonseDTO, readPostResponseDTO, readPostsResponseDTO } from "../dtos/posts.dto";
+import {
+    readCommentsResonseDTO,
+    readPostResponseDTO,
+    readPostsResponseDTO,
+    readRentPostsResponseDTO,
+} from "../dtos/posts.dto";
 
 export const readCommunityPosts = async (userId: number | undefined, query) => {
     const result = await findPostByType(userId, query.date, query.cursorId, PostType.Community);
@@ -81,5 +86,5 @@ export const createRentPost = async (userId: number, body: CreatePostBody) => {
 
 export const readRentPosts = async (userId: number | undefined, query) => {
     const result = await findPostByType(userId, query.date, query.cursorId, PostType.RentalInfo);
-    return readPostsResponseDTO(result);
+    return readRentPostsResponseDTO(result);
 };

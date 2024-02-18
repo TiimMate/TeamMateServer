@@ -10,6 +10,18 @@ export const readPostsResponseDTO = (result) => {
     };
 };
 
+export const readRentPostsResponseDTO = (result) => {
+    return {
+        posts: result.posts.map((post) => ({
+            id: post.id,
+            title: post.title,
+            content: post.content,
+            status: post.rentStatus,
+        })),
+        hasNext: result.hasNext,
+    };
+};
+
 export const readPostResponseDTO = (post, imageUrls, commentCount, comments, isBookmarked) => {
     return {
         post: {
