@@ -6,6 +6,7 @@ export const readApplyGuestingUserResponseDTO = (result) => {
     return result.map((guestingUser) => ({
         nickname: guestingUser["User.nickname"],
         height: guestingUser["User.height"],
+        avatarUrl: guestingUser["User.avatarUrl"],
         position: guestingUser["User.Profiles.position"],
         status: getGuestUserStatus(guestingUser.status),
     }));

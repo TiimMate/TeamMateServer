@@ -27,6 +27,7 @@ interface TeamDetail {
 interface UserInfo {
     nickname: string;
     height: number | null;
+    avatarUrl: string | null;
     Profiles: {
         position: string | null;
     };
@@ -60,6 +61,7 @@ export const readGuestingDetailResponseDTO = (
     const member = memberInfo.map((info: UserInfo) => ({
         nickname: info.nickname,
         height: info.height,
+        avatarUrl: info.avatarUrl,
         position: info["Profiles.position"],
     }));
     return {
@@ -81,6 +83,7 @@ export const readGuestingDetailResponseDTO = (
             leader: {
                 nickname: leaderInfo.nickname,
                 height: leaderInfo.height,
+                avatarUrl: leaderInfo.avatarUrl,
                 position: leaderInfo["Profiles.position"],
             },
             member,
