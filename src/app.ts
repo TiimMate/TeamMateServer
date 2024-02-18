@@ -4,7 +4,7 @@ dotenv.config();
 import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 
-import db from "./models/index";
+// import db from "./models/index";
 import { response } from "./config/response";
 import { BaseError } from "./config/error";
 import { status } from "./config/response.status";
@@ -23,14 +23,14 @@ import { healthRoute } from "./routes/health.route";
 const app = express();
 
 app.set("port", process.env.PORT || 3000);
-db.sequelize
-  .sync({ force: false })
-  .then(() => {
-    console.log("데이터베이스 연결 성공");
-  })
-  .catch((err) => {
-    console.error(err);
-  });
+// db.sequelize
+//   .sync({ force: false })
+//   .then(() => {
+//     console.log("데이터베이스 연결 성공");
+//   })
+//   .catch((err) => {
+//     console.error(err);
+//   });
 app.use(cors());
 app.use(express.static("public"));
 app.use(express.json());
