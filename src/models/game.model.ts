@@ -16,6 +16,10 @@ class Game extends Model<InferAttributes<Game>, InferCreationAttributes<Game>> {
                     type: new DataTypes.DATE(),
                     allowNull: false,
                 },
+                gameDuration: {
+                    type: new DataTypes.TIME(),
+                    allowNull: false,
+                },
                 category: {
                     type: new DataTypes.STRING(15),
                     allowNull: false,

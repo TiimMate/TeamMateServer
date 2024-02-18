@@ -4,6 +4,7 @@ import { getStatus } from "../constants/status.constant";
 
 export const readGameResponseDTO = (games) => {
     return games.map((game) => ({
+        gameId: game.id,
         gameTime: game.gameTime,
         teamName: game["HostTeam.name"],
         teamRegion: game["HostTeam.region"],
@@ -22,6 +23,7 @@ export const readGameDetailResponseDTO = (gameDetail, teamDetail, leaderInfo, me
         position: info["User.Profiles.position"],
     }));
     return {
+        id: gameDetail.id,
         name: teamDetail.name,
         skillLevel: teamDetail.skillLevel,
         mannerLevel: teamDetail.mannerLevel,
@@ -29,6 +31,7 @@ export const readGameDetailResponseDTO = (gameDetail, teamDetail, leaderInfo, me
         game_info: {
             gymName: teamDetail.gymName,
             gameTime: gameDetail.gameTime,
+            gameDuration: gameDetail.gameDuration,
             gender: getGender(teamDetail.gender),
             ageGroup: getAgeGroup(teamDetail.ageGroup),
         },

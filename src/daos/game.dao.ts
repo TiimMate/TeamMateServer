@@ -19,7 +19,7 @@ export const findGamesByDate = async (date, category) => {
                 },
             },
         ],
-        attributes: ["gameTime", "status"],
+        attributes: ["id", "gameTime", "status"],
         order: [["created_at", "DESC"]],
     });
 };
@@ -39,7 +39,7 @@ export const findGamesByGender = async (date, category, gender) => {
                 },
             },
         ],
-        attributes: ["gameTime", "status"],
+        attributes: ["id", "gameTime", "status"],
         order: [["created_at", "DESC"]],
     });
 };
@@ -55,13 +55,14 @@ export const findGamesByLevel = async (date, category, skillLevel) => {
                 attributes: ["id", "name", "region", "gender", "ageGroup", "skillLevel"],
                 where: {
                     category,
-                    skillLevel: {
-                        [Op.between]: [Math.floor(skillLevel / 10) * 10, Math.floor(skillLevel / 10) * 10 + 9],
-                    },
+                    skillLevel,
+                    // skillLevel: {
+                    //     [Op.between]: [Math.floor(skillLevel / 10) * 10, Math.floor(skillLevel / 10) * 10 + 9],
+                    // },
                 },
             },
         ],
-        attributes: ["gameTime", "status"],
+        attributes: ["id", "gameTime", "status"],
         order: [["created_at", "DESC"]],
     });
 };
@@ -81,7 +82,7 @@ export const findGamesByRegion = async (date, category, region) => {
                 },
             },
         ],
-        attributes: ["gameTime", "status"],
+        attributes: ["id", "gameTime", "status"],
         order: [["created_at", "DESC"]],
     });
 };
@@ -92,7 +93,7 @@ export const getGameDetail = async (gameId) => {
         where: {
             id: gameId,
         },
-        attributes: ["hostTeamId", "gameTime", "description"],
+        attributes: ["hostTeamId", "gameTime", "gameDuration", "description"],
     });
 };
 
@@ -100,6 +101,7 @@ export const insertGame = async (hostTeamId, data: CreateGameBody, category) => 
     await db.Game.create({
         hostTeamId: hostTeamId,
         gameTime: data.gameTime,
+        gameDuration: data.gameDuration,
         category: category,
         description: data.description,
     });
