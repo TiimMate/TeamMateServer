@@ -1,20 +1,40 @@
-import { Model, InferAttributes, InferCreationAttributes, CreationOptional, DataTypes, Sequelize } from "sequelize";
+import { Model, InferAttributes, InferCreationAttributes, DataTypes, Sequelize } from "sequelize";
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
-    declare id: CreationOptional<number>;
-    declare nickname: string;
-
     static initiate(sequelize: Sequelize) {
         User.init(
             {
-                id: {
-                    type: DataTypes.INTEGER,
-                    autoIncrement: true,
-                    primaryKey: true,
-                },
                 nickname: {
                     type: new DataTypes.STRING(10),
                     allowNull: false,
+                },
+                provider: {
+                    type: new DataTypes.STRING(10),
+                    allowNull: false,
+                },
+                providerId: {
+                    type: new DataTypes.STRING(50),
+                    allowNull: false,
+                },
+                refreshToken: {
+                    type: new DataTypes.STRING(150),
+                    allowNull: true,
+                },
+                gender: {
+                    type: new DataTypes.STRING(1),
+                    allowNull: true,
+                },
+                ageGroup: {
+                    type: new DataTypes.STRING(10),
+                    allowNull: true,
+                },
+                height: {
+                    type: new DataTypes.INTEGER(),
+                    allowNull: true,
+                },
+                avatarUrl: {
+                    type: new DataTypes.STRING(200),
+                    allowNull: true,
                 },
             },
             {
@@ -22,14 +42,25 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
                 timestamps: true,
                 underscored: true,
                 modelName: "User",
-                tableName: "users",
+                tableName: "user",
                 paranoid: true,
                 charset: "utf8",
                 collate: "utf8_general_ci",
             },
         );
     }
-    static associate(db) {}
+    static associate(db) {
+        db.User.hasMany(db.Profile, { foreignKey: "user_id" });
+        db.User.hasMany(db.Team, { foreignKey: "leader_id" });
+        db.User.hasMany(db.Member, { foreignKey: "user_id" });
+        db.User.hasMany(db.GuestUser, { foreignKey: "user_id" });
+        db.User.hasMany(db.Post, { foreignKey: "author_id" });
+        db.User.hasMany(db.Bookmark, { foreignKey: "user_id" });
+        db.User.hasMany(db.Comment, { foreignKey: "author_id" });
+        db.User.hasMany(db.TeamReview, { foreignKey: "reviewer_id" });
+        db.User.hasMany(db.UserReview, { foreignKey: "reviewer_id" });
+        db.User.hasMany(db.UserReview, { foreignKey: "reviewee_id" });
+    }
 }
 
 module.exports = User;
