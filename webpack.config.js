@@ -6,7 +6,7 @@ module.exports = {
   mode: "development",
   context: __dirname + "/src",
   entry: {
-    app: "../app.ts",
+    app: "./app.ts",
   },
   output: {
     path: path.resolve(__dirname, "dist"),
@@ -15,13 +15,8 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
-        use: {
-          loader: "babel-loader",
-          options: {
-            presets: ["@babel/preset-env"],
-          },
-        },
+        test: /\.ts$/,
+        use: "ts-loader",
         exclude: /node_modules/,
       },
     ],
@@ -31,4 +26,7 @@ module.exports = {
     node: true,
   },
   externals: [nodeExternals()],
+  resolve: {
+    extensions: [".ts", ".js"],
+  },
 };
