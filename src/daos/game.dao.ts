@@ -29,7 +29,8 @@ export const findGamesByGender = async (
 
 export const findGamesByLevel = async (date: string, category: Category, skillLevel, cursorId: number | undefined) => {
     const gamesBeforeCursor = generateCursorCondition(cursorId);
-    const teamFilter = { category, skillLevel };
+    const minLevel = Math.floor(parseInt(skillLevel) / 10) * 10;
+    const teamFilter = { skillLevel: { [Op.between]: [minLevel, minLevel + 9] }, category };
     return findGames(date, gamesBeforeCursor, teamFilter);
 };
 
