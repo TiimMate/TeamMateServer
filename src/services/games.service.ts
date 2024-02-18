@@ -17,7 +17,7 @@ import {
     getTeamCategoryByLeaderId,
     getTeamByLeaderId,
 } from "../daos/team.dao";
-import { getMemberCountByTeamId, findMemberInfoByCategory } from "../daos/member.dao";
+import { addMemberCount, findMemberInfoByCategory } from "../daos/member.dao";
 import { getUserInfoByCategory, userInfoAttributes } from "../daos/user.dao";
 import { getGameByUserId } from "../daos/game.dao";
 import { checkApplicationExisting } from "../daos/game-apply.dao";
@@ -26,34 +26,30 @@ import { CreateGameBody, UpdateGameBody } from "../schemas/game.schema";
 import { ApplyGameBody } from "../schemas/game-apply.schema";
 
 export const readGamesByDate = async (query) => {
-    const games = await findGamesByDate(query.date, query.category);
-    for (const game of games) {
-        game.memberCount = await getMemberCountByTeamId(game["HostTeam.id"]);
-    }
+    const cursorId = query.cursorId ? parseInt(query.cursorId) : undefined;
+    const games = await findGamesByDate(query.date, query.category, cursorId);
+    await addMemberCount(games.games);
     return readGameResponseDTO(games);
 };
 
 export const readGamesByGender = async (query) => {
-    const games = await findGamesByGender(query.date, query.category, query.gender);
-    for (const game of games) {
-        game.memberCount = await getMemberCountByTeamId(game["HostTeam.id"]);
-    }
+    const cursorId = query.cursorId ? parseInt(query.cursorId) : undefined;
+    const games = await findGamesByGender(query.date, query.category, query.gender, cursorId);
+    await addMemberCount(games.games);
     return readGameResponseDTO(games);
 };
 
 export const readGamesByLevel = async (query) => {
-    const games = await findGamesByLevel(query.date, query.category, query.skillLevel);
-    for (const game of games) {
-        game.memberCount = await getMemberCountByTeamId(game["HostTeam.id"]);
-    }
+    const cursorId = query.cursorId ? parseInt(query.cursorId) : undefined;
+    const games = await findGamesByLevel(query.date, query.category, query.skillLevel, cursorId);
+    await addMemberCount(games.games);
     return readGameResponseDTO(games);
 };
 
 export const readGamesByRegion = async (query) => {
-    const games = await findGamesByRegion(query.date, query.category, query.region);
-    for (const game of games) {
-        game.memberCount = await getMemberCountByTeamId(game["HostTeam.id"]);
-    }
+    const cursorId = query.cursorId ? parseInt(query.cursorId) : undefined;
+    const games = await findGamesByRegion(query.date, query.category, query.region, cursorId);
+    await addMemberCount(games.games);
     return readGameResponseDTO(games);
 };
 
