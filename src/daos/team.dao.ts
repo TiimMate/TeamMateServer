@@ -160,11 +160,11 @@ export const findTeamIdByLeaderId = async (userId: number) => {
     return teams.map((team) => team.id);
 };
 
-export const getTeamCategoryByLeaderId = async (userId: number) => {
+export const getTeamCategoryById = async (teamId: number) => {
     const team = await db.Team.findOne({
         raw: true,
         where: {
-            leaderId: userId,
+            id: teamId,
         },
         attributes: ["category"],
     });

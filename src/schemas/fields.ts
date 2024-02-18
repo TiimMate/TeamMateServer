@@ -69,7 +69,7 @@ export const categoryParam = object({
     }),
 });
 
-export const hostTeamIdField = { hostTeamId: z.number().int().optional() };
+export const hostTeamIdField = { hostTeamId: z.number().int() };
 
 export const gameTimeField = {
     gameTime: z.preprocess((arg) => {

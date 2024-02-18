@@ -12,6 +12,12 @@ import {
 } from "./fields";
 
 const body = object({
+    ...gameTimeField,
+    ...gameDurationField,
+    ...descriptionFieldInGame,
+});
+
+const createGameBody = object({
     ...hostTeamIdField,
     ...gameTimeField,
     ...gameDurationField,
@@ -19,10 +25,10 @@ const body = object({
 });
 
 export const createGameSchema = object({
-    body: body,
+    body: createGameBody,
 });
 
-export type CreateGameBody = TypeOf<typeof body>;
+export type CreateGameBody = TypeOf<typeof createGameBody>;
 
 export const updateGameSchema = object({
     body: body,
