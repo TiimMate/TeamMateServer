@@ -10,6 +10,6 @@ export const usersRouter = express.Router();
 
 usersRouter.use(verifyUser);
 
-usersRouter.get("/profiles/:category", validate(categoryParam), asyncHandler(fetchUserProfile));
+usersRouter.get("/:userId/profiles/:category", validate(categoryParam), asyncHandler(fetchUserProfile));
 
 usersRouter.put("/profiles/:category", validate(updateUserProfileSchema), asyncHandler(modifyUserProfile));

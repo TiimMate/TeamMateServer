@@ -92,31 +92,13 @@ export const statusField = { status: z.number().int() };
 
 export const recruitCountField = { recruitCount: z.number().int() };
 
-export const levelField = { level: z.number().int().optional() };
+export const levelField = { level: z.string().max(5) };
 
-export const dateParam = object({
-    params: object({
-        ...gameTimeField,
+export const levelFieldInTeam = {
+    skillLevel: z.string().refine((val) => !Number.isNaN(parseInt(val, 10)), {
+        message: "Expected number, received a string",
     }),
-});
-
-export const levelParam = object({
-    params: object({
-        ...levelField,
-    }),
-});
-
-export const genderParam = object({
-    params: object({
-        ...genderFieldInTeam,
-    }),
-});
-
-export const regionParam = object({
-    params: object({
-        ...regionFieldInTeam,
-    }),
-});
+};
 
 export const skillScoreField = { skillScore: z.number().int().min(1).max(5) };
 
@@ -129,3 +111,37 @@ export const guestMatchIdFieldInTeamReview = { guestMatchId: z.optional(z.number
 export const teamMatchIdField = { teamMatchId: z.optional(z.number().int()) };
 
 export const revieweeIdField = { revieweeId: z.number().int() };
+
+export const dateField = {
+    date: z.preprocess((arg) => {
+        if (typeof arg == "string") {
+            return new Date(arg);
+        }
+        return arg;
+    }, z.date()),
+};
+
+export const dateQuery = object({
+    query: object({
+        ...dateField,
+    }),
+});
+
+export const rentDateField = {
+    rentDate: z.optional(
+        z.preprocess((arg) => {
+            if (typeof arg == "string") {
+                return new Date(arg);
+            }
+            return arg;
+        }, z.date()),
+    ),
+};
+
+export const rentPlaceField = { rentPlace: z.optional(z.string().max(100)) };
+
+export const rentStatusField = { status: z.optional(z.number().int()) };
+
+export const gameDurationField = { gameDuration: z.string() };
+
+export const avatarUrlField = { avatarUrl: z.optional(z.string().max(200)) };

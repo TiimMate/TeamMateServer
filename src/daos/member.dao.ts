@@ -1,8 +1,8 @@
-import { Op } from "sequelize";
 import db from "../models";
+import { Op } from "sequelize";
+import { Category } from "../types/category.enum";
 
-export const findMemberInfoByTeamId = async (teamId, userInfoAttributes) => {
-    throw new Error("더 이상 사용하지 않는 함수");
+export const findMemberInfoByCategory = async (teamId: number, category: Category) => {
     return await db.Member.findAll({
         raw: true,
         where: {
@@ -11,7 +11,17 @@ export const findMemberInfoByTeamId = async (teamId, userInfoAttributes) => {
         include: [
             {
                 model: db.User,
-                attributes: userInfoAttributes(),
+                attributes: ["id", "nickname", "height", "avatarUrl"],
+                include: [
+                    {
+                        model: db.Profile,
+                        where: {
+                            category: category,
+                        },
+                        required: false,
+                        attributes: ["position"],
+                    },
+                ],
             },
         ],
         attributes: [],
@@ -85,4 +95,12 @@ export const getMemberCountByTeamId = async (teamId) => {
         },
     });
     return count;
+};
+
+export const addMemberCount = async (lists) => {
+    console.log("addMemberCount 함수는 제거될 함수입니다");
+    for (const list of lists) {
+        const teamId = list["Team.id"] ?? list["HostTeam.id"];
+        list.memberCount = (await getMemberCountByTeamId(teamId)) + 1;
+    }
 };

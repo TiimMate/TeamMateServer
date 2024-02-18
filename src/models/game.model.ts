@@ -8,16 +8,16 @@ class Game extends Model<InferAttributes<Game>, InferCreationAttributes<Game>> {
                     type: new DataTypes.INTEGER(),
                     allowNull: false,
                 },
-                applyTeamId: {
-                    type: new DataTypes.INTEGER(),
-                    allowNull: true,
-                },
                 opposingTeamId: {
                     type: new DataTypes.INTEGER(),
                     allowNull: true,
                 },
                 gameTime: {
                     type: new DataTypes.DATE(),
+                    allowNull: false,
+                },
+                gameDuration: {
+                    type: new DataTypes.TIME(),
                     allowNull: false,
                 },
                 category: {
@@ -49,9 +49,7 @@ class Game extends Model<InferAttributes<Game>, InferCreationAttributes<Game>> {
     static associate(db) {
         db.Game.belongsTo(db.Team, { foreignKey: "host_team_id", as: "HostTeam" });
         db.Game.belongsTo(db.Team, { foreignKey: "opposing_team_id" });
-        db.Game.belongsToMany(db.Team, {
-            through: "game_apply",
-        });
+        db.Game.hasMany(db.GameApply, { foreignKey: "game_id" });
         db.Game.hasMany(db.TeamReview, { foreignKey: "team_match_id" });
     }
 }

@@ -1,31 +1,21 @@
 import { TypeOf, object, z } from "zod";
-import { hostTeamIdField, gameTimeField, descriptionFieldInGame } from "./fields";
-
-const fields = {
-    hostTeamId: z.number().int().optional(),
-    // 본인이 리더인 팀이 하나인 경우는 바로 들어가겠지만, 여러 개이면 선택하여 들어갈 듯..?
-    // applyTeamId: z.number().int().min(1),
-    // opposingTeamId: z.number().int().min(1),
-    gameTime: z.preprocess((arg) => {
-        if (typeof arg == "string") {
-            return new Date(arg);
-        }
-        return arg;
-    }, z.date()),
-
-    // category: z.string(),
-    description: z.string(),
-    // status: z.number().int().min(0),
-};
+import {
+    hostTeamIdField,
+    gameTimeField,
+    descriptionFieldInGame,
+    categoryField,
+    dateField,
+    levelFieldInTeam,
+    regionFieldInTeam,
+    genderFieldInTeam,
+    gameDurationField,
+} from "./fields";
 
 const body = object({
     ...hostTeamIdField,
     ...gameTimeField,
+    ...gameDurationField,
     ...descriptionFieldInGame,
-});
-
-export const createGame = object({
-    ...fields,
 });
 
 export const createGameSchema = object({
@@ -34,12 +24,40 @@ export const createGameSchema = object({
 
 export type CreateGameBody = TypeOf<typeof body>;
 
-export const updateGame = object({
-    ...fields,
-});
-
 export const updateGameSchema = object({
     body: body,
 });
 
 export type UpdateGameBody = TypeOf<typeof body>;
+
+export const readGame = {
+    ...categoryField,
+    ...dateField,
+};
+
+export const readGameSchema = object({
+    query: object({
+        ...readGame,
+    }),
+});
+
+export const readGameFilterGenderSchema = object({
+    query: object({
+        ...readGame,
+        ...genderFieldInTeam,
+    }),
+});
+
+export const readGameFilterLevelSchema = object({
+    query: object({
+        ...readGame,
+        ...levelFieldInTeam,
+    }),
+});
+
+export const readGameFilterRegionSchema = object({
+    query: object({
+        ...readGame,
+        ...regionFieldInTeam,
+    }),
+});

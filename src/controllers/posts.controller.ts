@@ -48,7 +48,6 @@ export const fetchComments = async (req: Request, res: Response, next) => {
 
 export const addRentPost = async (req, res: Response, next) => {
     res.send(response(status.SUCCESS, await createRentPost(req.user.id, req.body)));
-    // res.send(response(status.SUCCESS, await createRentPost(2, req.body)));
 };
 
 export const fetchRentPosts = async (req, res: Response, next) => {

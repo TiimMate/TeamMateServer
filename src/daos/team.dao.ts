@@ -1,8 +1,9 @@
 import db from "../models";
-import { defaultLevel } from "../constants/level.constant";
 import { CreateTeamBody, UpdateTeamBodyWithoutMemberIdsToDelete } from "../schemas/team.schema";
 import { Category } from "../types/category.enum";
 import { Op } from "sequelize";
+
+const defaultLevel = 0;
 
 export const findTeamPreviewByCategory = async (userId: number, category: Category) => {
     const teamsAsLeader = await db.Team.findAll({
@@ -11,7 +12,7 @@ export const findTeamPreviewByCategory = async (userId: number, category: Catego
             category,
             leaderId: userId,
         },
-        attributes: ["name", "logo"],
+        attributes: teamPreviewAttributes(),
     });
     const teamsAsMember = await db.Team.findAll({
         raw: true,
@@ -27,10 +28,14 @@ export const findTeamPreviewByCategory = async (userId: number, category: Catego
                 attributes: [],
             },
         ],
-        attributes: ["name", "logo"],
+        attributes: teamPreviewAttributes(),
     });
     const previews = [...teamsAsLeader, ...teamsAsMember].sort((a, b) => a.name.localeCompare(b.name));
     return previews;
+};
+
+const teamPreviewAttributes = () => {
+    return ["id", "name", "logo"];
 };
 
 export const insertTeam = async (data: CreateTeamBody, userId: number, inviteCode: string) => {
@@ -50,36 +55,45 @@ export const insertTeam = async (data: CreateTeamBody, userId: number, inviteCod
     });
 };
 
-export const getTeamDetail = async (teamId: number) => {
-    return await db.Team.findAll({
-        raw: true,
-        where: {
-            id: teamId,
-        },
-        include: [
-            {
-                model: db.Member,
-                attributes: ["userId"],
-                required: false,
-            },
-        ],
-        attributes: ["name", "logo", "skillLevel", "mannerLevel", "description", "leaderId", "category"],
-    });
-};
-
-export const getTeamDetailforGuesting = async (teamId: number) => {
+export const getTeam = async (teamId: number) => {
     return await db.Team.findOne({
         raw: true,
         where: {
             id: teamId,
         },
-        include: [
-            {
-                model: db.Member,
-                attributes: ["userId"],
-                required: false,
-            },
+        attributes: ["id"],
+    });
+};
+
+export const getTeamDetail = async (teamId: number) => {
+    return await db.Team.findOne({
+        raw: true,
+        where: {
+            id: teamId,
+        },
+        attributes: [
+            "name",
+            "logo",
+            "skillLevel",
+            "mannerLevel",
+            "description",
+            "inviteCode",
+            "gender",
+            "ageGroup",
+            "region",
+            "gymName",
+            "leaderId",
+            "category",
         ],
+    });
+};
+
+export const getTeamDetailForGuesting = async (teamId: number) => {
+    return await db.Team.findOne({
+        raw: true,
+        where: {
+            id: teamId,
+        },
         attributes: [
             "name",
             "description",
@@ -125,6 +139,27 @@ export const getTeamIdByLeaderId = async (userId: number) => {
     return team?.id;
 };
 
+export const getTeamIdsByLeaderId = async (userId: number) => {
+    return await db.Team.findAll({
+        raw: true,
+        where: {
+            leaderId: userId,
+        },
+        attributes: ["id"],
+    });
+};
+
+export const findTeamIdByLeaderId = async (userId: number) => {
+    const teams = await db.Team.findAll({
+        raw: true,
+        where: {
+            leaderId: userId,
+        },
+        attributes: ["id"],
+    });
+    return teams.map((team) => team.id);
+};
+
 export const getTeamCategoryByLeaderId = async (userId: number) => {
     const team = await db.Team.findOne({
         raw: true,
@@ -161,7 +196,7 @@ export const findTeamPreviewByCategoryForLeader = async (userId: number, categor
             category,
             leaderId: userId,
         },
-        attributes: ["name"],
+        attributes: ["id", "name"],
     });
 };
 

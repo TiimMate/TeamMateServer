@@ -1,7 +1,7 @@
 import { BaseError } from "../config/error";
 import { status } from "../config/response.status";
 import { CreateTeamReviewBody } from "../schemas/team-review.schema";
-import { getGame } from "../daos/games.dao";
+import { getGame } from "../daos/game.dao";
 import { findLeaderId, getLeaderId } from "../daos/team.dao";
 import { getGuestingByAcceptedUserId } from "../daos/guest.dao";
 import { getExistingTeamReview, insertTeamReview } from "../daos/team-review.dao";
@@ -76,8 +76,10 @@ const retrieveRevieweeIdAndGameTime = async (userId: number, guestMatchId: numbe
     };
 };
 
-const validateReviewableTime = (gameTime: Date, currentTime: Date) => {
-    if (gameTime > currentTime) {
+export const validateReviewableTime = (gameTime: Date, currentTime: Date) => {
+    const timeDifference = currentTime.getTime() - gameTime.getTime();
+    const oneMonthInMilliseconds = 30 * 24 * 60 * 60 * 1000;
+    if (timeDifference < 0 && timeDifference > oneMonthInMilliseconds) {
         throw new BaseError(status.REVIEW_NOT_CURRENTLY_WRITABLE);
     }
 };
