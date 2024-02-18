@@ -69,7 +69,7 @@ export const findGuests = async (date: string, guestFilter: object, TeamFilter: 
                 attributes: ["id", "name", "region", "gender", "ageGroup", "skillLevel"],
             },
         ],
-        attributes: ["gameTime", "recruitCount", "gameDuration", "status"],
+        attributes: ["id", "gameTime", "recruitCount", "gameDuration", "status"],
     });
     return { guests, hasNext: calculateHasNext(guests, defaultLimit) };
 };
