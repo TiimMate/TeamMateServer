@@ -35,6 +35,7 @@ interface UserInfo {
 export const readGuestingResponseDTO = (result) => {
     return {
         guests: result.guests.map((guesting) => ({
+            guestId: guesting.id,
             gameTime: guesting.gameTime,
             gameDuration: guesting.gameDuration,
             teamName: guesting["Team.name"],
@@ -65,9 +66,10 @@ export const readGuestingDetailResponseDTO = (
         name: TeamDetail.name,
         skillLevel: TeamDetail.skillLevel,
         mannerLevel: TeamDetail.mannerLevel,
-        description: TeamDetail.description,
+        teamDescription: TeamDetail.description,
         status: getStatus(guestingDetail.status),
         gusting_info: {
+            guestDescription: guestingDetail.description,
             gameTime: guestingDetail.gameTime,
             gameDuration: guestingDetail.gameDuration,
             gender: getTeamGender(TeamDetail.gender),
