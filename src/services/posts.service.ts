@@ -19,8 +19,13 @@ export const readCommunityPosts = async (userId: number | undefined, query) => {
     return readPostsResponseDTO(result);
 };
 
-export const readMyPosts = async (userId: number, query) => {
-    const result = await findPostByAuthorId(userId, query.cursorId);
+export const readMyCommunityPosts = async (userId: number, query) => {
+    const result = await findPostByAuthorId(userId, PostType.Community, query.cursorId);
+    return readPostsResponseDTO(result);
+};
+
+export const readMyRentPosts = async (userId: number, query) => {
+    const result = await findPostByAuthorId(userId, PostType.RentalInfo, query.cursorId);
     return readPostsResponseDTO(result);
 };
 
