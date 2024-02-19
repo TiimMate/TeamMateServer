@@ -117,3 +117,17 @@ export const setCommonProfile = async (userId: number, commonProfile: CommonProf
         },
     );
 };
+
+export const updateLevelByUserId = async (userId: number, skillLevel: number, mannerLevel: number) => {
+    await db.Team.update(
+        {
+            skillLevel,
+            mannerLevel,
+        },
+        {
+            where: {
+                id: userId,
+            },
+        },
+    );
+};

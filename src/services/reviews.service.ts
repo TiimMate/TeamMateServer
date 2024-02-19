@@ -2,11 +2,22 @@ import { BaseError } from "../config/error";
 import { status } from "../config/response.status";
 import { CreateTeamReviewBody } from "../schemas/team-review.schema";
 import { getGame } from "../daos/game.dao";
-import { findLeaderId, getLeaderId } from "../daos/team.dao";
+import { findLeaderId, getLeaderId, updateLevelByTeamId } from "../daos/team.dao";
 import { getGuestingByAcceptedUserId } from "../daos/guest.dao";
-import { getExistingTeamReview, insertTeamReview } from "../daos/team-review.dao";
+import {
+    getExistingTeamReview,
+    getTotalMannerScoreByTeamId,
+    getTotalSkillScoreByTeamId,
+    insertTeamReview,
+} from "../daos/team-review.dao";
 import { CreateUserReviewBody } from "../schemas/user-review.schema";
-import { getExistingUserReview, insertUserReview } from "../daos/user-review.dao";
+import {
+    getExistingUserReview,
+    getTotalMannerScoreByUserId,
+    getTotalSkillScoreByUserId,
+    insertUserReview,
+} from "../daos/user-review.dao";
+import { updateLevelByUserId } from "../daos/user.dao";
 
 export const createTeamReview = async (userId: number, body: CreateTeamReviewBody) => {
     const { teamMatchId, guestMatchId } = body;
@@ -27,6 +38,12 @@ export const createTeamReview = async (userId: number, body: CreateTeamReviewBod
     }
 
     await insertTeamReview(userId, result.reviewedTeamId, body);
+
+    //update level
+    const totalSkillScore = await getTotalSkillScoreByTeamId(result.reviewedTeamId);
+    const totalMannerScore = await getTotalMannerScoreByTeamId(result.reviewedTeamId);
+    await updateLevelByTeamId(result.reviewedTeamId, totalSkillScore / 10, totalMannerScore / 10);
+
     return;
 };
 
@@ -61,6 +78,12 @@ export const createUserReview = async (userId: number, body: CreateUserReviewBod
     }
 
     await insertUserReview(userId, body);
+
+    //update level
+    const totalSkillScore = await getTotalSkillScoreByUserId(result.revieweeId);
+    const totalMannerScore = await getTotalMannerScoreByUserId(result.revieweeId);
+    await updateLevelByUserId(result.revieweeId, totalSkillScore / 10, totalMannerScore / 10);
+
     return;
 };
 

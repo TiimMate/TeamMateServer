@@ -26,3 +26,19 @@ export const insertTeamReview = async (userId: number, reviewedTeamId: number, b
         ...body,
     });
 };
+
+export const getTotalSkillScoreByTeamId = async (teamId: number) => {
+    return await db.TeamReview.sum("skillScore", {
+        where: {
+            reviewedTeamId: teamId,
+        },
+    });
+};
+
+export const getTotalMannerScoreByTeamId = async (teamId: number) => {
+    return await db.TeamReview.sum("mannerScore", {
+        where: {
+            reviewedTeamId: teamId,
+        },
+    });
+};
