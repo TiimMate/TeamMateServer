@@ -153,7 +153,7 @@ const findGameByTeamsAndGameTime = async (teamFilter, gameTime: string) => {
                 attributes: ["id", "name", "region", "gender", "ageGroup", "skillLevel"],
             },
         ],
-        attributes: ["id", "gameTime"],
+        attributes: ["id", "opposingTeamId", "gameTime"],
     });
     for (const gameResult of gameResults) {
         gameResult.type = MatchType.game;
