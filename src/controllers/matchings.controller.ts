@@ -6,6 +6,7 @@ import {
     readMatchingGuesting,
     readMatchingHosting,
     readHostingApplicantsTeamList,
+    readMatchingHostingGuestUser,
 } from "../services/matchings.service";
 import { addOpposingTeam } from "../services/teams.service";
 import { updateGuestUserStatus } from "../services/guests.service";
@@ -16,6 +17,10 @@ export const matchingGuestingPreview = async (req, res: Response, next) => {
 
 export const matchingHostingPreview = async (req, res: Response, next) => {
     res.send(response(status.SUCCESS, await readMatchingHosting(req.user.id, req.query)));
+};
+
+export const matchingHostingGuestUserPreview = async (req, res: Response, next) => {
+    res.send(response(status.SUCCESS, await readMatchingHostingGuestUser(req.user.id, req.params)));
 };
 
 export const ApplyGuestingUserPreview = async (req, res: Response, next) => {

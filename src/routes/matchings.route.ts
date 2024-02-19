@@ -9,6 +9,7 @@ import {
     modifyGuestStatus,
     fetchHostingApplicantsTeamList,
     gameApplicationApproval,
+    matchingHostingGuestUserPreview,
 } from "../controllers/matchings.controller";
 import { dateQuery } from "../schemas/fields";
 
@@ -19,6 +20,8 @@ matchingsRouter.use(verifyUser);
 matchingsRouter.get("/guesting", validate(dateQuery), asyncHandler(matchingGuestingPreview));
 
 matchingsRouter.get("/hosting", validate(dateQuery), asyncHandler(matchingHostingPreview));
+
+matchingsRouter.get("/hosting/:guestingId", asyncHandler(matchingHostingGuestUserPreview));
 
 matchingsRouter.get("/hosting/user/:guestingId", asyncHandler(ApplyGuestingUserPreview));
 
