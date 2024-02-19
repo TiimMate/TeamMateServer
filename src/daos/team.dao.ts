@@ -220,3 +220,17 @@ export const getLeaderId = async (teamId: number) => {
     });
     return team.leaderId;
 };
+
+export const updateLevelByTeamId = async (teamId: number, skillLevel: number, mannerLevel: number) => {
+    await db.Team.update(
+        {
+            skillLevel,
+            mannerLevel,
+        },
+        {
+            where: {
+                id: teamId,
+            },
+        },
+    );
+};
