@@ -10,13 +10,7 @@ import {
     setGame,
     insertGameApplication,
 } from "../daos/game.dao";
-import {
-    getTeam,
-    getTeamDetailForGuesting,
-    getTeamIdByLeaderId,
-    getTeamCategoryByLeaderId,
-    getTeamByLeaderId,
-} from "../daos/team.dao";
+import { getTeam, getTeamDetailForGuesting, getTeamCategoryById, getTeamByLeaderId } from "../daos/team.dao";
 import { addMemberCount, findMemberInfoByCategory } from "../daos/member.dao";
 import { getUserInfoByCategory, userInfoAttributes } from "../daos/user.dao";
 import { getGameByUserId } from "../daos/game.dao";
@@ -67,15 +61,14 @@ export const readGameDetail = async (params) => {
 };
 
 export const createGame = async (userId, body: CreateGameBody) => {
-    const hostTeamId = await getTeamIdByLeaderId(userId);
-    const category = await getTeamCategoryByLeaderId(userId);
-
-    const team = await getTeamByLeaderId(hostTeamId, userId);
+    const teamId = body.hostTeamId;
+    const team = await getTeamByLeaderId(teamId, userId);
     if (!team) {
         throw new BaseError(status.TEAM_LEADER_NOT_FOUND);
     }
 
-    await insertGame(hostTeamId, body, category);
+    const category = await getTeamCategoryById(teamId);
+    await insertGame(teamId, body, category);
     return;
 };
 
