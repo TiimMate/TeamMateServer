@@ -13,9 +13,10 @@ import {
     addRentPost,
     fetchRentPosts,
     fetchMyRentPosts,
+    modifyRentPost,
 } from "../controllers/posts.controller";
 import { validate } from "../middlewares/validate.middleware";
-import { createPostSchema } from "../schemas/post.schema";
+import { createPostSchema, updatePostSchema } from "../schemas/post.schema";
 import { createCommentSchema } from "../schemas/comment.schema";
 
 export const postsRouter = express.Router();
@@ -40,6 +41,9 @@ postsRouter.get("/:postId", verifyUser, asyncHandler(fetchPost));
 
 // 대관정보 글 작성
 postsRouter.post("/rent", verifyUser, validate(createPostSchema), asyncHandler(addRentPost));
+
+// 대관정보 글 수정
+postsRouter.put("/:postId", verifyUser, validate(updatePostSchema), asyncHandler(modifyRentPost));
 
 // 대관정보 글 목록 조회
 postsRouter.get("/rent", verifyUserIfExists, asyncHandler(fetchRentPosts));

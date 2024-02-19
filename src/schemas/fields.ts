@@ -142,6 +142,8 @@ export const rentPlaceField = { rentPlace: z.optional(z.string().max(100)) };
 
 export const rentStatusField = { status: z.optional(z.number().int()) };
 
+export const rentMapValueField = { rentMapValue: z.optional(z.string().max(100)) };
+
 export const gameDurationField = { gameDuration: z.string() };
 
 export const avatarUrlField = { avatarUrl: z.optional(z.string().max(200)) };

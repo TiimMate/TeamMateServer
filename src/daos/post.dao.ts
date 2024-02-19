@@ -50,6 +50,15 @@ export const getPost = async (postId: number) => {
     });
 };
 
+export const getPostByAuthorId = async (postId: number, userId: number) => {
+    return await db.Post.findOne({
+        where: {
+            id: postId,
+            authorId: userId,
+        },
+    });
+};
+
 const findPostByFilter = async (userId: number | undefined, postFilter: object) => {
     const includeAllPosts: any[] = [];
     if (userId) {
@@ -102,7 +111,15 @@ export const insertPost = async (userId: number, data: CreatePostBody, type: Pos
         authorId: userId,
         rentDate: data.rentDate,
         rentPlace: data.rentPlace,
+        rentMapValue: data.rentMapValue,
         rentStatus: 0,
         type,
     });
+};
+
+export const setPost = async (post, body) => {
+    Object.keys(body).forEach((field) => {
+        post[field] = body[field];
+    });
+    await post.save();
 };
