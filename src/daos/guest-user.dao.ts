@@ -84,3 +84,30 @@ export const checkForDuplicateGuestUser = async (userId, guestId) => {
         },
     });
 };
+
+export const getGuestingUser = async (guestingId: number) => {
+    return await db.GuestUser.findAll({
+        raw: true,
+        where: {
+            guestId: guestingId,
+            status: 1,
+        },
+        include: [
+            {
+                model: db.User,
+                include: [
+                    {
+                        model: db.Profile,
+                        attributes: ["position"],
+                    },
+                ],
+                attributes: ["nickname", "height", "avatarUrl"],
+            },
+            {
+                model: db.Guest,
+                attiributes: ["gametime"],
+            },
+        ],
+        attiributes: ["userId"],
+    });
+};
