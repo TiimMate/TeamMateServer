@@ -32,6 +32,10 @@ class Post extends Model<InferAttributes<Post>, InferCreationAttributes<Post>> {
                     type: new DataTypes.STRING(100),
                     allowNull: true,
                 },
+                rentMapValue: {
+                    type: new DataTypes.STRING(100),
+                    allowNull: true,
+                },
                 rentStatus: {
                     type: new DataTypes.INTEGER(),
                     allowNull: true,

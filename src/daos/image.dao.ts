@@ -5,6 +5,6 @@ export const findImage = async (postId: number) => {
         where: {
             postId,
         },
-        attributes: ["url"],
+        attributes: ["link"],
     });
 };

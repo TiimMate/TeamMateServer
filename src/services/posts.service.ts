@@ -42,11 +42,10 @@ export const createOrDeleteBookmark = async (userId: number, params) => {
 export const readPost = async (userId: number, params) => {
     const postId = params.postId;
     const post = handlePostNotFound(await getPost(postId));
-    const imageUrls = await findImage(postId);
     const commentCount = await getCommentCount(postId);
     const comments = await findComment(postId, undefined);
     const isBookmarked = await checkIsBookmarked(userId, postId);
-    return readPostResponseDTO(post, imageUrls, commentCount, comments, isBookmarked);
+    return readPostResponseDTO(post, commentCount, comments, isBookmarked);
 };
 
 const checkIsBookmarked = async (userId: number | undefined, postId: number) => {
