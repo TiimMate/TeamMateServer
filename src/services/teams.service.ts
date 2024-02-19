@@ -20,7 +20,8 @@ export const readTeamPreviews = async (userId: number, query) => {
 };
 
 export const createTeam = async (userId: number, body: CreateTeamBody) => {
-    await insertTeam(body, userId, uuidv4());
+    const inviteCode = uuidv4().split("-")[0];
+    await insertTeam(body, userId, inviteCode);
     return;
 };
 
