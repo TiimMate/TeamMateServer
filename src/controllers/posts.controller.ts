@@ -6,20 +6,25 @@ import {
     readBookmarkedPosts,
     readPost,
     readCommunityPosts,
-    readMyPosts,
+    readMyCommunityPosts,
     createCommunityPost,
     createComment,
     readComments,
     createRentPost,
     readRentPosts,
+    readMyRentPosts,
 } from "../services/posts.service";
 
 export const fetchCommunityPosts = async (req, res: Response, next) => {
     res.send(response(status.SUCCESS, await readCommunityPosts(req.user?.id, req.query)));
 };
 
-export const fetchMyPosts = async (req, res: Response, next) => {
-    res.send(response(status.SUCCESS, await readMyPosts(req.user.id, req.query)));
+export const fetchMyCommunityPosts = async (req, res: Response, next) => {
+    res.send(response(status.SUCCESS, await readMyCommunityPosts(req.user.id, req.query)));
+};
+
+export const fetchMyRentPosts = async (req, res: Response, next) => {
+    res.send(response(status.SUCCESS, await readMyRentPosts(req.user.id, req.query)));
 };
 
 export const fetchBookmarkedPosts = async (req, res: Response, next) => {

@@ -55,7 +55,6 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.use((err, req: Request, res: Response, next: NextFunction) => {
     res.locals.message = err.message;
     res.locals.err = process.env.NODE_ENV !== "production" ? err : {};
-    console.log(err);
     const error = err instanceof BaseError ? err : new BaseError(status.INTERNAL_SERVER_ERROR);
     res.status(error.data.status).send(response(error.data));
 });

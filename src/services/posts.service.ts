@@ -19,8 +19,13 @@ export const readCommunityPosts = async (userId: number | undefined, query) => {
     return readPostsResponseDTO(result);
 };
 
-export const readMyPosts = async (userId: number, query) => {
-    const result = await findPostByAuthorId(userId, query.cursorId);
+export const readMyCommunityPosts = async (userId: number, query) => {
+    const result = await findPostByAuthorId(userId, PostType.Community, query.cursorId);
+    return readPostsResponseDTO(result);
+};
+
+export const readMyRentPosts = async (userId: number, query) => {
+    const result = await findPostByAuthorId(userId, PostType.RentalInfo, query.cursorId);
     return readPostsResponseDTO(result);
 };
 
@@ -37,11 +42,10 @@ export const createOrDeleteBookmark = async (userId: number, params) => {
 export const readPost = async (userId: number, params) => {
     const postId = params.postId;
     const post = handlePostNotFound(await getPost(postId));
-    const imageUrls = await findImage(postId);
     const commentCount = await getCommentCount(postId);
     const comments = await findComment(postId, undefined);
     const isBookmarked = await checkIsBookmarked(userId, postId);
-    return readPostResponseDTO(post, imageUrls, commentCount, comments, isBookmarked);
+    return readPostResponseDTO(post, commentCount, comments, isBookmarked);
 };
 
 const checkIsBookmarked = async (userId: number | undefined, postId: number) => {

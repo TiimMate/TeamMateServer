@@ -6,12 +6,13 @@ import {
     fetchBookmarkedPosts,
     fetchPost,
     fetchCommunityPosts,
-    fetchMyPosts,
+    fetchMyCommunityPosts,
     addCommunityPost,
     addComment,
     fetchComments,
     addRentPost,
     fetchRentPosts,
+    fetchMyRentPosts,
 } from "../controllers/posts.controller";
 import { validate } from "../middlewares/validate.middleware";
 import { createPostSchema } from "../schemas/post.schema";
@@ -23,7 +24,9 @@ postsRouter.post("/community", verifyUser, validate(createPostSchema), asyncHand
 
 postsRouter.get("/community", verifyUserIfExists, asyncHandler(fetchCommunityPosts));
 
-postsRouter.get("/authors/me", verifyUser, asyncHandler(fetchMyPosts));
+postsRouter.get("/community/authors/me", verifyUser, asyncHandler(fetchMyCommunityPosts));
+
+postsRouter.get("/rent/authors/me", verifyUser, asyncHandler(fetchMyRentPosts));
 
 postsRouter.get("/bookmarks", verifyUser, asyncHandler(fetchBookmarkedPosts));
 
