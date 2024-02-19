@@ -22,13 +22,14 @@ export const readRentPostsResponseDTO = (result) => {
     };
 };
 
-export const readPostResponseDTO = (post, imageUrls, commentCount, comments, isBookmarked) => {
+export const readPostResponseDTO = (post, commentCount, comments, isBookmarked) => {
+    console.log(post);
     return {
         post: {
             title: post.title,
-            contnet: post.content,
-            link: post.link,
-            imageUrls: imageUrls,
+            content: post.content,
+            imageUrls: post.link,
+            mapCoordinateVal: post.rentMapValue,
         },
         isBookmarked,
         commentCount,

@@ -46,7 +46,7 @@ export const getPost = async (postId: number) => {
         where: {
             id: postId,
         },
-        attributes: ["title", "content", "link"],
+        attributes: ["title", "content", "link", "rentMapValue"],
     });
 };
 
