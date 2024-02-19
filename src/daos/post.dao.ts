@@ -21,8 +21,8 @@ export const findPostByType = async (
     }
 };
 
-export const findPostByAuthorId = async (userId: number, cursorId?: number) => {
-    const postsBeforeCursorForAuthor = { authorId: userId, ...generateCursorCondition(cursorId) };
+export const findPostByAuthorId = async (userId: number, type: PostType, cursorId?: number) => {
+    const postsBeforeCursorForAuthor = { authorId: userId, type, ...generateCursorCondition(cursorId) };
     return findPostByFilter(userId, postsBeforeCursorForAuthor);
 };
 
