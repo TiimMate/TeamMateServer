@@ -46,7 +46,16 @@ export const getPost = async (postId: number) => {
         where: {
             id: postId,
         },
-        attributes: ["title", "content", "link", "rentMapValue"],
+        attributes: ["title", "content", "link", "rentDate", "rentPlace", "rentMapValue"],
+    });
+};
+
+export const getPostByAuthorId = async (postId: number, userId: number) => {
+    return await db.Post.findOne({
+        where: {
+            id: postId,
+            authorId: userId,
+        },
     });
 };
 
@@ -102,7 +111,15 @@ export const insertPost = async (userId: number, data: CreatePostBody, type: Pos
         authorId: userId,
         rentDate: data.rentDate,
         rentPlace: data.rentPlace,
+        rentMapValue: data.rentMapValue,
         rentStatus: 0,
         type,
     });
+};
+
+export const setPost = async (post, body) => {
+    Object.keys(body).forEach((field) => {
+        post[field] = body[field];
+    });
+    await post.save();
 };

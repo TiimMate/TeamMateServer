@@ -2,11 +2,19 @@ import { BaseError } from "../config/error";
 import { status } from "../config/response.status";
 import { PostType } from "../types/post-type.enum";
 import { CreateCommentBody } from "../schemas/comment.schema";
-import { CreatePostBody } from "../schemas/post.schema";
+import { CreatePostBody, UpdatePostBody } from "../schemas/post.schema";
 import { getBookmark, insertOrDeleteBookmark } from "../daos/bookmark.dao";
 import { findComment, getCommentCount, insertComment } from "../daos/comment.dao";
 import { findImage } from "../daos/image.dao";
-import { findPostByType, findPostByAuthorId, findBookmarkedPost, getPost, insertPost } from "../daos/post.dao";
+import {
+    findPostByType,
+    findPostByAuthorId,
+    findBookmarkedPost,
+    getPost,
+    insertPost,
+    getPostByAuthorId,
+    setPost,
+} from "../daos/post.dao";
 import {
     readCommentsResonseDTO,
     readPostResponseDTO,
@@ -86,6 +94,23 @@ export const readComments = async (params, query) => {
 export const createRentPost = async (userId: number, body: CreatePostBody) => {
     await insertPost(userId, body, PostType.RentalInfo);
     return;
+};
+
+export const updateRentPost = async (userId: number, body: UpdatePostBody, params) => {
+    const postId = params.postId;
+    const post = handlePostUserWroteNotFound(await getPostByAuthorId(postId, userId));
+    console.log(post);
+    console.log(body);
+
+    await setPost(post, body);
+    return;
+};
+
+const handlePostUserWroteNotFound = (post) => {
+    if (!post) {
+        throw new BaseError(status.POST_USER_WROTE_NOT_FOUND);
+    }
+    return post;
 };
 
 export const readRentPosts = async (userId: number | undefined, query) => {

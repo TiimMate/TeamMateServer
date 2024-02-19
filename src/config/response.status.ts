@@ -165,6 +165,13 @@ export const status: { [key: string]: Status } = {
         message: "요청한 글을 찾을 수 없습니다.",
     },
 
+    POST_USER_WROTE_NOT_FOUND: {
+        status: StatusCodes.NOT_FOUND,
+        isSuccess: false,
+        code: "POST002",
+        message: "요청한 글은 유저가 작성한 글이 아닙니다.",
+    },
+
     //user err
     USER_NOT_FOUND: {
         status: StatusCodes.NOT_FOUND,
