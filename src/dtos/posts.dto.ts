@@ -26,7 +26,7 @@ export const readPostResponseDTO = (post, imageUrls, commentCount, comments, isB
     return {
         post: {
             title: post.title,
-            contnet: post.content,
+            content: post.content,
             link: post.link,
             imageUrls: imageUrls,
         },
